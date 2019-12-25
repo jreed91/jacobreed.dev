@@ -1,14 +1,35 @@
 @import "~bulma/sass/utilities/initial-variables"
 
+
+// Colors
+$background: #fffffe
+$headline: #094067
+$paragraph: #5f6c7b
+$button: #3da9fc
+$button-text: $background
+$background-invert: #d8eefe
+
+//Font-family
+$family-sans-serif: 'Open Sans', sans-serif;
+
+
 // Config vars
 // Kaldi logo brand color: #FD461E
 $kaldi-red: #D64000
 $kaldi-red-invert: #fff
 
-$primary: $kaldi-red
-$primary-invert: $kaldi-red-invert
-$body-color: #333
-$black: #2b2523
+
+$body-color: $background
+$black: $headline
+
+$primary: $headline
+$primary-invert: $background-invert
+$navbar-item-color: $headline
+
+
+  
+.navbar-item
+  font-weight: 700;
 
 .navbar .navbar-menu
   box-shadow:none !important
@@ -57,22 +78,19 @@ $black: #2b2523
     font-size: 18px
     font-size: 1rem
     line-height: 1.25
-    background-color: #fff
+    background-color: $button
     border-radius: .25rem
     text-decoration: none
     font-weight: 700
-    color: #CC3700
+    color: $button-text
     text-align: center
-    -webkit-box-shadow: inset 0 0 0 2px #CC3700
-    box-shadow: inset 0 0 0 2px #f40
     -webkit-transition: all .15s ease
     transition: all .15s ease
 
 .margin-top-0
   margin-top: 0 !important
 
-.navbar-item .icon
-  color: $primary
+
 // Override for use of svg's from https://simpleicons.org/
 .icon svg
   width: 1.5rem
@@ -124,7 +142,6 @@ $menu-label-color: $white-ter
 
 
 @import "~bulma"
-
 
 // responsiveness
 +tablet-only
