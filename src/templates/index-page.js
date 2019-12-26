@@ -15,45 +15,59 @@ export const IndexPageTemplate = ({
   description,
   intro,
 }) => (
- <div>
-  <div>
-     <section className="hero is-medium is-bold">
-      <div className="hero-body">
-        <div className="container has-text-centered">
-          <h1 className="title has-text-primary">
-          {title}
-          </h1>
-          <h2 className="subtitle has-text-primary has-text-weight-normal">
-          {subheading}
-          </h2>
-        </div>
+    <div>
+      <div>
+        <section className="hero is-medium is-bold">
+          <div className="hero-body">
+            <div className="container has-text-centered">
+              <h1 className="title has-text-primary">
+                {title}
+              </h1>
+              <h2 className="subtitle has-text-primary has-text-weight-normal">
+                {subheading}
+              </h2>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-    </div>
-  <div>
-    <section className="section">
-      <div className="container">
-        <div className="section">
-          <div className="columns">
-            <div className="column is-10 is-offset-1">
-              <div className="content">
-                <div className="content">
-                  <div className="has-text-centered">
-                    <h1 className="title has-text-primary">{mainpitch.title}</h1>
-                  </div>
-                  <div className="">
-                    <p className="subtitle">{mainpitch.description}</p>
+        <section className="invert">
+          <div className="container">
+            <div className="section">
+              <div className="columns">
+                <div className="column is-10 is-offset-1">
+                  <div className="content">
+                    <div className="content">
+                      <div className="has-text-centered">
+                        <h1 className="title has-text-primary">{mainpitch.title}</h1>
+                      </div>
+                      <div className="">
+                        <p className="subtitle">{mainpitch.description}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+        <section className="invert">
+          <div className="container">
+            <div className="section">
+              <div className="has-text-centered">
+              </div>
+              <div className="columns">
+                <div className="column">
+                  <h1 className="title has-text-primary">Writing</h1>
+                </div>
+              </div>
+              <div className="columns">
+              <BlogRoll />
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-  </div>
-  </div>
-)
+  )
 
 IndexPageTemplate.propTypes = {
   image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
