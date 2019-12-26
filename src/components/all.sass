@@ -9,30 +9,36 @@ $button: #3da9fc
 $button-text: $background
 $background-invert: #d8eefe
 
-//Font-family
-$family-sans-serif: 'Open Sans', sans-serif;
-
-
-// Config vars
-// Kaldi logo brand color: #FD461E
-$kaldi-red: #D64000
-$kaldi-red-invert: #fff
-
-
-$body-color: $background
+$link: $background
+$body-color: $headline
 $black: $headline
+$grey-darker: #5f6c7b
+$grey: $paragraph
+$text: $paragraph
 
 $primary: $headline
 $primary-invert: $background-invert
+
+//Font-family
+$family-sans-serif: 'proxima-nova', sans-serif
+
+//Navbar
+$navbar-height: 5rem
 $navbar-item-color: $headline
 
-
-  
 .navbar-item
-  font-weight: 700;
+  font-weight: 400
+  font-size: 1.25rem
+
+.navbar-item
+  padding: 0.5rem 1.75rem !important
 
 .navbar .navbar-menu
   box-shadow:none !important
+.navbar-item img 
+  max-height: 4rem !important
+  
+
 
 .content .taglist
   list-style: none
@@ -96,8 +102,6 @@ $navbar-item-color: $headline
   width: 1.5rem
   height: 1.5rem
   fill: currentColor
-.navbar-brand .navbar-item.logo
-  padding: 0 1rem
 footer.footer
   padding: 3rem 0rem 0rem
   background-color: transparent
@@ -106,9 +110,9 @@ footer.footer
 $menu-item-color: $white-ter
 $menu-item-hover-color: $black !important
 $menu-item-hover-background-color: $black
-$menu-item-active-color: $kaldi-red-invert
-$menu-item-active-background-color:	$kaldi-red-invert
-$menu-list-border-left: 1px solid $kaldi-red-invert
+$menu-item-active-color: $background-invert
+$menu-item-active-background-color:	$background-invert
+$menu-list-border-left: 1px solid $background-invert
 $menu-label-color: $white-ter
 
 
