@@ -12,23 +12,25 @@ class BlogRoll extends React.Component {
       <div className="columns is-multiline">
         {posts &&
           posts.map(({ node: post }) => (
-            <div className="is-parent column is-6" key={post.id}>
+            <div className="column " key={post.id}>
               <article
-                className={`blog-list-item tile is-child box notification ${
+                className={`card ${
                   post.frontmatter.featuredpost ? 'is-featured' : ''
-                }`}
+                  }`}
               >
-                <header>
-                  {post.frontmatter.featuredimage ? (
-                    <div className="featured-thumbnail">
+                {post.frontmatter.featuredimage ? (
+                  <div className="card-image">
+                    <figure class="image">
                       <PreviewCompatibleImage
                         imageInfo={{
                           image: post.frontmatter.featuredimage,
                           alt: `featured image thumbnail for post ${post.frontmatter.title}`,
                         }}
                       />
-                    </div>
-                  ) : null}
+                    </figure>
+                  </div>
+                ) : null}
+                <div className="card-content">
                   <p className="post-meta">
                     <Link
                       className="title has-text-primary is-size-4"
@@ -37,19 +39,19 @@ class BlogRoll extends React.Component {
                       {post.frontmatter.title}
                     </Link>
                     <span> &bull; </span>
-                    <span className="subtitle is-size-5 is-block">
+                    <span className="subtitle is-size-6 is-block">
                       {post.frontmatter.date}
                     </span>
                   </p>
-                </header>
-                <p>
-                  {post.excerpt}
-                  <br />
-                  <br />
-                  <Link className="button" to={post.fields.slug}>
-                    Keep Reading →
+                  <p>
+                    {post.excerpt}
+                    <br />
+                    <br />
+                    <Link className="button" to={post.fields.slug}>
+                      Keep Reading →
                   </Link>
-                </p>
+                  </p>
+                </div>
               </article>
             </div>
           ))}
