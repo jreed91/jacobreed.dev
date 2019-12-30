@@ -9,10 +9,10 @@ class BlogRoll extends React.Component {
     const { edges: posts } = data.allMarkdownRemark
 
     return (
-      <div className="columns is-multiline">
+      <div className="columns is-multiline is-mobile">
         {posts &&
           posts.map(({ node: post }) => (
-            <div className="column " key={post.id}>
+            <div className="column is-half" key={post.id}>
               <article
                 className={`card ${
                   post.frontmatter.featuredpost ? 'is-featured' : ''
