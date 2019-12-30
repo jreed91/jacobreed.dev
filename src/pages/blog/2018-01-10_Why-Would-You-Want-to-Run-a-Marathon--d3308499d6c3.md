@@ -1,7 +1,7 @@
 ---
 templateKey: blog-post
 title: Why Would You Want to Run a Marathon?
-date: 2016-12-17T15:04:10.000Z
+date: 2018-01-10T00:47:49.226Z
 featuredpost: false
 featuredimage: /img/1__xFeXP228u__3dvwpsA2Pdbg.jpeg
 description:  That’s the question I get asked most often after I say I’m training for a marathon.
