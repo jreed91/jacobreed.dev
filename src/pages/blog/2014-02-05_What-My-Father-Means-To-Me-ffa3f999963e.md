@@ -3,6 +3,7 @@ templateKey: blog-post
 title: What My Father Means To Me
 date: 2014-02-05T22:20:03.451Z
 featuredpost: false
+syndicate: true
 featuredimage: /img/1__pQ1htpFXvRSI23wPAQSM3w.jpeg
 description: The Coffee Taster’s Flavor Wheel, the official resource used by coffee tasters, has been revised for the first time this year.
 tags:
