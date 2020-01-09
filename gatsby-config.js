@@ -37,9 +37,11 @@ module.exports = {
               edges {
                 node {
                   html
+                  fields {
+                    slug
+                  }
                   frontmatter {
                     date
-                    path
                     title
                     syndicate
                   }
@@ -54,7 +56,7 @@ module.exports = {
                 title: edge.node.frontmatter.title,
                 date: edge.node.frontmatter.date,
                 syndicate: edge.node.frontmatter.syndicate,
-                url: site.siteMetadata.siteUrl + edge.node.frontmatter.path,
+                url: site.siteMetadata.siteUrl + edge.node.fields.slug,
                 html: edge.node.html,
               }
             })
