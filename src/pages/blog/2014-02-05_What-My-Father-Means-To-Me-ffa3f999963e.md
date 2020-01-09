@@ -1,18 +1,17 @@
 ---
 templateKey: blog-post
 title: What My Father Means To Me
-date: 2014-02-05T22:20:03.451Z
-featuredpost: false
 syndicate: true
+date: 2014-02-05T22:20:03.451Z
+description: >-
+  The Coffee Taster’s Flavor Wheel, the official resource used by coffee
+  tasters, has been revised for the first time this year.
+featuredpost: false
 featuredimage: /img/1__pQ1htpFXvRSI23wPAQSM3w.jpeg
-description: The Coffee Taster’s Flavor Wheel, the official resource used by coffee tasters, has been revised for the first time this year.
 tags:
-  - flavor
-  - tasting
+  - personal
+  - thoughts
 ---
-
-  
-
 How do you put into words how much someone means to you?
 
 I know I can never fully describe how great of a father he truly is without him being here. But I will try, so that someday my own children will be able to see how great he was.
@@ -25,8 +24,7 @@ After serving in the Army, he worked at many different places and told my mom to
 
 He was Mr. Fix-It around our house. If one of our cars needed fixing he could do it. If the stove broke he would be the one we call. On top of all this, he was the one that cooked and cleaned. He was so intelliget as well. Ask him any kind of trivia and he could answer it in a snap. Just recently someone got engaged and he told her it would take 21 days to get used to the ring. We thought he was just joking but then he started rattling off why.
 
-![Champions!!](img/1__dtUUvSMd0eUtut5G5JnEnw.jpeg)
-Champions!!
+![Champions!!](img/1__dtUUvSMd0eUtut5G5JnEnw.jpeg) Champions!!
 
 He was the man that coached all of my sports. He coached my soccer teams, my basketball teams, my baseball teams. When I wanted to join a traveling basketball team and I was turned down by another team, he was the first one to volunteer to coach.
 
@@ -55,7 +53,5 @@ This was the moment when I realized, even through all his pain and suffering he 
 And just like he said: “I want to be with you guys forever”.
 
 You will Dad.
-
-  
 
 > Love you Dad
