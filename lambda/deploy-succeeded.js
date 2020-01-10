@@ -1,6 +1,6 @@
 const Twitter = require('twitter');
 const dotenv = require('dotenv');
-const Entities = require('html-entities');
+const Entities = require('html-entities').AllHtmlEntities;
 const fetch = require('node-fetch');
 
 dotenv.config()
