@@ -1,5 +1,5 @@
 const Twitter = require('twitter');
-const dotenv = require('twitter');
+const dotenv = require('dotenv');
 const AllHtmlEntities = require('html-entities');
 const fetch = require('node-fetch');
 
