@@ -8,6 +8,7 @@ description: >-
   tasters, has been revised for the first time this year.
 featuredpost: false
 featuredimage: /img/1-guedpz-wj5fdffg75bnuiq.png
+syndicate: true
 tags:
   - angularjs
   - angular

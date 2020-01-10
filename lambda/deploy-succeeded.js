@@ -73,7 +73,7 @@ const prepareStatusText = note => {
     const entities = new Entities()
 
     // strip html tags and decode entities
-    let text = note.content.trim().replace(/<[^>]+>/g, '')
+    let text = note.content_html.trim().replace(/<[^>]+>/g, '')
     text = entities.decode(text)
 
     // truncate note text if its too long for a tweet.
