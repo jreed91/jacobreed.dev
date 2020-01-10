@@ -37,12 +37,12 @@ const status = (code, msg) => {
 
 // Check exisiting notes
 const processNotes = async notes => {
-    if (!notes.length) {
+    if (!notes.items.length) {
         return status(404, 'No notes found to process.')
     }
 
     // assume the last note is not yet syndicated
-    const latestNote = notes[0]
+    const latestNote = notes.items[0]
     if (!latestNote.syndicate) {
         return status(
             400,
