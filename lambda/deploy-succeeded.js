@@ -113,8 +113,7 @@ const publishNote = async note => {
     }
 }
 
-// Main Lambda Function Handler
-exports.handler = async () => {
+function handler({ headers, body}, context, callback) {
     // Fetch the list of published notes to work on,
     // then process them to check if an action is necessary
     return fetch(NOTES_URL)
@@ -122,3 +121,5 @@ exports.handler = async () => {
         .then(processNotes)
         .catch(handleError)
 }
+
+exports.handler = handler;
