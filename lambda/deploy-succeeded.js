@@ -43,12 +43,6 @@ const processNotes = async notes => {
 
     // assume the last note is not yet syndicated
     const latestNote = notes.items[0]
-    if (!latestNote.syndicate) {
-        return status(
-            400,
-            'Latest note has disabled syndication. No action taken.'
-        )
-    }
 
     try {
         // check twitter for any tweets containing note URL.

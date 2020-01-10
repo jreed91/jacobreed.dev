@@ -58,7 +58,6 @@ module.exports = {
                 date: edge.node.frontmatter.date,
                 url: site.siteMetadata.siteUrl + edge.node.fields.slug,
                 html: edge.node.html,
-                syndicate: edge.node.frontmatter.syndicate
               }
             })
           },
