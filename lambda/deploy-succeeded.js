@@ -1,7 +1,8 @@
-import fetch from 'node-fetch'
-import dotenv from 'dotenv'
-import Twitter from 'twitter'
-import { AllHtmlEntities as Entities } from 'html-entities'
+const Twitter = require('twitter');
+const dotenv = require('twitter');
+const AllHtmlEntities = require('html-entities');
+const fetch = require('node-fetch');
+
 
 dotenv.config()
 
