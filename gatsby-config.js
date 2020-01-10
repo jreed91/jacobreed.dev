@@ -52,13 +52,13 @@ module.exports = {
           `,
           normalize: ({ query: { site, allMarkdownRemark } }) => {
             return allMarkdownRemark.edges.map(edge => {
-              return {
+              return [{
                 title: edge.node.frontmatter.title,
                 date: edge.node.frontmatter.date,
                 syndicate: edge.node.frontmatter.syndicate,
                 url: site.siteMetadata.siteUrl + edge.node.fields.slug,
                 html: edge.node.html,
-              }
+              }]
             })
           },
         },

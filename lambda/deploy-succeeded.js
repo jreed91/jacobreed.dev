@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 const AllHtmlEntities = require('html-entities');
 const fetch = require('node-fetch');
 
-
 dotenv.config()
 
 // URL of notes JSON feed
@@ -114,7 +113,8 @@ const publishNote = async note => {
     }
 }
 
-function handler({ headers, body}, context, callback) {
+// Main Lambda Function Handler
+exports.handler = async () => {
     // Fetch the list of published notes to work on,
     // then process them to check if an action is necessary
     return fetch(NOTES_URL)
@@ -122,5 +122,3 @@ function handler({ headers, body}, context, callback) {
         .then(processNotes)
         .catch(handleError)
 }
-
-exports.handler = handler;
