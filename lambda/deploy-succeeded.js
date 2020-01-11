@@ -97,7 +97,7 @@ const publishNote = async note => {
         if (tweet) {
             return status(
                 200,
-                `Note ${note.date} successfully posted to Twitter.`
+                `Note ${note.title} successfully posted to Twitter.`
             )
         } else {
             return status(422, 'Error posting to Twitter API.')
