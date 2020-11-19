@@ -1,10 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, graphql } from 'gatsby'
+import React from "react";
+import PropTypes from "prop-types";
+import { Link, graphql } from "gatsby";
 
-import Layout from '../components/Layout'
-import Features from '../components/Features'
-import BlogRoll from '../components/BlogRoll'
+import Layout from "../components/Layout";
+import Features from "../components/Features";
+import BlogRoll from "../components/BlogRoll";
+import "./index.css";
+import BlogIndexPage from "../pages/blog";
 
 export const IndexPageTemplate = ({
   image,
@@ -15,59 +17,27 @@ export const IndexPageTemplate = ({
   description,
   intro,
 }) => (
-    <div>
-      <div>
-        <section className="hero is-medium is-bold">
-          <div className="hero-body">
-            <div className="container has-text-centered">
-              <h1 className="title has-text-primary">
-                {title}
-              </h1>
-              <h2 className="subtitle has-text-primary has-text-weight-normal">
-                {subheading}
-              </h2>
-            </div>
+  <div>
+    <div class="relative bg-white overflow-hidden ">
+      <div class="mx-auto">
+        <main class="mt-10 mx-auto px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+          <div class="sm:text-center">
+            <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <span class="block xl:inline">{title}</span>
+            </h1>
+            <h2 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <span class="block text-blue-600 xl:inline">{subheading}</span>
+            </h2>
+            <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl">
+              {mainpitch.description}
+            </p>
           </div>
-        </section>
+        </main>
       </div>
-        <section className="invert">
-          <div className="container">
-            <div className="section">
-              <div className="columns">
-                <div className="column is-10 is-offset-1">
-                  <div className="content">
-                    <div className="content">
-                      <div className="has-text-centered">
-                        <h1 className="title has-text-primary">{mainpitch.title}</h1>
-                      </div>
-                      <div className="">
-                        <p className="subtitle">{mainpitch.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="invert">
-          <div className="container">
-            <div className="section">
-              <div className="has-text-centered">
-              </div>
-              <div className="columns">
-                <div className="column">
-                  <h1 className="title has-text-primary">Writing</h1>
-                </div>
-              </div>
-              <div className="columns">
-              <BlogRoll />
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-  )
+    </div>
+    <BlogRoll />
+  </div>
+);
 
 IndexPageTemplate.propTypes = {
   image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
@@ -75,10 +45,10 @@ IndexPageTemplate.propTypes = {
   heading: PropTypes.string,
   subheading: PropTypes.string,
   mainpitch: PropTypes.object,
-}
+};
 
 const IndexPage = ({ data }) => {
-  const { frontmatter } = data.markdownRemark
+  const { frontmatter } = data.markdownRemark;
 
   return (
     <Layout>
@@ -90,8 +60,8 @@ const IndexPage = ({ data }) => {
         mainpitch={frontmatter.mainpitch}
       />
     </Layout>
-  )
-}
+  );
+};
 
 IndexPage.propTypes = {
   data: PropTypes.shape({
@@ -99,9 +69,9 @@ IndexPage.propTypes = {
       frontmatter: PropTypes.object,
     }),
   }),
-}
+};
 
-export default IndexPage
+export default IndexPage;
 
 export const pageQuery = graphql`
   query IndexPageTemplate {
@@ -117,4 +87,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

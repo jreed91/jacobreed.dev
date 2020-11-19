@@ -4,8 +4,7 @@ title: Create a simple pager utilizing AngularJS dir-paginate and ASP.NET 5 API
 syndicate: false
 date: 2016-01-17T17:06:34.192Z
 description: >-
-  The Coffee Taster’s Flavor Wheel, the official resource used by coffee
-  tasters, has been revised for the first time this year.
+  
 featuredpost: false
 featuredimage: /img/1-guedpz-wj5fdffg75bnuiq.png
 tags:

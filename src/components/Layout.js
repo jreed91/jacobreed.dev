@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import './all.sass'
 import useSiteMetadata from './SiteMetadata'
 import { withPrefix } from 'gatsby'
 
@@ -47,10 +46,10 @@ const TemplateWrapper = ({ children }) => {
           property="og:image"
           content={`${withPrefix('/')}img/og-image.jpg`}
         />
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
       </Helmet>
       <Navbar />
       <div>{children}</div>
-      {/* <Footer /> */}
     </div>
   )
 }
