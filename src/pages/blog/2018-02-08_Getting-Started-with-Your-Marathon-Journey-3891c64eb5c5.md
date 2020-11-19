@@ -1,11 +1,11 @@
 ---
 templateKey: blog-post
-title:  Getting Started with Your Marathon Journey
+title: Getting Started with Your Marathon Journey
+syndicate: true
 date: 2018-02-08T01:49:09.967Z
+description: Get all the things you need to take the next step in your marathon journey.
 featuredpost: false
 featuredimage: /img/1__QgsXtucapPQd0Z63a5iFTA.jpeg
-description: The Coffee Taster’s Flavor Wheel, the official resource used by coffee tasters, has been revised for the first time this year.
-syndicate: true
 tags:
   - flavor
   - tasting
@@ -36,10 +36,10 @@ Another great choice for neutral runners. Extremely light weight and durable.
 
 There are a million options when it comes to running clothes. The main things you want to look for are:
 
-1.  Lightweight
-2.  UV protection
-3.  Absorbent
-4.  Comfortable
+1. Lightweight
+2. UV protection
+3. Absorbent
+4. Comfortable
 
 Here are a few of my favorite items
 

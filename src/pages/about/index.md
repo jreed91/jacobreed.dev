@@ -6,7 +6,7 @@ Jacob Reed is a developer, writer, phtographer living in Des Moines, IA. He work
 
 Jacob spends his free time hiking, running, listening to music, photogrpahy and anything technology related. 
 
-If you're interested in reaching out feel free to [email me.](mailto:jreed91@gmail.com)
+If you're interested in reaching out feel free to [email me](mailto:jacobreed@hey.com).
 
 ## My Travels
 
