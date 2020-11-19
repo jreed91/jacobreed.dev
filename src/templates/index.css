@@ -91,6 +91,10 @@
   .markdown table {
     @apply mb-6;
   }
+
+  .markdown pre {
+    @apply p-2 mx-6 bg-gray-100 font-serif border-l-4 border-gray-400 overflow-ellipsis overflow-hidden;
+  }
   
   
   /* Wrap any inline highlights `that are really long`, but don't modify

@@ -30,13 +30,17 @@ You should now have a simple ASP.NET website structure set up. Now we need to ge
 
 Make sure you have bower installed:
 
+```
 npm install -g bower
+```
 
 In my template I was missing a .bowerrc file, add this to the root of your directory and type:
 
-{\
+```
+{
   	"directory": "wwwroot/lib"\
 }
+```
 
 This will help make sure that all your bower dependencies are loading into the lib folder.
 
@@ -44,7 +48,8 @@ Now we can start adding our dependencies to the bower file.
 
 Add this to our bower.json:
 
-{\
+```
+{
     "name": "ASP.NET",\
     "private": true,\
     "dependencies": {\
@@ -56,10 +61,13 @@ Add this to our bower.json:
 	    "angularUtils-pagination": "*"\
 	}\
 }
+```
 
 After saving, open up terminal in your directory and type:
 
+```
 bower update
+```
 
 You now see all of our dependencies loaded into the lib folder.
 
@@ -67,30 +75,30 @@ You now see all of our dependencies loaded into the lib folder.
 
 We can now start building our API. First start let’s build our Model. In the Models folder create a new class named Item.cs. Add the attributes you want to track, for simplicity here is mine:
 
-namespace angularjs_aspnet_paginate.Models\
-{\
-    public class Item\
-    {\
+```
+namespace angularjs_aspnet_paginate.Models
+{
+    public class Item
+    {
         public int Id { get; set; }  
 
-```
-    public string Name { get; set; }  
-}  
-```
 
+    public string Name { get; set; }  
+    }  
 }
+```
 
 We also need to create a model for the data we will return. Call this class PagedCollection.cs and add the following:
 
+```
 using System.Linq; using System.Collections.Generic;
 
-namespace angularjs_aspnet_paginate.Models\
-{\
-    public class PagedCollection<T>\
-    {\
+namespace angularjs_aspnet_paginate.Models
+{
+    public class PagedCollection<T>
+    {
         public int Page { get; set; }  
 
-```
     public int Count  
     {  
         get  
@@ -103,51 +111,51 @@ namespace angularjs_aspnet_paginate.Models\
     public int TotalCount { get; set; }  
 
     public IEnumerable<T> Items { get; set; }  
-}  
-```
-
+    }  
 }
+```
 
 This is the data we will return from our API to our client. It includes the pagee number, a count of number of items, a count of total pages, total count of items overall, and the items.
 
 Now that we have our models we can build our API. Create a new Controller: ItemsController.cs. Here is the relevant code for returning Items:
 
-// GET: api/paginate\
-\[HttpGet]\
-public PagedCollection<Item> Get(int? page, int? pageSize)\
-{\
-    var currPage = page.GetValueOrDefault(0);\
-    currPage = currPage - 1;\
+```
+// GET: api/paginate
+[HttpGet]
+public PagedCollection<Item> Get(int? page, int? pageSize)
+{
+    var currPage = page.GetValueOrDefault(0);
+    currPage = currPage - 1;
     var currPageSize = pageSize.GetValueOrDefault(10);  
 
-```
-var paged = \_items.Skip(currPage \* currPageSize)  
+var paged = _items.Skip(currPage * currPageSize)  
                     .Take(currPageSize)  
                     .ToArray();  
 
-var totalCount = \_items.Count();  
+var totalCount = _items.Count();  
 
-return new PagedCollection<Item>()  
-{  
-    Page = currPage,  
-    TotalCount = totalCount,  
-    TotalPages = (int)Math.Ceiling((decimal)totalCount / currPageSize),  
-    Items = paged  
-};  
-```
-
+    return new PagedCollection<Item>()  
+    {  
+        Page = currPage,  
+        TotalCount = totalCount,  
+        TotalPages = (int)Math.Ceiling((decimal)totalCount / currPageSize),  
+        Items = paged  
+    }; 
 }
+```
 
 This api takes a GET request with the current page and the page size (i.e. how many items should be displayed). We then use a linq query to get the data from _items based on the current page number and page size:
 
-static ItemsController() {\
-	_items = Enumerable.Range(1, 100)\
-    	.Select(i => new Item()\
+```
+static ItemsController() {
+	_items = Enumerable.Range(1, 100)
+    	.Select(i => new Item()
         {\
-            Id = i,\
-            Name = "Item " + i.ToString()\
-        }).ToArray();\
+            Id = i,
+            Name = "Item " + i.ToString()
+        }).ToArray();
 }
+```
 
 We get our total count of items and return the PagedCollection model. After building out this structure open up terminal and type:
 
@@ -164,9 +172,11 @@ Now that we have our API built we can start building our front-end code.
 
 See the following code for these files:
 
+```
 _ViewStart.cshtml: @{ Layout = “_Layout”; }
 
 _ViewImports.cshtml: @using angularjs_aspnet_paginate @using angularjs_aspnet_paginate.Models
+```
 
 1. Add another folder with Views called Shared
 2. Add a file named _Layout.cshtml
@@ -176,19 +186,24 @@ This is the file that will load all of your client side html after _ViewStart.cs
 1. Add another folder names Home inside Views
 2. Add a file named Index.cshtml. This is the file that will load once RenderBody() is called.
 3. In order for all of this to work we need to add a HomeController to our ASP.NET code. Add HomeController.cs under the Controllers folder:
-4. using Microsoft.AspNet.Mvc;
-5. namespace angularjs_aspnet_paginate.Controllers { public class HomeController : Controller {
 
-* public IActionResult Index() { return View(); } } }
+```
+using Microsoft.AspNet.Mvc;
+namespace angularjs_aspnet_paginate.Controllers { public class HomeController : Controller {
+
+public IActionResult Index() { return View(); } } }
+```
 
 This is ust saying when I hit the home controller load my initial Index view. We also need to add the following code to our Startup.cs Configure method:
 
-app.UseMvc(routes =>\
-    {\
-        routes.MapRoute(\
-            name: "default",\
-            template: "{controller=Home}/{action=Index}/{id?}");\
+```
+app.UseMvc(routes =>
+    {
+        routes.MapRoute(
+            name: "default",
+            template: "{controller=Home}/{action=Index}/{id?}");
     });
+```
 
 You can now test the application to see the intial view load.
 
@@ -196,8 +211,9 @@ You can now test the application to see the intial view load.
 
 Now open up Views/Home/Index.cshtml and build our boilerplate code.
 
-@{\
-    ViewData\["Title"] = "Home Page";\
+```
+@{
+    ViewData\["Title"] = "Home Page";
 }  
 
 <div ng-app="paginationApp">  
@@ -208,6 +224,7 @@ Now open up Views/Home/Index.cshtml and build our boilerplate code.
         <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" template-url="lib/angularUtils-pagination/dirPagination.tpl.html"></dir-pagination-controls>  
     </div>  
 </div>
+```
 
 There’s a lot in this so let me go explain:
 
@@ -233,7 +250,3 @@ You should now have a working AngularJS server-side pagination with an ASP.NET A
 * [https://github.com/mizrael/AngularJs-Pagination/tree/master/DemoAngularPagination](mizrael/AngularJs-Pagination)
 * [ASP.NET Docs](https://docs.asp.net/en/latest/)
 * [Dir-Paginate Module](https://github.com/mizrael/AngularJs-Pagination)
-
-*This article was originally posted* *[on my own site](http://jacobreed.me//2016/01/12/Create-a-simple-pager-utilizing-AngularJS-dir-paginate-and-ASP.NET-5-API.html).*
-
-\#Tech
