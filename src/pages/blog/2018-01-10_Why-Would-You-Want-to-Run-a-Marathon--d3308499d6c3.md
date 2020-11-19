@@ -10,7 +10,6 @@ tags:
   - flavor
   - tasting
 ---
-
 ![](img/1__xFeXP228u__3dvwpsA2Pdbg.jpeg)
 
 That’s the question I get asked most often after I say I’m training for a marathon. Why would I want to run 26.2 grueling miles? Is it because I enjoy running that much? Probably not, no runner enjoys running that much. Maybe it’s because I want to get in shape? If I’m going to run 26.2 miles, I better be in good shape before that.

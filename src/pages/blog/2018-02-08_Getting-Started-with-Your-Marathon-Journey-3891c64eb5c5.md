@@ -10,7 +10,6 @@ tags:
   - flavor
   - tasting
 ---
-
 ![](img/1__QgsXtucapPQd0Z63a5iFTA.jpeg)
 
 So you’ve already read our last story:
