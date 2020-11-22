@@ -7,9 +7,6 @@ description: >-
   
 featuredpost: false
 featuredimage: /img/1__pQ1htpFXvRSI23wPAQSM3w.jpeg
-tags:
-  - personal
-  - thoughts
 ---
 How do you put into words how much someone means to you?
 

@@ -6,9 +6,6 @@ date: 2018-02-08T01:49:09.967Z
 description: Get all the things you need to take the next step in your marathon journey.
 featuredpost: false
 featuredimage: /img/1__QgsXtucapPQd0Z63a5iFTA.jpeg
-tags:
-  - flavor
-  - tasting
 ---
 ![](img/1__QgsXtucapPQd0Z63a5iFTA.jpeg)
 

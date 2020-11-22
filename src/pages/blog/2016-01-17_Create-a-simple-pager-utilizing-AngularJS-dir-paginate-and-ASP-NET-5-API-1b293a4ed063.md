@@ -7,11 +7,6 @@ description: >-
   
 featuredpost: false
 featuredimage: /img/1-guedpz-wj5fdffg75bnuiq.png
-tags:
-  - angularjs
-  - angular
-  - technology
-  - tutorial
 ---
 Today I’m going to walk you through how to build a simple server-side pager utilizing AngularJS, C#, and ASP.NET 5 on OS X.
 

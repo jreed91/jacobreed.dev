@@ -6,9 +6,6 @@ featuredpost: false
 featuredimage: /img/1__xFeXP228u__3dvwpsA2Pdbg.jpeg
 description:  That’s the question I get asked most often after I say I’m training for a marathon.
 syndicate: true
-tags:
-  - flavor
-  - tasting
 ---
 ![](img/1__xFeXP228u__3dvwpsA2Pdbg.jpeg)
 
