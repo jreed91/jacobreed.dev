@@ -1,0 +1,175 @@
+---
+templateKey: blog-post
+title: CDK - A Canary in a Coal Mine
+syndicate: true
+date: 2021-08-03T15:25:42.205Z
+description: A safe way to deploy your lambdas
+featuredpost: true
+featuredimage: /img/canary_art22.jpg
+---
+When developing new lambdas using the CDK it's easy to get comfortable with the normal deployment process. Just run "cdk deploy" and your application is deployed, right?! Wrong! How do you know the lambda deployment worked properly? Do you really want to cut all your traffic over to the new lambda without performing integration tests? Well if this is you the CDK has tools just for the job.
+
+## A Lambda Canary
+
+A canary is a type of bird that used to be used in coal mines to give an early warning signs of potential dangers. That same analogy can be used with a lambda. Here is what we're going to be building:
+
+![Sequence Diagram](/img/untitled.png)
+
+## Get Started
+
+A canary is a type of bird that used to be used in coal mines to give an early warning signs of potential dangers. That same analogy can be used with a lambda. Here is what we're going to be building:
+
+1. A Lambda that will be our "Live" version.
+2. A Lambda that will be our integration test version.
+
+So to get started we need to create a new project. I personally like to use [Projen](https://github.com/projen/projen). To get started run:
+
+```
+npx projen new awscdk-app-ts
+```
+
+After that you should have a new CDK project set up. Now we need to create a few different files. First we need our "live" lambda. This will simply return back the event body back to the caller.
+
+```
+export const handler = async (event: any): Promise<any> => {
+  return event.body;
+};
+```
+*src/lambda/index.ts*
+
+## Our "Canary Lambda"
+
+Now we can create our lambda canary. When this is triggered it will perform some integration tests on our "Live Lambda". First create a new folder under src named "integration". Inside of here run "npm init -y". This will create our package.json. Create our lambda entry point:
+
+```
+import { runIntegrationTests } from './integration-tests';
+import { testOne } from './test-one';
+
+
+export const handler = async (event: any) => {
+  // Define and pass in as many integration tests as you need. Each test run concurrently
+  await runIntegrationTests(event, [
+    testOne(),
+  ]);
+};
+```
+*src/integration/test-lambda.ts*
+
+The rest of the code can be referenced here: <https://github.com/jreed91/cdk-lambda-canary>. This logic here is where you could really do some interesting logic. For instance, does your lambda post to an SQS queue? Validate a message is put on the queue after invoking.
+
+## The infrastructure code
+The most important piece is next. Our CDK Stack. This will consist of our 2 lambdas:
+```
+    const myFunction = new Function(this, 'SsMyLambdaFunction', {
+      code: Code.fromAsset(__dirname + '../../../build'),
+      handler: 'index.handler',
+      runtime: Runtime.NODEJS_12_X,
+      description: 'Generated on: ${new Date().toISOString()}',
+    });
+
+    const testFunction = new Function(this, 'test', {
+      code: Code.fromAsset(__dirname + '../../../build-test'),
+      handler: 'test-lambda.handler',
+      runtime: Runtime.NODEJS_12_X,
+```
+*src/infrastructure/my-stack.ts*
+
+A cloudwatch alarm where our invocation errors for our live lambda will go:
+```
+   const invocationErrorsAlarm = new Alarm(this, 'invoke-errors', {
+      metric: myFunction.metricErrors(),
+      threshold: 1,
+      evaluationPeriods: 1,
+    });
+```
+*src/infrastructure/my-stack.ts*
+
+Then we will create a custom construct to handle our CodeDeploy:
+```
+interface CanaryLambdaDeployProps extends StackProps {
+  mainFunction: Function;
+  testFunction: Function;
+  deploymentConfig: ILambdaDeploymentConfig; // Choose your type of cutover
+  subscription: ITopicSubscription;
+  alarms?: Alarm[];
+  liveAliasName?: string;
+}
+export class TestableLambda extends Construct {
+  readonly liveAlias: Alias
+
+  constructor(scope: Construct, id: string, props: CanaryLambdaDeployProps) {
+    super(scope, id);
+   ...
+  }
+}
+```
+*src/infrastructure/testable-lambda.ts*
+
+This class will build the following:
+1. A new CodeDeploy Application:
+```
+const myApplication = new LambdaApplication(this, 'myCodeDeployLambda');
+```
+
+2. Set the version of the lambda that we need to test against.
+```
+    const aliasName = props.liveAliasName || 'live';
+
+    const newVersion = props.mainFunction.currentVersion;
+    this.liveAlias = newVersion.addAlias(aliasName);
+
+    props.testFunction.addEnvironment('FUNCTION_TO_INVOKE', newVersion.functionArn);
+    newVersion.grantInvoke(props.testFunction);
+```
+
+3. A CDK lambda deployment group. This is what performs the actual deployment of the lambda and shifts traffic based on the passed in props.
+```
+ new LambdaDeploymentGroup(this, 'DeploymentGroup', {
+      application: myApplication,
+      alias: this.liveAlias,
+      deploymentConfig: props.deploymentConfig,
+      preHook: props.testFunction,
+      alarms: props.alarms,
+    });
+```
+
+4. Finally a little extra credit. An SNS topic that can send you notifications based on the status of your deployment. Hook it up to Slack or whatever your heart desires. This had to use a Cfn Construct due to a limitation on the deployment notifications from CodeDeploy in the CDK.
+
+```
+const topic = new Topic(this, 'notification-topic', {
+      displayName: 'Customer subscription topic',
+    });
+
+    topic.addSubscription(props.subscription);
+
+    new CfnNotificationRule(this, 'NotificationRule', {
+      detailType: 'FULL',
+      name: 'Deployment Notifications',
+      eventTypeIds: [
+        'codedeploy-application-deployment-failed',
+        'codedeploy-application-deployment-succeeded',
+      ],
+      resource: myApplication.applicationArn,
+      targets: [{ targetType: 'SNS', targetAddress: topic.topicArn }],
+    });
+
+    topic.addToResourcePolicy(new PolicyStatement({
+      actions: [
+        'SNS:Publish',
+      ],
+      principals: [
+        new ServicePrincipal('codestar-notifications.amazonaws.com'),
+      ],
+      effect: Effect.ALLOW,
+      resources: [
+        topic.topicArn,
+      ],
+    }));
+```
+
+## End
+After doing all of this you can be more confident in your deployments and that all your integration with AWS services functions as you expected.
+
+### References
+
+* <https://blog.outwiththeold.info/posts/testable-lambda/>
