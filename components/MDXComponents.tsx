@@ -16,7 +16,7 @@ const CustomLink = (props: {href: string, children: any}) => {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 };
 
-function RoundedImage(props) {
+function RoundedImage(props: any) {
   return <Image alt={props.alt} className="rounded-lg" {...props} />;
 }
 
