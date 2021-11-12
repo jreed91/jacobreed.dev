@@ -3,3 +3,9 @@ node_modules
 
 # Contentlayer
 .contentlayer
+
+.log
+.DS_Store
+.next
+.vercel
+.env
