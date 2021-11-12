@@ -5,7 +5,6 @@ import {
   } from 'contentlayer/source-files';
   import rehypeSlug from 'rehype-slug';
   import rehypeCodeTitles from 'rehype-code-titles';
-  import rehypePrism from 'rehype-prism-plus';
   
   const computedFields: ComputedFields = {
     slug: {
@@ -34,9 +33,7 @@ import {
     mdx: {
       rehypePlugins: [
         rehypeSlug,
-        rehypeCodeTitles,
-        rehypePrism
-      ]
+        rehypeCodeTitles      ]
     }
   });
   
