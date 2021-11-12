@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const CustomLink = (props) => {
+const CustomLink = (props: {href: string, children: any}) => {
   const href = props.href;
   const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'));
 

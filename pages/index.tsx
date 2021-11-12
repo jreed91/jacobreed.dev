@@ -1,13 +1,14 @@
 import { allBlogs } from ".contentlayer/data";
+import { Blog } from ".contentlayer/types";
 import { pick } from "contentlayer/client";
 import Container from "../components/Container";
 import FeaturedBlogs from "../components/BlogPostCard";
 
-export default function Home({ posts }) {
+export default function Home({ posts }: {posts: Blog[]}) {
   const filteredBlogPosts = posts
   .sort(
     (a, b) =>
-      Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
+      Number(new Date(b.date)) - Number(new Date(a.date))
   ).slice(0, 2);
 
   return (

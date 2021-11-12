@@ -27,7 +27,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: {params: {slug: string}}) {
     const post = allBlogs.find((post) => post.slug === params.slug);
   
     return { props: { post } };

@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import NextLink from 'next/link';
 import cn from 'classnames';
 
-function NavItem({ href, text }) {
+function NavItem({ href, text }: {href: string, text: string}) {
   const router = useRouter();
   const isActive = router.asPath === href;
 

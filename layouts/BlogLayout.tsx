@@ -5,9 +5,9 @@ import Container from '../components/Container';
 import type { PropsWithChildren } from 'react';
 import type { Blog } from '.contentlayer/types';
 
-const editUrl = (slug) =>
+const editUrl = (slug: string) =>
   `https://github.com/jreed91/jacobreed.dev/edit/main/data/blog/${slug}.mdx`;
-const discussUrl = (slug) =>
+const discussUrl = (slug: string) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
     `https://jacobreed.dev/blog/${slug}`
   )}`;
