@@ -34,7 +34,7 @@ export default function BlogLayout({
               alt="Jacob Reed"
               height={24}
               width={24}
-              src="/avatar.jpg"
+              src="/static/images/avatar.jpeg"
               className="rounded-full"
             />
             <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
@@ -42,6 +42,9 @@ export default function BlogLayout({
               {format(parseISO(post.date), 'MMMM dd, yyyy')}
             </p>
           </div>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 min-w-32 md:mt-0">
+            {post.readingTime.text}
+          </p>
         </div>
         <div className="w-full mt-4 prose dark:prose-dark max-w-none">
           {children}

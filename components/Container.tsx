@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import NextLink from 'next/link';
 import cn from 'classnames';
+import Footer from "./Footer";
 
 function NavItem({ href, text }: {href: string, text: string}) {
   const router = useRouter();
@@ -111,7 +112,7 @@ export default function Container(props: any) {
         className="flex flex-col justify-center px-8 bg-gray-50 dark:bg-gray-900"
       >
         {children}
-        {/* <Footer /> */}
+        <Footer />
       </main>
     </div>
   );
