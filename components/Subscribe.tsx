@@ -1,50 +1,51 @@
-import { useState, useRef, FormEventHandler } from 'react';
+import { useState, useRef, FormEventHandler, FormEvent } from "react";
 
 export enum Form {
-    Initial,
-    Loading,
-    Success,
-    Error
-  }
-  
-  export type FormState = {
-    state: Form;
-    message?: string;
-  };
+  Initial,
+  Loading,
+  Success,
+  Error,
+}
+
+export type FormState = {
+  state: Form;
+  message?: string;
+};
 
 export default function Subscribe() {
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
   const inputEl = useRef<HTMLInputElement>(null);
 
+  const subscribe = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setForm({ state: Form.Loading });
 
-    if(inputEl.current && inputEl.current.value) {
-        const res = await fetch('/api/subscribe', {
-            body: JSON.stringify({
-              email: inputEl.current.value
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            method: 'POST'
-          });
-      
-          const { error } = await res.json();
-          if (error) {
-            setForm({
-              state: Form.Error,
-              message: error
-            });
-            return;
-          }
-      
-          inputEl.current.value = '';
-          setForm({
-            state: Form.Success,
-            message: `Hooray! You're now on the list.`
-          });
-    }
+    if (inputEl.current && inputEl.current.value) {
+      const res = await fetch("/api/subscribe", {
+        body: JSON.stringify({
+          email: inputEl.current.value,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
 
+      const { error } = await res.json();
+      if (error) {
+        setForm({
+          state: Form.Error,
+          message: error,
+        });
+        return;
+      }
+
+      inputEl.current.value = "";
+      setForm({
+        state: Form.Success,
+        message: `Hooray! You're now on the list.`,
+      });
+    }
   };
 
   return (
@@ -70,7 +71,7 @@ export default function Subscribe() {
           className="flex items-center justify-center absolute right-1 top-1 px-4 pt-1 font-medium h-8 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded w-28"
           type="submit"
         >
-          {form.state === Form.Loading ? <p>Loading</p> : 'Subscribe'}
+          {form.state === Form.Loading ? <p>Loading</p> : "Subscribe"}
         </button>
       </form>
       {form.state === Form.Error ? (
