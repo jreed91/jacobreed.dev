@@ -14,36 +14,37 @@ export enum Form {
 
 export default function Subscribe() {
   const [form, setForm] = useState<FormState>({ state: Form.Initial });
-  const inputEl = useRef(null);
+  const inputEl = useRef<HTMLInputElement>(null);
 
-  const subscribe = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
     setForm({ state: Form.Loading });
 
-    const res = await fetch('/api/subscribe', {
-      body: JSON.stringify({
-        email: inputEl.current.value
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    });
-
-    const { error } = await res.json();
-    if (error) {
-      setForm({
-        state: Form.Error,
-        message: error
-      });
-      return;
+    if(inputEl.current && inputEl.current.value) {
+        const res = await fetch('/api/subscribe', {
+            body: JSON.stringify({
+              email: inputEl.current.value
+            }),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            method: 'POST'
+          });
+      
+          const { error } = await res.json();
+          if (error) {
+            setForm({
+              state: Form.Error,
+              message: error
+            });
+            return;
+          }
+      
+          inputEl.current.value = '';
+          setForm({
+            state: Form.Success,
+            message: `Hooray! You're now on the list.`
+          });
     }
 
-    inputEl.current.value = '';
-    setForm({
-      state: Form.Success,
-      message: `Hooray! You're now on the list.`
-    });
   };
 
   return (
