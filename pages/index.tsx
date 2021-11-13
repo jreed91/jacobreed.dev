@@ -2,7 +2,8 @@ import { allBlogs } from ".contentlayer/data";
 import { Blog } from ".contentlayer/types";
 import { pick } from "contentlayer/client";
 import Container from "../components/Container";
-import FeaturedBlogs from "../components/BlogPostCard";
+import BlogPost from "../components/BlogPost";
+import Subscribe from "../components/Subscribe";
 
 export default function Home({ posts }: {posts: Blog[]}) {
   const filteredBlogPosts = posts
@@ -26,20 +27,18 @@ export default function Home({ posts }: {posts: Blog[]}) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-start max-w-2xl border-gray-200 dark:border-gray-700 mx-auto pb-16">
+      <div className="items-center justify-between w-full relative max-w-2xl mx-auto">
         <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-6 text-black dark:text-white">
-          Featured Posts
+          Writing
         </h3>
          {!filteredBlogPosts.length && (
           <p className="mb-4 text-gray-600 dark:text-gray-400">
             No posts found.
           </p>
         )}
-        <div className="flex gap-6 flex-col md:flex-row">
         {filteredBlogPosts.map((post) => (
-         <FeaturedBlogs slug={post.slug} title={post.title} summary={post.summary} date={post.date}/>
+          <BlogPost key={post.title} {...post} />
         ))}
-        </div>
       </div>
     </Container>
   );

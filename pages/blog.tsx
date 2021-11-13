@@ -22,7 +22,7 @@ export default function Blog({
   return (
     <Container
     >
-      <div className="fflex items-center justify-between w-full relative max-w-2xl mx-auto">
+      <div className="items-center justify-between w-full relative max-w-2xl mx-auto">
         <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
           All Posts
         </h3>
