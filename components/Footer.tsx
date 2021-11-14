@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import Subscribe from './Subscribe';
+import Link from "next/link";
+import { NavItem } from "./Container";
+import Subscribe from "./Subscribe";
 
-
-const ExternalLink = ({ href, children }: {href: string, children: any}) => (
+const ExternalLink = ({ href, children }: { href: string; children: any }) => (
   <a
     className="text-gray-500 hover:text-gray-600 transition"
     target="_blank"
@@ -15,27 +15,20 @@ const ExternalLink = ({ href, children }: {href: string, children: any}) => (
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col justify-center items-start max-w-2xl mx-auto w-full mb-8">
-      <Subscribe/>
+    <footer className="flex flex-col justify-center pb-8">
       <hr className="w-full border-1 border-gray-200 dark:border-gray-800 mb-8" />
-      <div className="w-full max-w-2xl grid grid-cols-1 gap-4 pb-16 sm:grid-cols-2">
-        <div className="flex flex-col space-y-4">
-          <Link href="/">
-            <a className="text-gray-500 hover:text-gray-600 transition">Home</a>
-          </Link>
-          <Link href="/about">
-            <a className="text-gray-500 hover:text-gray-600 transition">
-              About
-            </a>
-          </Link>
+      <nav className="flex items-center justify-between w-full relative max-w-4xl border-gray-200 dark:border-gray-700 mx-auto ">
+        <div className="ml-[-0.60rem]">
+          <NavItem href="/" text="Home" />
+          <NavItem href="https://twitter.com/jreed91" text="Twitter" />
+          <NavItem href="https://github.com/jreed91" text="GitHub" />
         </div>
-        <div className="flex flex-col space-y-4">
-          <ExternalLink href="https://twitter.com/jreed91">
-            Twitter
-          </ExternalLink>
-          <ExternalLink href="https://github.com/jreed91">GitHub</ExternalLink>
-        </div>
-        </div>
+        <div
+            className="flex items-center justify-cente"
+          >
+            Jacob Reed &copy; 2021
+          </div>
+      </nav>
     </footer>
   );
 }

@@ -19,7 +19,7 @@ A canary is a type of bird that used to be used in coal mines to give an early w
 1. A Lambda that will be our "Live" version.
 2. A Lambda that will be our integration test version.
 
-So to get started we need to create a new project. I personally like to use `[Projen](https://github.com/projen/projen)`. To get started run:
+So to get started we need to create a new project. I personally like to use [Projen](https://github.com/projen/projen). To get started run:
 
 ```
 npx projen new awscdk-app-ts
@@ -52,7 +52,7 @@ export const handler = async (event: any) => {
 ```
 *src/integration/test-lambda.ts*
 
-The rest of the code can be referenced here: `[https://github.com/jreed91/cdk-lambda-canary](https://github.com/jreed91/cdk-lambda-canary)`. This logic here is where you could really do some interesting logic. For instance, does your lambda post to an SQS queue? Validate a message is put on the queue after invoking.
+The rest of the code can be referenced here: [https://github.com/jreed91/cdk-lambda-canary](https://github.com/jreed91/cdk-lambda-canary). This logic here is where you could really do some interesting logic. For instance, does your lambda post to an SQS queue? Validate a message is put on the queue after invoking.
 
 ## The infrastructure code
 The most important piece is next. Our CDK Stack. This will consist of our 2 lambdas:
@@ -169,4 +169,4 @@ After doing all of this you can be more confident in your deployments and that a
 
 ### References
 
-* `[https://blog.outwiththeold.info/posts/testable-lambda/](https://blog.outwiththeold.info/posts/testable-lambda/)`
+* [https://blog.outwiththeold.info/posts/testable-lambda/](https://blog.outwiththeold.info/posts/testable-lambda/)
