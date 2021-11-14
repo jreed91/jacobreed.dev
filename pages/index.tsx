@@ -15,10 +15,10 @@ export default function Home({ posts }: {posts: Blog[]}) {
   return (
     <Container>
       <div className="flex flex-col items-start justify-start max-w-4xl mx-auto w-full pb-16">
-            <h1 className="font-bold text-6xl w-4/6">
+            <h1 className="font-bold text-6xl">
               My name is Jacob.
             </h1>
-            <h2 className="text-gray-700 dark:text-gray-200 mb-4 text-2xl w-4/6">
+            <h2 className="text-gray-700 dark:text-gray-200 mb-4 text-2xl">
               I'm an experienced Software Engineer @ <a href="https://www.leantechniques.com" target="_blank">Lean TECHniques</a>
             </h2>
       </div>
