@@ -3,7 +3,6 @@ import { Blog } from ".contentlayer/types";
 import { pick } from "contentlayer/client";
 import Container from "../components/Container";
 import BlogPost from "../components/BlogPost";
-import Subscribe from "../components/Subscribe";
 
 export default function Home({ posts }: {posts: Blog[]}) {
   const filteredBlogPosts = posts
