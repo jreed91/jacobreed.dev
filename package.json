@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@prisma/client": "^3.4.2",
+    "prisma": "^3.4.2",
     "@tailwindcss/typography": "0.4.1",
     "classnames": "^2.3.1",
     "contentlayer": "^0.0.31",
