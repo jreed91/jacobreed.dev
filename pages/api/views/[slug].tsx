@@ -37,8 +37,16 @@ export default async function handler(
           slug
         }
       });
-
-      return res.status(200).json({ total: views.count.toString() });
+      
+      if (!views) {
+        return res.status(404).json({
+          error: 'View not found'
+        });
+      } else {
+        return res.status(200).json({
+          total: views.count.toString()
+        });
+      }
     }
   } catch (e: any) {
     return res.status(500).json({ message: e.message });
