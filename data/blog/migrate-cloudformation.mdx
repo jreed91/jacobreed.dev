@@ -9,14 +9,14 @@ This article will help others on how to migrate an existing cloudformation stack
 
 There are many different tools that can help migrate your stacks into terraform but none of them fit exactly what I was looking for but they might help you.
 
-* ![Terraformer](https://github.com/GoogleCloudPlatform/terraformer)
-* ![cf-to-tf](https://github.com/humanmade/cf-to-tf)
+* [Terraformer](https://github.com/GoogleCloudPlatform/terraformer)
+* [cf-to-tf](https://github.com/humanmade/cf-to-tf)
 
 Here are the steps I followed to manually migrate my cloudformation resources.
 
 ## 1. Add a retain policy to the resources you are migrating
 
-* Depending on how your cloudformation resources were created you'll want to update the resource so it has a ![DeletionPolicy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html) on it. This would look like:
+* Depending on how your cloudformation resources were created you'll want to update the resource so it has a [DeletionPolicy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html) on it. This would look like:
 
 ```json
 {
@@ -30,7 +30,7 @@ Here are the steps I followed to manually migrate my cloudformation resources.
 }
 ```
 
-If you're migrating a database resource you might want to also add ![deletion protection](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html) to the resource.
+If you're migrating a database resource you might want to also add [deletion protection](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html) to the resource.
 
 ## 2. Create a terraform project
 
@@ -123,4 +123,4 @@ aws cloudformation delete-stack \
     --stack-name my-stack
 ```
 
-Now you're free to use terraform from here on out for managing your resources. 
+Now you're free to use terraform from here on out for managing your resources.

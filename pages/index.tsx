@@ -9,7 +9,7 @@ export default function Home({ posts }: {posts: Blog[]}) {
   .sort(
     (a, b) =>
       Number(new Date(b.date)) - Number(new Date(a.date))
-  ).slice(0, 2);
+  );
 
   return (
     <Container>
