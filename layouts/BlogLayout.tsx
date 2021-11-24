@@ -7,7 +7,7 @@ import type { Blog } from '.contentlayer/types';
 import ViewCounter from '../components/ViewCounter';
 
 const editUrl = (slug: string) =>
-  `https://github.com/jreed91/jacobreed.dev/edit/main/data/blog/${slug}.mdx`;
+  `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${slug}.mdx`;
 const discussUrl = (slug: string) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
     `https://jacobreed.dev/blog/${slug}`
