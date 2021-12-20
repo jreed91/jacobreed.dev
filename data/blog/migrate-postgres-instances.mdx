@@ -1,0 +1,155 @@
+---
+title: How to Migrate Between Two RDS Postgres Instances
+date: '2021-12-20'
+image: /static/images/iu.png
+summary: A walkthrough on how to migrate between two RDS Postgres Instances
+---
+
+When searching for how to migrate between two RDS instances you may be met with articles that point you in the direction of using Amazon Database Migration Services (DMS), from experience DON'T DO IT. You'll be met with constant unexplainable failures, digging through logs that tell you nothing and paying AWS for support. DMS might be great for more complex migrations i.e. moving from one database engine to another. For Postgres -> Postgres migrations there is an easier option!
+
+- [Enter Postgres Logical Replication](#enter-postgres-logical-replication)
+  - [Getting Started](#getting-started)
+  - [Database Setup](#database-setup)
+  - [Enabling the Publication](#enabling-the-publication)
+  - [Enabling the Subscription](#enabling-the-subscription)
+  - [Wrapping Up](#wrapping-up)
+
+# Enter Postgres Logical Replication
+
+Logical replication was introduced in Postgres 10.0. From Postgres [docs](https://www.postgresql.org/docs/10/logical-replication.html):
+
+    Logical replication is a method of replicating data objects and their changes, based upon their replication identity (usually a primary key). We use the term logical in contrast to physical replication, which uses exact block addresses and byte-by-byte replication.
+
+This method uses a publication and subscription model for replicating changes between databases.
+
+This is a great use case for when you're migrating between two database instances. In my case I needed to migrate to a different VPC because AWS RDS didn't support the instance class I wanted to move to.
+
+## Getting Started
+
+The first thing we need is 2 RDS instances that are able to communicate with each other. I'll use terraform in this article but use whatever Infrastructure as Code (IaaC) that makes you happy.
+
+```hcl
+resource "aws_db_instance" "default" {
+  allocated_storage    = 10
+  engine               = "postgres"
+  engine_version       = "10.0"
+  instance_class       = "db.t3.micro"
+  name                 = "sourcedb"
+  username             = "foo"
+  password             = "foobarbaz"
+  parameter_group_name = aws_db_parameter_group.source-parameters.id
+  skip_final_snapshot  = true
+}
+
+
+resource "aws_db_instance" "target" {
+  allocated_storage    = 10
+  engine               = "postgres"
+  engine_version       = "10.0"
+  instance_class       = "db.t3.micro"
+  name                 = "sourcedb"
+  username             = "foo"
+  password             = "foobar"
+  parameter_group_name = aws_db_parameter_group.target-parameters.id
+  skip_final_snapshot  = true
+}
+```
+
+*main.tf*
+
+We also want these databases to have a special role to perform the replication process. I'm using terraform here as well but you could use the console to do this as well. You'll need to do the following twice for the source and target databases.
+
+    Important Note: The role must have the roles: "rds_replication", "rds_superuser"
+
+```hcl
+provider "postgresql" {
+  host            = aws_db_instance.source.endpoint
+  port            = 5432
+  database        = "postgres"
+  username        = "foo"
+  password        = "foobar"
+  sslmode         = "require"
+  connect_timeout = 15
+}
+
+resource "postgresql_schema" "my_schema" {
+  name  = "my_schema"
+  owner = "postgres"
+
+
+  # app_releng can create new objects in the schema.  This is the role that
+  # migrations are executed as.
+  policy {
+    create = true
+    usage  = true
+    role   = "my_migration_role"
+  }
+}
+
+
+resource "postgresql_role" "my_migration_role" {
+  name             = "my_migration_role"
+  login            = true
+  connection_limit = 5
+  password         = "apassword"
+  roles            = ["rds_replication", "rds_superuser"]
+}
+```
+
+*database.tf*
+
+After deploying this we should have two databases.
+
+## Database Setup
+
+The first thing we need on the source database is a special parameter defined to allow postgres to create replication slots. See below for my parameter group I used.
+
+```hcl
+resource "aws_db_parameter_group" "source-parameters" {
+  name   = "rds-postgres"
+  family = "postgres10.0"
+
+  parameter {
+    name  = "rds.logical_replication"
+    value = "1"
+  }
+}
+```
+
+*main.tf*
+
+## Enabling the Publication
+
+After deploying the parameter group and rebooting your database you should be able to start enabling the publication. Login using your migration role into the source database.
+
+Perform the following command:
+
+```sql
+CREATE PUBLICATION pub FOR TABLE <table>, <table2>;
+```
+
+[Publication Docs](https://www.postgresql.org/docs/10/sql-createpublication.html)
+
+## Enabling the Subscription
+
+Log in to your target database and perform the following command:
+
+```sql
+CREATE SUBSCRIPTION migration CONNECTION 'host=<AWS RDS Source Server Address> port=<port> user=<user> sslmode=prefer dbname=<database name>' PUBLICATION pub
+```
+
+[Subscription Docs](https://www.postgresql.org/docs/10/sql-createsubscription.html)
+
+## Wrapping Up
+
+You should now be able to see your data flowing between your 2 databases. Some things to note:
+
+- Changes to the database schema are not replicated
+- Sequences are not replicated
+- If a table does not have a Primary Key you'll see errors
+  
+To track that everything is up to date run the following command on source and target and validate they match:
+
+```sql
+Select pg_current_wal_lsn()
+```
