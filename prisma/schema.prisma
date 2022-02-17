@@ -14,3 +14,10 @@ model views {
   slug  String @id @db.VarChar(128)
   count BigInt @default(1)
 }
+
+model projects {
+  slug          String @id @db.VarChar(128)
+  name          String @db.Text
+  description   String @db.Text
+  image         String @db.Text
+}

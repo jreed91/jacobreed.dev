@@ -70,6 +70,7 @@ export default function Container(props: any) {
           <div className="ml-[-0.60rem]">
             <NavItem href="/" text="Home" />
             <NavItem href="/blog" text="Blog" />
+            <NavItem href="/projects" text="Projects" />
           </div>
           <button
             aria-label="Toggle Dark Mode"
