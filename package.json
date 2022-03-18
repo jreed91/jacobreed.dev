@@ -29,7 +29,7 @@
     "autoprefixer": "^10.4.4",
     "eslint": "7",
     "eslint-config-next": "12.0.3",
-    "postcss": "^8.4.6",
+    "postcss": "^8.4.12",
     "prettier": "2.5.1",
     "rehype": "12.0.1",
     "rehype-code-titles": "1.0.3",
