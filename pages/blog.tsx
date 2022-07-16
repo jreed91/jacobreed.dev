@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Container from '../components/Container';
 import BlogPost from '../components/BlogPost';
 import { InferGetStaticPropsType } from 'next';
-import { allBlogs } from '.contentlayer/data';
+import { allBlogs } from "contentlayer/generated"
+
 import { pick } from '@contentlayer/utils';
 
 export default function Blog({

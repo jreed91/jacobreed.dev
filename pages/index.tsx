@@ -1,8 +1,7 @@
-import { allBlogs } from ".contentlayer/data";
-import { Blog } from ".contentlayer/types";
-import { pick } from "contentlayer/client";
+import { allBlogs, Blog } from "contentlayer/generated"
 import Container from "../components/Container";
 import BlogPost from "../components/BlogPost";
+import { pick } from "contentlayer/client";
 
 export default function Home({ posts }: {posts: Blog[]}) {
   const filteredBlogPosts = posts

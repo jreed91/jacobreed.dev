@@ -1,6 +1,5 @@
-import { allBlogs } from ".contentlayer/data";
-import { Blog } from ".contentlayer/types";
-import { pick } from "contentlayer/client";
+import { allBlogs, Blog, pick } from "contentlayer/generated"
+
 import Link from "next/link";
 import useSWR from "swr";
 import Container from "../../components/Container";
