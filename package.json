@@ -30,7 +30,7 @@
     "eslint": "7",
     "eslint-config-next": "12.2.2",
     "postcss": "^8.4.12",
-    "prettier": "2.5.1",
+    "prettier": "2.7.1",
     "rehype": "12.0.1",
     "rehype-code-titles": "1.0.3",
     "rehype-slug": "5.0.1",
