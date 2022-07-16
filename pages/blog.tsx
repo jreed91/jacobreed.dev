@@ -4,8 +4,7 @@ import Container from '../components/Container';
 import BlogPost from '../components/BlogPost';
 import { InferGetStaticPropsType } from 'next';
 import { allBlogs } from "contentlayer/generated"
-
-import { pick } from '@contentlayer/utils';
+import { pick } from 'contentlayer/client';
 
 export default function Blog({
   posts
