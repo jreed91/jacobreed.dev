@@ -3,8 +3,8 @@ import { parseISO, format } from 'date-fns';
 
 import Container from '../components/Container';
 import type { PropsWithChildren } from 'react';
-import type { Blog } from '.contentlayer/types';
 import ViewCounter from '../components/ViewCounter';
+import { Blog } from 'contentlayer/generated';
 
 const editUrl = (slug: string) =>
   `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${slug}.mdx`;
