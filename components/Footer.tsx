@@ -26,7 +26,7 @@ export default function Footer() {
         <div
             className="flex items-center justify-cente"
           >
-            Jacob Reed &copy; 2021
+            Jacob Reed &copy; 2022
           </div>
       </nav>
     </footer>
