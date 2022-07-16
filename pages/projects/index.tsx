@@ -1,6 +1,6 @@
-import { allBlogs } from ".contentlayer/data";
-import { Blog } from ".contentlayer/types";
 import { pick } from "contentlayer/client";
+import { allBlogs } from "contentlayer/generated"
+
 import Link from "next/link";
 import useSWR from "swr";
 import Container from "../../components/Container";
@@ -27,7 +27,7 @@ export default function Projects() {
           All Projects
         </h3>
         {projects?.map((project) => (
-          <Link href={`${project.slug}`}>
+          <Link href={`${project.slug}`} key={project.slug}>
             <a className="w-full ">
               <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
                 <div className="flex flex-col justify-between md:flex-row">

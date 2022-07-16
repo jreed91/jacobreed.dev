@@ -1,8 +1,7 @@
-import { allBlogs } from ".contentlayer/data";
-import { Blog } from ".contentlayer/types";
-import { pick } from "contentlayer/client";
+import { allBlogs, Blog } from "contentlayer/generated"
 import Container from "../components/Container";
 import BlogPost from "../components/BlogPost";
+import { pick } from "contentlayer/client";
 
 export default function Home({ posts }: {posts: Blog[]}) {
   const filteredBlogPosts = posts
@@ -18,7 +17,7 @@ export default function Home({ posts }: {posts: Blog[]}) {
               My name is Jacob.
             </h1>
             <h2 className="text-gray-700 dark:text-gray-200 mb-4 text-2xl">
-              I'm an experienced Software Engineer @ <a href="https://www.leantechniques.com" target="_blank">Lean TECHniques</a>
+              I am an experienced Software Engineer @ <a href="https://www.leantechniques.com" target="_blank " rel="noreferrer">Lean TECHniques</a>
             </h2>
       </div>
       <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
