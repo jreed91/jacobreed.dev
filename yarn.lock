@@ -426,10 +426,10 @@
   resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b.tgz#a564dd6fb6f25405fe06164989ebd8a1e4bb3508"
   integrity sha512-8yWpXkQRmiSfsi2Wb/ZS5D3RFbeu/btL9Pm/gdF4phB0Lo5KGsDFMxFMgaD64mwED2nHc8ZaEJg/+4Jymb9Znw==
 
-"@prisma/engines@4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.3.0.tgz#097784f5d044d4a364652420d3c4d6d4c0baa909"
-  integrity sha512-JAyU7+QEpLkVtgVMYBSPQt9sUcgFqA/MdD4mK7yx+ZyDfHQlP+nT1rmqFPZ3MofR0mAha7nr3rx0ZNN46gLp9Q==
+"@prisma/engines@4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.3.1.tgz#fb0ad69eded13827fb4cd81995a351c234e8327f"
+  integrity sha512-4JF/uMaEDAPdcdZNOrnzE3BvrbGpjgV0FcPT3EVoi6I86fWkloqqxBt+KcK/+fIRR0Pxj66uGR9wVH8U1Y13JA==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -496,14 +496,15 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tailwindcss/typography@0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.4.tgz#ad8c9e6808bae297bb7826742e4789f2a9f09a48"
-  integrity sha512-QEdg40EmGvE7kKoDei8zr5sf4D1pIayHj4R31bH3lX8x2BtTiR+jNejYPOkhbmy3DXgkMF9jC8xqNiGFAuL9Sg==
+"@tailwindcss/typography@0.5.7":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.5.7.tgz#e0b95bea787ee14c5a34a74fc824e6fe86ea8855"
+  integrity sha512-JTTSTrgZfp6Ki4svhPA4mkd9nmQ/j9EfE7SbHJ1cLtthKkpW2OxsFXzSmxbhYbEkfNIyAyhle5p4SYyKRbz/jg==
   dependencies:
     lodash.castarray "^4.4.0"
     lodash.isplainobject "^4.0.6"
     lodash.merge "^4.6.2"
+    postcss-selector-parser "6.0.10"
 
 "@types/acorn@^4.0.0":
   version "4.0.6"
@@ -3181,7 +3182,7 @@ postcss-nested@5.0.6:
   dependencies:
     postcss-selector-parser "^6.0.6"
 
-postcss-selector-parser@^6.0.10, postcss-selector-parser@^6.0.6:
+postcss-selector-parser@6.0.10, postcss-selector-parser@^6.0.10, postcss-selector-parser@^6.0.6:
   version "6.0.10"
   resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-6.0.10.tgz#79b61e2c0d1bfc2602d549e11d0876256f8df88d"
   integrity sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==
@@ -3222,12 +3223,12 @@ prettier@2.7.1:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
 
-prisma@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.3.0.tgz#2c989be1bc6298f28bb4db40521dabec46e7a388"
-  integrity sha512-Ii588H5IsbSun5BwpNQwrayrHKecFEZ6wDoJ7nr2IsqlMblmkA1dextGBObsG9tg+aIVhTrNa7OAbhbvEfqhdQ==
+prisma@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.3.1.tgz#9e4c24e49710392be40ee75fb3d9341d7487881e"
+  integrity sha512-90xo06wtqil76Xsi3mNpc4Js3SdDRR5g4qb9h+4VWY4Y8iImJY6xc3PX+C9xxTSt1lr0Q89A0MLkJjd8ax6KiQ==
   dependencies:
-    "@prisma/engines" "4.3.0"
+    "@prisma/engines" "4.3.1"
 
 prop-types@^15.8.1:
   version "15.8.1"
