@@ -4,8 +4,7 @@ import Link from 'next/link';
 
 export default function BlogPost ({ blog }: { blog: Blog}) {
   return (
-    <Link href={`/blog/${blog.slug}`}>
-      <a className="w-full ">
+    <Link href={`/blog/${blog.slug}`} className="w-full ">
         <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
           <div className="flex flex-col justify-between md:flex-row">
             <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
@@ -30,7 +29,6 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
           </div>
           <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
         </div>
-      </a>
     </Link>
   );
 }

@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col items-start justify-start max-w-4xl mx-auto w-full pb-16">
-        <h1 className="font-bold text-6xl">My name is Jacob.</h1>
+        <h1 className="font-bold text-6xl  dark:text-gray-200">My name is Jacob.</h1>
         <h2 className="text-gray-700 dark:text-gray-200 mb-4 text-2xl">
           I am an experienced Software Engineer @{" "}
           <a

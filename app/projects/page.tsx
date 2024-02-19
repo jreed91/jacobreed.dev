@@ -21,10 +21,9 @@ export default function Projects() {
       <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
       <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
           All Projects
-        </h3>
+        </h3>``
         {projects?.map((project) => (
-          <Link href={`${project.slug}`} key={project.slug}>
-            <a className="w-full ">
+          <Link href={`${project.slug}`} key={project.slug} className="w-full ">
               <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
                 <div className="flex flex-col justify-between md:flex-row">
                   <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
@@ -51,7 +50,6 @@ export default function Projects() {
                   {project.description}
                 </p>
               </div>
-            </a>
           </Link>
         ))}
       </div>
