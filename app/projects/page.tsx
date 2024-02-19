@@ -1,10 +1,7 @@
-import { pick } from "contentlayer/client";
-import { allBlogs } from "contentlayer/generated"
-
+'use client'
+import { fetcher } from "app/components/ViewCounter";
 import Link from "next/link";
 import useSWR from "swr";
-import Container from "../../components/Container";
-import { fetcher } from "../../components/ViewCounter";
 
 interface Response {
   projects: Projects[];
@@ -17,11 +14,10 @@ interface Projects {
 }
 
 export default function Projects() {
-  const { data } = useSWR<Response>(`/api/projects/handler`, fetcher);
-  const projects = data?.projects;
-
+  const { data } = useSWR<Projects[]>(`/api/projects`, fetcher);
+  const projects = data;
+  
   return (
-    <Container>
       <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
       <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
           All Projects
@@ -59,14 +55,6 @@ export default function Projects() {
           </Link>
         ))}
       </div>
-    </Container>
   );
 }
 
-export async function getStaticProps() {
-  const posts = allBlogs.map((post) =>
-    pick(post, ["slug", "title", "summary", "date"])
-  );
-
-  return { props: { posts } };
-}
