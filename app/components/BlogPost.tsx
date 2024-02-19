@@ -1,20 +1,14 @@
+import { Blog } from 'app/db/blog';
 import Link from 'next/link';
-import { Blog } from "contentlayer/generated"
 
 
-export default function BlogPost({
-  title,
-  summary,
-  slug
-}: Pick<Blog, 'title' | 'summary' | 'slug'>) {
-
+export default function BlogPost ({ blog }: { blog: Blog}) {
   return (
-    <Link href={`/blog/${slug}`}>
-      <a className="w-full ">
+    <Link href={`/blog/${blog.slug}`} className="w-full ">
         <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
           <div className="flex flex-col justify-between md:flex-row">
             <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
-              {title}
+              {blog.metadata.title}
             </h4>
             <div className="">
             <svg
@@ -33,9 +27,8 @@ export default function BlogPost({
             </svg>
             </div>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">{summary}</p>
+          <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
         </div>
-      </a>
     </Link>
   );
 }

@@ -1,17 +1,4 @@
-import Link from "next/link";
-import { NavItem } from "./Container";
-import Subscribe from "./Subscribe";
-
-const ExternalLink = ({ href, children }: { href: string; children: any }) => (
-  <a
-    className="text-gray-500 hover:text-gray-600 transition"
-    target="_blank"
-    rel="noopener noreferrer"
-    href={href}
-  >
-    {children}
-  </a>
-);
+import { NavItem } from "./Navigation";
 
 export default function Footer() {
   return (

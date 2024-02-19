@@ -1,9 +1,8 @@
-const { spacing, fontFamily } = require('tailwindcss/defaultTheme');
+import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
 
-module.exports = {
-  mode: 'jit',
-  content: ['./pages/**/*.tsx', './components/**/*.tsx', './layouts/**/*.tsx'],
-  darkMode: 'class',
+export default {
+  content: ['./app/**/*.{ts,tsx}', './content/**/*.mdx', './public/**/*.svg'],
   theme: {
     extend: {
       typography: (theme) => ({
@@ -18,7 +17,7 @@ module.exports = {
               code: { color: theme('colors.blue.400') }
             },
             'h2,h3,h4': {
-              'scroll-margin-top': spacing[32]
+              'scroll-margin-top': 32
             },
             thead: {
               borderBottomColor: theme('colors.gray.200')
@@ -44,7 +43,7 @@ module.exports = {
             },
             'h1,h2,h3,h4': {
               color: theme('colors.gray.100'),
-              'scroll-margin-top': spacing[32]
+              'scroll-margin-top': 32
             },
             hr: { borderColor: theme('colors.gray.700') },
             ol: {
@@ -72,5 +71,5 @@ module.exports = {
       })
     }
   },
-  plugins: [require('@tailwindcss/typography')]
-};
+  plugins: [typography],
+} satisfies Config;

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from "react";
 import useSWR from "swr";
 
@@ -15,7 +17,7 @@ export async function fetcher<JSON = any>(
 
 export default function ViewCounter({ slug }: { slug: string }) {
   const { data } = useSWR<Views>(`/api/views/${slug}`, fetcher);
-  const views = new Number(data?.total);
+  const views = Number(data?.total);
 
   useEffect(() => {
     const registerView = () =>
