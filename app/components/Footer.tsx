@@ -7,13 +7,12 @@ export default function Footer() {
       <nav className="flex items-center justify-between w-full relative max-w-4xl border-gray-200 dark:border-gray-700 mx-auto ">
         <div className="ml-[-0.60rem]">
           <NavItem href="/" text="Home" />
-          <NavItem href="https://twitter.com/jreed91" text="Twitter" />
           <NavItem href="https://github.com/jreed91" text="GitHub" />
         </div>
         <div
             className="flex items-center justify-cente"
           >
-            Jacob Reed &copy; 2022
+            Jacob Reed &copy; 2025
           </div>
       </nav>
     </footer>
