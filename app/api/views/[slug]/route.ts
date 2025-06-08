@@ -1,28 +1,30 @@
 // Using in-memory storage for views instead of Prisma since DATABASE_URL is not configured
 const viewsMap = new Map<string, number>();
 
+import { NextRequest, NextResponse } from 'next/server';
+
 export async function POST(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  context: any
 ) {
+  const { params } = context as { params: { slug: string } };
   const slug = params.slug;
   
   // Update view count
   const currentViews = viewsMap.get(slug) || 0;
   viewsMap.set(slug, currentViews + 1);
   
-  return new Response(
-    JSON.stringify({
-      total: currentViews + 1,
-    }),
+  return NextResponse.json(
+    { total: currentViews + 1 },
     { status: 200 }
   );
 }
 
 export async function GET(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  context: any
 ) {
+  const { params } = context as { params: { slug: string } };
   const slug = params.slug;
   const viewCount = viewsMap.get(slug);
 
@@ -30,18 +32,8 @@ export async function GET(
     // Initialize with 0 views if not found
     viewsMap.set(slug, 0);
     
-    return new Response(
-      JSON.stringify({
-        total: 0,
-      }),
-      { status: 200 }
-    );
+    return NextResponse.json({ total: 0 }, { status: 200 });
   } else {
-    return new Response(
-      JSON.stringify({
-        total: viewCount,
-      }),
-      { status: 200 }
-    );
+    return NextResponse.json({ total: viewCount }, { status: 200 });
   }
 }
