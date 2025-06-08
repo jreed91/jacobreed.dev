@@ -13,7 +13,7 @@ export async function POST(
   
   return new Response(
     JSON.stringify({
-      total: (currentViews + 1).toString(),
+      total: currentViews + 1,
     }),
     { status: 200 }
   );
@@ -32,14 +32,14 @@ export async function GET(
     
     return new Response(
       JSON.stringify({
-        total: "0",
+        total: 0,
       }),
       { status: 200 }
     );
   } else {
     return new Response(
       JSON.stringify({
-        total: viewCount.toString(),
+        total: viewCount,
       }),
       { status: 200 }
     );
