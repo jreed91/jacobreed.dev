@@ -1,0 +1,44 @@
+---
+title: Getting Started with GitHub Copilot Instructions in JetBrains IDEs
+date: '2025-06-08'
+image: /static/images/avatar.jpeg
+summary: Learn how to configure Copilot instruction files in IntelliJ and WebStorm for better code suggestions and automatic semantic commits.
+---
+
+GitHub Copilot can do more than just autocomplete code. JetBrains IDEs look for instruction files inside the `.github` folder. You can add files like `copilot-instructions.md` and `git-commit-instructions.md` to give Copilot extra context about your project. IntelliJ IDEA and WebStorm read these files automatically, so your guidance is always available while you work.
+
+## Creating the instruction file
+
+Create a `.github/copilot-instructions.md` file in your repository. A simple example might look like this:
+
+```md
+# GitHub Copilot Instructions
+
+- Prefer TypeScript and React examples.
+- Assume a Next.js and Tailwind CSS stack.
+```
+
+Next add a `.github/git-commit-instructions.md` file for commit messages:
+
+```md
+# Git Commit Instructions
+
+- Follow the Conventional Commits style.
+- Start messages with `feat:`, `fix:`, or another conventional type.
+```
+
+These files let Copilot know which languages and frameworks you use and how commit messages should be formatted.
+
+## Why bother?
+
+I use this daily to auto create semantic commits for all my repositories. Copilot remembers to add prefixes like `fix:` for me and understands the context of my changes. The generated commit messages are much more helpful for the next developer who looks at the history.
+
+Even if you're new to Copilot, customizing these instructions can quickly improve the suggestions you see in IntelliJ or WebStorm. Copilot becomes aware of your conventions—whether that's using Next.js and Tailwind or following a particular commit message style.
+
+## Next steps
+
+1. Create `.github/copilot-instructions.md` and `.github/git-commit-instructions.md` in your project.
+2. Add notes describing your preferred languages, frameworks, and commit message style.
+3. Restart your IDE so Copilot picks up the new instructions.
+
+That's all there is to it. Once set up, you'll notice smarter code completions and automatically formatted commit messages whenever you commit from your JetBrains IDE.
