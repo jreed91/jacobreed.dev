@@ -21,7 +21,7 @@ export default function Projects() {
       <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
       <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
           All Projects
-        </h3>``
+        </h3>
         {projects?.map((project) => (
           <Link href={`${project.slug}`} key={project.slug} className="w-full ">
               <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
