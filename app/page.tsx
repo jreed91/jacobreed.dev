@@ -9,8 +9,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col items-start justify-start max-w-4xl mx-auto w-full pb-16">
-        <h1 className="font-bold text-6xl  dark:text-gray-200">My name is Jacob.</h1>
+      <div className="flex flex-col items-start justify-start max-w-4xl mx-auto w-full pb-16 px-8">
+        <h1 className="font-bold text-6xl leading-tight dark:text-gray-200">My name is Jacob.</h1>
         <h2 className="text-gray-700 dark:text-gray-200 mb-4 text-2xl">
           I am an experienced Software Engineer @{" "}
           <a
@@ -22,7 +22,7 @@ export default function Home() {
           </a>
         </h2>
       </div>
-      <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
+      <div className="items-center justify-between w-full relative max-w-4xl mx-auto px-8">
         <h3 className="font-bold text-2xl md:text-4xl tracking-tight mb-6 text-black dark:text-white">
           Writing
         </h3>
