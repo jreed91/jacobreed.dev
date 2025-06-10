@@ -23,7 +23,7 @@ export function NavItem({ href, text }: { href: string; text: string }) {
 export default function Navigation() {
   return (
     <div className="flex flex-col justify-center px-8">
-      <nav className="flex items-center justify-between w-full relative max-w-4xl border-gray-200 dark:border-gray-700 mx-auto pt-8 pb-8 sm:pb-16  text-gray-900 bg-gray-50  dark:bg-gray-900 bg-opacity-60 dark:text-gray-100">
+      <nav className="sticky top-0 z-10 flex items-center justify-between w-full relative max-w-4xl mx-auto pt-8 pb-8 sm:pb-16 border-b border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-900/70 backdrop-blur text-gray-900 dark:text-gray-100">
         <div className="ml-[-0.60rem]">
           <NavItem href="/" text="Home" />
           <NavItem href="/blog" text="Blog" />

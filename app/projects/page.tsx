@@ -18,13 +18,13 @@ export default function Projects() {
   const projects = data;
   
   return (
-      <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
+      <div className="items-center justify-between w-full relative max-w-4xl mx-auto px-8">
       <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
           All Projects
         </h3>
         {projects?.map((project) => (
-          <Link href={`${project.slug}`} key={project.slug} className="w-full ">
-              <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
+          <Link href={`${project.slug}`} key={project.slug} className="w-full">
+              <div className="w-full mb-8 transform hover:scale-[1.01] transition-all rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 p-4">
                 <div className="flex flex-col justify-between md:flex-row">
                   <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
                     {project.name}

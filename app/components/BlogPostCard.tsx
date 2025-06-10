@@ -7,8 +7,7 @@ export default function BlogPostCard({ title, slug, summary, date }: {title: str
   return (
     <Link href={`/blog/${slug}`}  className={cn(
       'transform hover:scale-[1.01] transition-all',
-      'rounded-xl w-full md:w-1/3 bg-gradient-to-r p-1',
-      'bg-gray-200'
+      'rounded-xl w-full md:w-1/3 bg-gradient-to-r from-gray-100 to-gray-200 p-1'
     )}>
         <div className="flex flex-col justify-between h-full bg-white dark:bg-gray-900 rounded-lg p-6">
           <div className="flex flex-col md:flex-row justify-between">
