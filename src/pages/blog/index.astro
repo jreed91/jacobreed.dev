@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPost from '../../components/BlogPost.tsx';
+import { getBlogPosts } from '../../db/blog';
+const filteredBlogPosts = getBlogPosts().sort((a, b) => Number(new Date(b.metadata.date)) - Number(new Date(a.metadata.date)));
+---
+<BaseLayout>
+  <div class="items-center justify-between w-full relative max-w-4xl mx-auto">
+    <h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">All Posts</h3>
+    {filteredBlogPosts.length === 0 ? (
+      <p class="mb-4 text-gray-600 dark:text-gray-400">No posts found.</p>
+    ) : (
+      filteredBlogPosts.map(post => <BlogPost blog={post} />)
+    )}
+  </div>
+</BaseLayout>
