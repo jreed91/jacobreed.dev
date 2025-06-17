@@ -1,0 +1,19 @@
+---
+import Footer from '../components/Footer.tsx';
+import Navigation from '../components/Navigation.tsx';
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="bg-gray-50 dark:bg-gray-900">
+      <main id="skip" class="flex flex-col justify-center px-8 bg-gray-50 dark:bg-gray-900">
+        <Navigation />
+        <slot />
+        <Footer />
+      </main>
+    </div>
+  </body>
+</html>

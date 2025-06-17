@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GET } from '../../api/projects/route';
+const res = await GET();
+const projects = await res.json();
+---
+<BaseLayout>
+  <div class="items-center justify-between w-full relative max-w-4xl mx-auto">
+    <h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">All Projects</h3>
+    {projects.map(project => (
+      <a href={project.slug} class="w-full" key={project.slug}>
+        <div class="w-full mb-8 transform hover:scale-[1.01] transition-all">
+          <div class="flex flex-col justify-between md:flex-row">
+            <h4 class="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">{project.name}</h4>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 ml-1">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.5 12h-15m11.667-4l3.333 4-3.333-4zm3.333 4l-3.333 4 3.333-4z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">{project.description}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
