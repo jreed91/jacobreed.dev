@@ -1,0 +1,348 @@
+---
+title: Making Sense of Postgres Query Plans
+
+---
+
+# Making Sense of Postgres Query Plans (with a Little Help from AI)
+**Audience:** Application engineers working on OLTP-style workloads (APIs, dashboards, transactional systems).  
+**Goal:** Turn `EXPLAIN` and `EXPLAIN ANALYZE` into fast, repeatable fixes—then supercharge the workflow with AI for summaries, suggestions, and CI guardrails.
+
+---
+
+## Table of Contents
+1. [Why Query Plans Matter for Apps](#why-query-plans-matter-for-apps)
+2. [`EXPLAIN` vs `EXPLAIN ANALYZE`](#explain-vs-explain-analyze)
+3. [How to Read a Plan (App-Load Edition)](#how-to-read-a-plan-app-load-edition)
+4. [Common Plan Nodes (Quick Reference)](#common-plan-nodes-quick-reference)
+5. [Worked Example #1: Indexing to Avoid Seq Scan + Sort](#worked-example-1-indexing-to-avoid-seq-scan--sort)
+6. [Worked Example #2: Bad Join Choice → Nested Loop Explosion](#worked-example-2-bad-join-choice--nested-loop-explosion)
+7. [Using AI Alongside `EXPLAIN`](#using-ai-alongside-explain)
+8. [CI Guardrails: Catch Plan Regressions Early](#ci-guardrails-catch-plan-regressions-early)
+9. [Stats, Skew & Practical Knobs](#stats-skew--practical-knobs)
+10. [Checklist Before You Ship](#checklist-before-you-ship)
+11. [Appendix: Recipes & One-Liners](#appendix-recipes--one-liners)
+
+---
+
+## Why Query Plans Matter for Apps
+In app workloads, **latency wins**. Most 10–100× improvements come from:
+- Changing the **access path** (Seq Scan → Index Scan / Index Only Scan)
+- Fixing **join shapes** (bad Nested Loop → Hash/Merge Join)
+- Avoiding big **Sort** nodes by **covering** `WHERE` + `ORDER BY` with the right composite index
+
+> Rule of thumb: fix **plan shape** first (indexes / predicates), then consider GUCs for **temporary diagnosis**, not as a permanent band-aid.
+
+---
+
+## `EXPLAIN` vs `EXPLAIN ANALYZE`
+
+```sql
+-- Predicted plan only (does NOT run the query)
+EXPLAIN SELECT * FROM users WHERE email = 'dev@example.com';
+
+-- Executes the query and reports actual timing/rows
+EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'dev@example.com';
+
+-- Richest diagnostic output (great for tooling & CI)
+EXPLAIN (ANALYZE, BUFFERS, VERBOSE, FORMAT JSON) SELECT ...;
+```
+
+**Safety tip for writes:** Wrap in a **read-only transaction** to avoid mistakes.
+```sql
+BEGIN READ ONLY;
+EXPLAIN ANALYZE UPDATE accounts SET ... WHERE ...;  -- will fail safely
+ROLLBACK;
+```
+
+---
+
+## How to Read a Plan (App-Load Edition)
+
+Focus on these **three signals**:
+
+1) **Scan Type**
+- `Seq Scan` → whole table; okay for tiny tables, dangerous at scale
+- `Index Scan` / `Index Only Scan` → targeted lookups
+- `Bitmap Index/Heap Scan` → hybrid path; can still be I/O heavy
+
+2) **Rows: estimated vs actual**
+- Big divergence = stale or unrepresentative stats → `ANALYZE`, expression/partial indexes, or higher per-column stats target
+
+3) **Time & Buffers**
+- `shared hit/read` from `BUFFERS` shows cache vs I/O
+- Heavy `Sort`/`Hash` with disk spill = likely low `work_mem` or missing covering index
+
+Work **bottom-up**: the top node is the final step; slow nodes are often deeper.
+
+---
+
+## Common Plan Nodes (Quick Reference)
+
+- **Seq Scan**: full table read. Red flag if filters are selective.  
+- **Index Scan / Index Only Scan**: uses an index; “only” avoids heap when visibility allows.  
+- **Bitmap Index Scan + Bitmap Heap Scan**: good for many hits; can still read many heap blocks.  
+- **Nested Loop**: fast when **outer** is tiny and **inner** indexed; catastrophic for large sets without indexes.  
+- **Hash Join**: build hash on smaller input, probe with larger input; great general-purpose join for medium/large sets.  
+- **Merge Join**: both sides sorted on join key; shines when ordering already exists.  
+- **Sort / Aggregate**: watch for big sort times; prefer indexes that satisfy order.  
+
+---
+
+## Worked Example #1: Indexing to Avoid Seq Scan + Sort
+
+**Goal:** Last 20 orders for a customer, newest first.
+```sql
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT *
+FROM orders
+WHERE customer_id = 42
+ORDER BY created_at DESC
+LIMIT 20;
+```
+
+**Bad plan (excerpt):**
+```
+Limit
+  -> Sort  (actual time=1800..1820 rows=20 loops=1)
+       Sort Key: created_at DESC
+       -> Seq Scan on orders  (actual rows=1,500,000 loops=1)
+            Filter: (customer_id = 42)
+            Buffers: shared read=xxxxx
+```
+- Full table scan + explicit sort → seconds of latency.
+
+**Fix:** Cover the filter and the order.
+```sql
+CREATE INDEX CONCURRENTLY ON orders (customer_id, created_at DESC);
+```
+
+**Good plan (excerpt):**
+```
+Limit
+  -> Index Scan using orders_customer_id_created_at_idx on orders
+       Index Cond: (customer_id = 42)
+       Filter: (true)  -- order already satisfied by index
+```
+- No seq scan. No sort. Milliseconds.
+
+**AI assist (what it might say):**
+- *“Plan dominated by Seq Scan + Sort. Create a composite index `(customer_id, created_at DESC)` to support both the filter and ordering.”*
+
+---
+
+## Worked Example #2: Bad Join Choice → Nested Loop Explosion
+
+**Schema (simplified):**
+```sql
+CREATE TABLE users(
+  id bigint PRIMARY KEY,
+  org_id bigint NOT NULL
+);
+
+CREATE TABLE events(
+  id bigint PRIMARY KEY,
+  user_id bigint NOT NULL,
+  created_at timestamptz NOT NULL,
+  type text NOT NULL
+);
+-- Missing helpful index on events(user_id, created_at)
+```
+
+**Query:** “Recent login-like events for all users in an org.”
+```sql
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT e.*
+FROM users u
+JOIN events e ON e.user_id = u.id
+WHERE u.org_id = 10
+  AND e.type IN ('login','session_resume')
+  AND e.created_at >= now() - interval '30 days';
+```
+
+**Bad plan (excerpt):**
+```
+Nested Loop  (actual time=..., rows=..., loops=1)
+  -> Index Scan using users_org_id_idx on users u
+       Index Cond: (org_id = 10)      -- returns ~50k users
+  -> Seq Scan on events e
+       Filter: ((user_id = u.id) AND (type = ANY('{login,session_resume}')) 
+                AND (created_at >= now() - '30 days'::interval))
+       Rows Removed by Filter: large
+```
+- For **each** of ~50k users, Postgres scans `events` (no index on `events.user_id, created_at`).  
+- This is an **N×M** nightmare: Nested Loop with inner Seq Scan.
+
+**Two robust fixes:**
+
+1) **Composite index** to support the lookup & time window:
+```sql
+CREATE INDEX CONCURRENTLY ON events (user_id, created_at)
+  WHERE type IN ('login','session_resume');  -- partial index optional but powerful
+```
+- Now the inner side probes the index instead of scanning the table.
+
+2) **Encourage Hash Join** when joining bigger sets (and give memory):
+```sql
+SET work_mem = '256MB';      -- per operation; test only
+-- Optionally test plan alternatives:
+SET enable_nestloop = off;   -- testing only, don't leave it disabled
+```
+- With indexes in place, planner often picks **Hash Join** for medium/large sets.
+
+**Good plan (excerpt):**
+```
+Hash Join
+  Hash Cond: (e.user_id = u.id)
+  -> Index Scan using events_user_id_created_at_idx on events e
+       Index Cond: ((created_at >= now() - '30 days'::interval) AND (type = ANY ...))
+  -> Index Only Scan using users_org_id_idx on users u
+       Index Cond: (org_id = 10)
+```
+- Probes indexed events directly; no per-user seq scan; scales to large orgs.
+
+**AI assist (what it might say):**
+- *“Nested Loop with inner Seq Scan suggests missing index on `events(user_id, created_at)`. Create a composite (optionally partial) index aligned with filters. Re-run; expect Hash Join or efficient Index Scan path.”*
+
+---
+
+## Using AI Alongside `EXPLAIN`
+
+**Why AI helps:** Plans are precise but verbose. AI can **translate**, **prioritize**, and **suggest** next steps.
+
+1) **Plan Summarization**  
+Paste JSON plan:
+```sql
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT ...;
+```
+Prompts to use:
+- “Summarize this plan in plain English; highlight the biggest bottleneck.”  
+- “Why a Seq Scan and how to avoid it?”  
+- “Is there a safer index to satisfy the ORDER BY?”
+
+2) **Query Rewrite Suggestions**  
+- Move predicates into joins; turn correlated subqueries into joins; apply **sargable** predicates; propose **composite/partial/expression indexes**.
+
+3) **Regression Detection in CI**  
+- Feed “before vs after” JSON plans to AI; ask “which node got slower and why?”
+
+4) **Workload Pattern Recognition**  
+- Cluster 100s of plans from `pg_stat_statements`: *“80% of slow queries need covering indexes for ORDER BY”*, etc.
+
+5) **Learning & Training**  
+- “Explain this plan like I’m a junior dev.”  
+- “Teach me when to prefer Hash Join vs Nested Loop given this plan.”
+
+> AI won’t **replace** the planner; it **accelerates** your interpretation and helps teams converge on fixes faster.
+
+---
+
+## CI Guardrails: Catch Plan Regressions Early
+
+**Store canonical plans** (JSON) for critical queries. On each PR:
+1. Run representative `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)`
+2. Compare to baseline
+3. Fail the build if:
+   - Seq Scan appeared where indexed access was expected
+   - Estimated vs actual rows mismatch widens materially
+   - Sorts/hashes start to **spill** (visible in plan)
+
+**Example bash sketch (with `psql` + `jq`):**
+```bash
+# dump current plan to JSON
+psql "$DATABASE_URL" -Atc "
+  EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
+  SELECT * FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20;
+" > current_plan.json
+
+# compare a few key fields
+jq '.[0].Plan | {Node:.["Node Type"], Sort:.Sort, Plans:.Plans}' current_plan.json > slim_current.json
+jq '.[0].Plan | {Node:.["Node Type"], Sort:.Sort, Plans:.Plans}' baseline_plan.json > slim_baseline.json
+
+diff -u slim_baseline.json slim_current.json || {
+  echo 'Plan changed materially. Investigate.'
+  exit 1
+}
+```
+
+**Tip:** Add an **AI step** that explains the diff and proposes fixes in plain English on the PR.
+
+---
+
+## Stats, Skew & Practical Knobs
+
+- Keep stats fresh:
+  ```sql
+  ANALYZE;                          -- entire DB
+  ANALYZE public.events;            -- table
+  ALTER TABLE events ALTER COLUMN user_id SET STATISTICS 500;  -- combat skew
+  ```
+
+- When data is skewed, consider **partial** or **expression** indexes that mirror common predicates.
+  ```sql
+  CREATE INDEX ON events (user_id) WHERE created_at >= now() - interval '30 days';
+  CREATE INDEX ON orders ((lower(status)));  -- expression index
+  ```
+
+- Diagnosis-only GUCs (**don’t** leave them permanently changed):
+  ```sql
+  SET enable_nestloop = off;   -- force Hash/Merge to compare
+  SET enable_seqscan = off;    -- test index usage
+  SET work_mem = '256MB';      -- reduce spills for joins/sorts during tests
+  SET track_io_timing = on;    -- show real I/O timing in plans
+  ```
+
+---
+
+## Checklist Before You Ship
+
+- [ ] `Seq Scan` replaced with proper indexed access for selective filters  
+- [ ] Large joins prefer **Hash/Merge** when outer side isn’t tiny  
+- [ ] `ORDER BY` satisfied by the index (no giant Sort nodes)  
+- [ ] Stats are current; misestimates corrected (ANALYZE / per-column stats / partial indexes)  
+- [ ] CI diff on JSON plans in place; AI summarizes regressions  
+- [ ] Any temporary GUC tweaks were reverted
+
+---
+
+## Appendix: Recipes & One-Liners
+
+**Capture slow queries over time:**
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+SELECT query, mean_exec_time, total_exec_time, calls
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 20;
+```
+
+**Get the worst offenders and snapshot their plans:**
+```sql
+-- for each 'queryid' you care about, re-run with EXPLAIN
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) <the query>;
+```
+
+**Safer testing for writes:**
+```sql
+BEGIN READ ONLY;
+EXPLAIN ANALYZE DELETE FROM ...;  -- will refuse to execute
+ROLLBACK;
+```
+
+**Cover WHERE + ORDER BY:**
+```sql
+-- Equality columns first, then range, then ordering
+CREATE INDEX ON orders (customer_id, status, created_at DESC);
+```
+
+**Hash Join vs Nested Loop quick sanity:**
+- Tiny outer + indexed inner → Nested Loop is fine  
+- Medium/large sets → prefer Hash Join (and enough `work_mem`)  
+
+**AI prompts you can paste into your tool:**
+- “Summarize this plan and list the top 2 bottlenecks.”  
+- “Which missing index would most likely remove the Sort?”  
+- “Estimate whether a Nested Loop or Hash Join is better and why.”
+
+---
+
+**Closing thought:** Learn to read plans bottom‑up. Let AI translate the noise, highlight the bottlenecks, and suggest first fixes. Your app’s **p95s** will thank you.
