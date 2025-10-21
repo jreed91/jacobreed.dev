@@ -1,5 +1,6 @@
 import { Blog } from 'app/db/blog';
 import Link from 'next/link';
+import { parseISO, format } from 'date-fns';
 
 
 export default function BlogPost ({ blog }: { blog: Blog}) {
@@ -26,6 +27,11 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
               />
             </svg>
             </div>
+          </div>
+          <div className="flex items-center gap-2 mb-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{format(parseISO(blog.metadata.date), 'MMMM dd, yyyy')}</span>
+            <span>•</span>
+            <span>{blog.metadata.readingTime}</span>
           </div>
           <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
         </div>

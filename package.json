@@ -25,6 +25,7 @@
     "prisma": "6.17.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "reading-time": "^1.5.0",
     "sharp": "0.34.4",
     "sugar-high": "0.9.4",
     "swr": "2.3.6",
