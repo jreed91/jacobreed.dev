@@ -2,7 +2,7 @@ import Link from 'next/link';
 import cn from 'classnames';
 import { parseISO, format } from 'date-fns';
 
-export default function BlogPostCard({ title, slug, summary, date }: {title: string, slug: string, summary: string, date: string}) {
+export default function BlogPostCard({ title, slug, summary, date, readingTime }: {title: string, slug: string, summary: string, date: string, readingTime: string}) {
 
   return (
     <Link href={`/blog/${slug}`}  className={cn(
@@ -16,11 +16,13 @@ export default function BlogPostCard({ title, slug, summary, date }: {title: str
               {title}
             </h4>
             </div>
-            <div className="flex flex-col md:flex-row">
-              <span className="text-sm mb-5 sm:mb-4 w-full">{format(parseISO(date), 'MMMM dd, yyyy')}</span>
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
+              <span className="text-sm text-gray-700 dark:text-gray-300">{format(parseISO(date), 'MMMM dd, yyyy')}</span>
+              <span className="hidden md:inline text-gray-500 dark:text-gray-400">•</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{readingTime}</span>
             </div>
-            <div className="flex flex-col md:flex-row justify-between">
-              <p className="text-md">{summary}</p>
+            <div className="flex flex-col md:flex-row justify-between mt-3">
+              <p className="text-md text-gray-700 dark:text-gray-300">{summary}</p>
             </div>
           </div>
 
