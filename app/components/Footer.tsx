@@ -10,7 +10,7 @@ export default function Footer() {
           <NavItem href="https://github.com/jreed91" text="GitHub" />
         </div>
         <div
-            className="flex items-center justify-cente"
+            className="flex items-center justify-center text-gray-700 dark:text-gray-300"
           >
             Jacob Reed &copy; 2025
           </div>
