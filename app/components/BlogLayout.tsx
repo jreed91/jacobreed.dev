@@ -19,8 +19,8 @@ export default function BlogLayout({
   blog,
 }: PropsWithChildren<{ blog: Blog }>) {
   return (
-    <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl mx-auto mb-16">
-      <article className="flex flex-col items-start justify-center w-full lg:max-w-4xl">
+    <div className="w-full max-w-4xl mx-auto mb-16">
+      <article className="flex flex-col items-start justify-center w-full">
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
         {blog.metadata.title}
       </h1>
@@ -46,6 +46,9 @@ export default function BlogLayout({
           </Suspense>
         </p>
       </div>
+      <div className="w-full mt-6">
+        <TableOfContents headings={blog.headings} />
+      </div>
       <div className="w-full mt-4 prose dark:prose-dark max-w-none">
         <CustomMDX source={blog.content} />
       </div>
@@ -63,9 +66,6 @@ export default function BlogLayout({
         </a>
       </div>
     </article>
-    <aside className="lg:w-64 flex-shrink-0">
-      <TableOfContents headings={blog.headings} />
-    </aside>
     </div>
   );
 }
