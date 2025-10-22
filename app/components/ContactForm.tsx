@@ -23,14 +23,6 @@ export default function ContactForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-2">Get in Touch</h2>
-        <p className="text-neutral-600 dark:text-neutral-400">
-          This form showcases React 19&apos;s <code className="px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded text-sm">useActionState</code> and{' '}
-          <code className="px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded text-sm">useFormStatus</code> hooks with Next.js Server Actions.
-        </p>
-      </div>
-
       <form action={formAction} className="space-y-6">
         <div>
           <label

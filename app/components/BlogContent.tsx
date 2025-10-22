@@ -9,9 +9,6 @@ interface BlogContentProps {
 }
 
 export default async function BlogContent({ blog }: BlogContentProps) {
-  // Simulate slight delay to show streaming effect
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
   return (
     <>
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">

@@ -7,13 +7,10 @@ interface RelatedPostsProps {
 }
 
 async function getRelatedPosts(currentSlug: string): Promise<Blog[]> {
-  // Simulate a slow database query to demonstrate streaming
-  // In production, you might query related posts by tags, category, or similar content
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-
   const allPosts = getBlogPosts();
 
   // Get 3 random posts that aren't the current post
+  // In production, you might query related posts by tags, category, or similar content
   return allPosts
     .filter((post) => post.slug !== currentSlug)
     .sort(() => Math.random() - 0.5)
@@ -29,10 +26,7 @@ export default async function RelatedPosts({ currentSlug }: RelatedPostsProps) {
 
   return (
     <div className="mt-16 border-t border-neutral-200 dark:border-neutral-800 pt-8">
-      <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
-        This section streams in after the main content loads (React Suspense + Streaming)
-      </p>
+      <h2 className="text-2xl font-bold mb-6">More Articles</h2>
 
       <div className="grid gap-4">
         {relatedPosts.map((post) => (
