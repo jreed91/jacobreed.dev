@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) can be accessed on [http://localhost:3000/api/projects](http://localhost:3000/api/projects). This endpoint can be edited in `app/api/projects/route.ts`.
+[API routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) can be accessed on [http://localhost:3000/api/case-studies](http://localhost:3000/api/case-studies). This endpoint can be edited in `app/api/case-studies/route.ts`.
 
 The `app/api` directory is mapped to `/api/*`. Files in this directory are treated as [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) instead of React pages.
 

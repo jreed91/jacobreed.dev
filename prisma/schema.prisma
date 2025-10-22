@@ -10,9 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model projects {
+model case_studies {
   slug          String @id @db.VarChar(128)
   name          String @db.Text
-  description   String @db.Text
+  problem       String @db.Text
+  solution      String @db.Text
+  outcome       String @db.Text
+  tech_used     String @db.Text  // JSON array stored as text
+  metrics       String? @db.Text // Optional metrics
+  year          Int
+  company       String? @db.Text // Optional company name
+  category      String @db.VarChar(50)
   image         String @db.Text
 }
