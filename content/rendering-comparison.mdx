@@ -1,0 +1,518 @@
+---
+title: 'Understanding Modern React Rendering: CSR vs SSR vs RSC'
+publishedAt: '2025-10-22'
+summary: 'A deep dive into Client-Side Rendering, Server-Side Rendering, and React Server Components with real-world code examples and performance comparisons.'
+---
+
+The React ecosystem has evolved dramatically over the past few years, introducing multiple rendering strategies that can be confusing for developers. Understanding the differences between Client-Side Rendering (CSR), Server-Side Rendering (SSR), and React Server Components (RSC) is crucial for building performant modern web applications.
+
+In this post, we'll explore each approach with real code examples and discuss when to use each one.
+
+## Client-Side Rendering (CSR)
+
+Client-Side Rendering is the traditional approach where JavaScript runs in the browser to render your entire application. The server sends a minimal HTML shell, and React takes over to render everything on the client.
+
+### How It Works
+
+1. Browser requests the page
+2. Server sends minimal HTML with JavaScript bundles
+3. Browser downloads and executes JavaScript
+4. React renders the UI
+5. Data fetching happens after initial render
+6. UI updates with fetched data
+
+### Code Example
+
+```jsx
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUser() {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUser();
+  }, [userId]);
+
+  if (loading) {
+    return <div>Loading user profile...</div>;
+  }
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.bio}</p>
+      <p>Followers: {user.followers}</p>
+    </div>
+  );
+}
+```
+
+### Real-World Implications
+
+**Pros:**
+- Simple mental model
+- Great for highly interactive apps
+- Works well for authenticated dashboards
+- Reduced server load
+
+**Cons:**
+- Slower Time to First Contentful Paint (FCP)
+- Poor SEO (crawlers see empty HTML)
+- Large JavaScript bundles affect performance
+- Loading states are visible to users
+- "Waterfall" data fetching (component mounts → fetch → render children)
+
+**Bundle Size Impact:** All component code and dependencies ship to the client.
+
+**Network Waterfall:**
+```
+1. HTML Request          → 50ms
+2. JavaScript Download   → 500ms
+3. JavaScript Parse      → 200ms
+4. React Hydration       → 150ms
+5. Data Fetch            → 300ms
+6. Render with Data      → 50ms
+Total: ~1250ms until content visible
+```
+
+## Server-Side Rendering (SSR)
+
+SSR renders your React components on the server for each request, sending fully-formed HTML to the client. React then "hydrates" the HTML to make it interactive.
+
+### How It Works
+
+1. Browser requests the page
+2. Server fetches data
+3. Server renders React to HTML
+4. Server sends complete HTML
+5. Browser displays content (visible immediately)
+6. JavaScript downloads and executes
+7. React hydrates the HTML (attaches event listeners)
+
+### Code Example
+
+```jsx
+// app/users/[id]/page.tsx (Next.js App Router)
+// This is still a Server Component, but with dynamic rendering
+
+import { Suspense } from 'react';
+
+async function getUser(userId: string) {
+  const response = await fetch(`https://api.example.com/users/${userId}`, {
+    cache: 'no-store', // This forces SSR (no caching)
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch user');
+  }
+
+  return response.json();
+}
+
+export default async function UserPage({ params }: { params: { id: string } }) {
+  const user = await getUser(params.id);
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.bio}</p>
+      <p>Followers: {user.followers}</p>
+
+      <Suspense fallback={<div>Loading posts...</div>}>
+        <UserPosts userId={params.id} />
+      </Suspense>
+    </div>
+  );
+}
+
+// Client component for interactivity
+'use client';
+
+export function FollowButton({ userId }: { userId: string }) {
+  const [following, setFollowing] = useState(false);
+
+  return (
+    <button onClick={() => setFollowing(!following)}>
+      {following ? 'Unfollow' : 'Follow'}
+    </button>
+  );
+}
+```
+
+### Old-Style SSR (Next.js Pages Router)
+
+```jsx
+// pages/users/[id].tsx (Next.js Pages Router - older approach)
+
+export async function getServerSideProps(context) {
+  const { id } = context.params;
+
+  const response = await fetch(`https://api.example.com/users/${id}`);
+  const user = await response.json();
+
+  return {
+    props: {
+      user,
+    },
+  };
+}
+
+export default function UserPage({ user }) {
+  const [following, setFollowing] = useState(false);
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.bio}</p>
+      <p>Followers: {user.followers}</p>
+      <button onClick={() => setFollowing(!following)}>
+        {following ? 'Unfollow' : 'Follow'}
+      </button>
+    </div>
+  );
+}
+```
+
+### Real-World Implications
+
+**Pros:**
+- Fast First Contentful Paint (content visible immediately)
+- Better SEO (crawlers see full HTML)
+- No loading spinners for initial data
+- Social media previews work perfectly
+
+**Cons:**
+- Slower Time to Interactive (TTI) - must download and hydrate
+- Entire page is client-side after hydration
+- Can't interact with page until JavaScript loads
+- Increased server load (rendering on every request)
+- All component code still ships to client
+
+**Bundle Size Impact:** Same as CSR - all component code ships to the client for hydration.
+
+**Network Waterfall:**
+```
+1. HTML Request + Server Render → 400ms (includes data fetch)
+2. HTML Visible (FCP)           → Content visible!
+3. JavaScript Download          → 500ms
+4. JavaScript Parse             → 200ms
+5. React Hydration              → 150ms
+6. Interactive (TTI)            → 1250ms
+FCP: ~400ms | TTI: ~1250ms
+```
+
+## React Server Components (RSC)
+
+React Server Components are a paradigm shift. They run ONLY on the server and never hydrate on the client. They can fetch data, access databases, and read files directly - then stream the result to the client.
+
+### How It Works
+
+1. Browser requests the page
+2. Server executes Server Components
+3. Server fetches all data (database, APIs, files)
+4. Server renders components to a special format
+5. Server streams the result to the client
+6. Client receives and displays content
+7. Only Client Components hydrate with JavaScript
+
+### Code Example
+
+```jsx
+// app/users/[id]/page.tsx (Default Server Component)
+
+import { FollowButton } from './FollowButton';
+import { prisma } from '@/lib/prisma';
+
+// This runs ONLY on the server - no client bundle!
+async function getUser(userId: string) {
+  // Direct database access - no API route needed
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      posts: {
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+      },
+    },
+  });
+
+  return user;
+}
+
+// Server Component - no 'use client' directive
+export default async function UserPage({ params }: { params: { id: string } }) {
+  // Data fetching is just part of rendering
+  const user = await getUser(params.id);
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.bio}</p>
+      <p>Followers: {user.followers}</p>
+
+      {/* Client Component for interactivity */}
+      <FollowButton userId={user.id} initialFollowing={user.isFollowing} />
+
+      <h2>Recent Posts</h2>
+      <ul>
+        {user.posts.map(post => (
+          <li key={post.id}>
+            <PostCard post={post} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Separate file: FollowButton.tsx
+'use client';
+
+import { useState } from 'react';
+
+export function FollowButton({
+  userId,
+  initialFollowing
+}: {
+  userId: string;
+  initialFollowing: boolean;
+}) {
+  const [following, setFollowing] = useState(initialFollowing);
+  const [loading, setLoading] = useState(false);
+
+  async function toggleFollow() {
+    setLoading(true);
+    try {
+      await fetch(`/api/follow/${userId}`, {
+        method: following ? 'DELETE' : 'POST',
+      });
+      setFollowing(!following);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <button onClick={toggleFollow} disabled={loading}>
+      {loading ? 'Loading...' : following ? 'Unfollow' : 'Follow'}
+    </button>
+  );
+}
+```
+
+### Advanced: Streaming with Suspense
+
+```jsx
+import { Suspense } from 'react';
+
+// Fast to render - shows immediately
+async function UserBasicInfo({ userId }: { userId: string }) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.bio}</p>
+    </div>
+  );
+}
+
+// Slow query - wrapped in Suspense
+async function UserAnalytics({ userId }: { userId: string }) {
+  // This takes 2 seconds to compute
+  const analytics = await prisma.analytics.aggregate({
+    where: { userId },
+    // Complex aggregation query...
+  });
+
+  return (
+    <div>
+      <h3>Analytics</h3>
+      <p>Total Views: {analytics.totalViews}</p>
+      <p>Engagement Rate: {analytics.engagementRate}%</p>
+    </div>
+  );
+}
+
+export default function UserPage({ params }: { params: { id: string } }) {
+  return (
+    <div>
+      {/* Renders immediately */}
+      <UserBasicInfo userId={params.id} />
+
+      {/* Streams in when ready */}
+      <Suspense fallback={<div>Loading analytics...</div>}>
+        <UserAnalytics userId={params.id} />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+### Real-World Implications
+
+**Pros:**
+- Smallest JavaScript bundles (only interactive parts ship)
+- Fast FCP and TTI (less JavaScript to download/parse)
+- Direct backend access (no API routes needed)
+- Streaming for progressive rendering
+- Automatic code splitting
+- Secure (can use secrets, database queries stay on server)
+
+**Cons:**
+- New mental model (Server vs Client Components)
+- Can't use browser APIs or React hooks in Server Components
+- Requires server infrastructure (can't use static hosting alone)
+- Debugging can be trickier (server and client logs)
+
+**Bundle Size Impact:** MASSIVE reduction - only client components ship to the browser.
+
+**Network Waterfall:**
+```
+1. HTML Request + Server Render → 400ms (includes data fetch)
+2. HTML Visible (FCP)           → Content visible!
+3. Small JS Download            → 100ms (only client components)
+4. JavaScript Parse             → 50ms
+5. React Hydration              → 50ms
+6. Interactive (TTI)            → 600ms
+FCP: ~400ms | TTI: ~600ms (2x faster than SSR!)
+```
+
+## Side-by-Side Comparison
+
+| Feature | CSR | SSR | RSC |
+|---------|-----|-----|-----|
+| **First Paint** | Slow | Fast | Fast |
+| **Time to Interactive** | Slow | Slow | Fast |
+| **SEO** | Poor | Good | Good |
+| **JavaScript Bundle** | Large | Large | Small |
+| **Server Load** | Low | High | Medium |
+| **Data Fetching** | Client | Server | Server |
+| **Streaming** | No | Limited | Yes |
+| **Backend Access** | No | Limited | Yes |
+| **Hosting** | Static | Server | Server |
+
+## Real-World Performance Example
+
+Let's say we're building a blog post page. Here's what happens:
+
+### CSR Performance
+```
+HTML download:        50ms   (5KB)
+JavaScript download:  800ms  (300KB bundle)
+Parse/Execute:        200ms
+Data fetch:           400ms
+Total to content:     1450ms
+```
+
+### SSR Performance
+```
+HTML download:        500ms  (25KB, includes data)
+JavaScript download:  800ms  (300KB bundle)
+Parse/Execute:        200ms
+Hydration:           150ms
+FCP: 500ms | TTI: 1650ms
+```
+
+### RSC Performance
+```
+HTML download:        500ms  (25KB, includes data)
+JavaScript download:  200ms  (50KB - only interactive parts)
+Parse/Execute:        50ms
+Hydration:           50ms
+FCP: 500ms | TTI: 800ms
+```
+
+## When to Use Each Approach
+
+### Use Client-Side Rendering When:
+- Building a dashboard or admin panel
+- Your app is behind authentication (SEO doesn't matter)
+- You need lots of client-side interactivity
+- You're building a SPA with client-side routing
+- Example: Notion, Figma, Google Docs
+
+### Use Server-Side Rendering When:
+- SEO is critical but you need dynamic data
+- You need personalized content on every request
+- You're migrating from a traditional SSR framework
+- You can't use React Server Components (older Next.js version)
+- Example: E-commerce product pages, news sites
+
+### Use React Server Components When:
+- Building with Next.js 13+ App Router
+- You want optimal performance
+- You need to access backend resources directly
+- You want to minimize JavaScript bundle size
+- You're building a new project (greenfield)
+- Example: Modern blogs, marketing sites, SaaS applications
+
+## Hybrid Approach (Best Practice)
+
+The real power comes from combining all three:
+
+```jsx
+// Server Component (default)
+export default async function BlogPost({ params }) {
+  // Fetch on server
+  const post = await getPost(params.slug);
+
+  return (
+    <article>
+      {/* Static content - no JS needed */}
+      <h1>{post.title}</h1>
+      <MDXContent content={post.content} />
+
+      {/* Client component for interactivity */}
+      <LikeButton postId={post.id} />
+
+      {/* Server component for data */}
+      <Suspense fallback={<div>Loading comments...</div>}>
+        <Comments postId={post.id} />
+      </Suspense>
+    </article>
+  );
+}
+```
+
+This gives you:
+- Fast first paint (Server Component)
+- Minimal JavaScript (only the button)
+- Progressive enhancement (comments stream in)
+- Great SEO (full HTML)
+
+## Conclusion
+
+The evolution from CSR to SSR to RSC represents a fundamental shift in how we build React applications. React Server Components offer the best of both worlds: fast initial loads with minimal JavaScript, while still allowing interactive client-side components where needed.
+
+For new projects, I recommend starting with React Server Components (Next.js 14+ App Router) and only using `'use client'` when you truly need client-side interactivity. This approach will give you the best performance by default and scale as your application grows.
+
+Remember: **Start with Server Components, add Client Components only where needed.**
+
+The future of React is server-first, but with the flexibility to drop down to the client when needed. Understanding these patterns will make you a more effective React developer and help you build faster, more efficient applications.
