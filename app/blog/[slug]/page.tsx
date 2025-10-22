@@ -2,6 +2,7 @@ import { getBlogPosts } from 'app/db/blog';
 import BlogLayout from '../../components/BlogLayout';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { getReactions } from 'app/actions/reactions';
 
 const baseUrl = 'https://jacobreed.dev';
 
@@ -64,6 +65,9 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
+  // Fetch initial reactions data
+  const initialReactions = await getReactions(slug);
+
   // JSON-LD Schema markup for SEO
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -89,7 +93,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <BlogLayout blog={post}>
+      <BlogLayout blog={post} slug={slug} initialReactions={initialReactions}>
       </BlogLayout>
     </>
   );
