@@ -5,6 +5,8 @@ import { type PropsWithChildren } from "react";
 import { Blog } from "app/db/blog";
 import { CustomMDX } from "./Mdx";
 import TableOfContents from "./TableOfContents";
+import BlogReactions from "./BlogReactions";
+import { type ReactionData } from "app/actions/reactions";
 
 const editUrl = (slug: string) =>
   `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${slug}.mdx`;
@@ -13,10 +15,18 @@ const discussUrl = (slug: string) =>
     `https://jacobreed.dev/blog/${slug}`
   )}`;
 
+interface BlogLayoutProps {
+  blog: Blog;
+  slug: string;
+  initialReactions: ReactionData;
+}
+
 export default function BlogLayout({
   children,
   blog,
-}: PropsWithChildren<{ blog: Blog }>) {
+  slug,
+  initialReactions,
+}: PropsWithChildren<BlogLayoutProps>) {
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
@@ -44,6 +54,7 @@ export default function BlogLayout({
       <div className="w-full mt-4 prose prose-gray dark:prose-invert max-w-none">
         <CustomMDX source={blog.content} />
       </div>
+      <BlogReactions slug={slug} initialReactions={initialReactions} />
       <div className="text-sm text-gray-700 dark:text-gray-300">
         <a
           href={discussUrl(blog.slug)}
