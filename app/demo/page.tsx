@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import ContactForm from 'app/components/ContactForm';
 import NewsletterForm from 'app/components/NewsletterForm';
 
@@ -20,7 +21,7 @@ export default function DemoPage() {
       </div>
 
       {/* Features Overview */}
-      <div className="mb-16 grid md:grid-cols-3 gap-6">
+      <div className="mb-16 grid md:grid-cols-4 gap-6">
         <div className="p-6 border border-neutral-200 dark:border-neutral-800 rounded-lg">
           <div className="text-2xl mb-2">⚡</div>
           <h3 className="font-semibold mb-2">Server Actions</h3>
@@ -42,6 +43,14 @@ export default function DemoPage() {
           <h3 className="font-semibold mb-2">useFormStatus</h3>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Track pending states for better user feedback
+          </p>
+        </div>
+
+        <div className="p-6 border border-neutral-200 dark:border-neutral-800 rounded-lg">
+          <div className="text-2xl mb-2">🌊</div>
+          <h3 className="font-semibold mb-2">Streaming</h3>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            Progressive page rendering with React Suspense
           </p>
         </div>
       </div>
@@ -154,6 +163,70 @@ export default function Form() {
         </div>
       </section>
 
+      {/* Streaming & Suspense Section */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-bold mb-6">React Suspense + Streaming</h2>
+        <div className="prose dark:prose-invert max-w-none">
+          <p>
+            All blog posts now use <strong>React Suspense</strong> with <strong>streaming</strong> to
+            progressively render content as it becomes available. This provides:
+          </p>
+
+          <ul>
+            <li><strong>Faster perceived performance</strong> - Users see content immediately as it loads</li>
+            <li><strong>Better UX</strong> - Loading skeletons show exactly what&apos;s coming</li>
+            <li><strong>Granular loading states</strong> - Each section loads independently</li>
+            <li><strong>SEO friendly</strong> - Critical content streams first</li>
+          </ul>
+
+          <h3>How It Works</h3>
+          <p>
+            Visit any blog post to see streaming in action. The page loads in stages:
+          </p>
+
+          <ol>
+            <li><strong>Main content</strong> - Blog post loads first (300ms delay)</li>
+            <li><strong>Reactions</strong> - Interactive reactions stream in next</li>
+            <li><strong>Related posts</strong> - Suggestions stream in last (1.5s delay)</li>
+          </ol>
+
+          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg my-6">
+            <p className="text-sm font-semibold mb-2">💡 Try it yourself:</p>
+            <p className="text-sm mb-0">
+              Visit <Link href="/blog/CDK" className="underline">any blog post</Link> and watch the
+              content progressively stream in. Notice the skeleton loaders that give instant
+              feedback while content loads.
+            </p>
+          </div>
+
+          <h3>Code Example</h3>
+          <pre className="bg-neutral-900 dark:bg-neutral-950 text-neutral-100 p-4 rounded-lg overflow-x-auto">
+{`import { Suspense } from 'react';
+
+export default function BlogPost() {
+  return (
+    <article>
+      {/* Main content */}
+      <Suspense fallback={<BlogPostSkeleton />}>
+        <BlogContent />
+      </Suspense>
+
+      {/* Reactions (independent) */}
+      <Suspense fallback={<ReactionsSkeleton />}>
+        <BlogReactions />
+      </Suspense>
+
+      {/* Related posts (slowest) */}
+      <Suspense fallback={<RelatedPostsSkeleton />}>
+        <RelatedPosts />
+      </Suspense>
+    </article>
+  );
+}`}
+          </pre>
+        </div>
+      </section>
+
       {/* Version Info */}
       <section className="p-6 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
         <h3 className="font-semibold mb-3">Powered By</h3>
@@ -161,7 +234,8 @@ export default function Form() {
           <li>• React 19.2.0 (latest)</li>
           <li>• Next.js 15.5.6 (latest)</li>
           <li>• Server Actions (stable)</li>
-          <li>• useActionState & useFormStatus hooks (stable)</li>
+          <li>• useActionState, useFormStatus, useOptimistic hooks (stable)</li>
+          <li>• React Suspense + Streaming (stable)</li>
         </ul>
       </section>
     </div>
