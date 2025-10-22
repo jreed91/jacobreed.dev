@@ -10,11 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model views {
-  slug  String @id @db.VarChar(128)
-  count BigInt @default(1)
-}
-
 model projects {
   slug          String @id @db.VarChar(128)
   name          String @db.Text

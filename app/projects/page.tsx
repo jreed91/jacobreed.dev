@@ -1,5 +1,4 @@
 'use client'
-import { fetcher } from "app/components/ViewCounter";
 import Link from "next/link";
 import useSWR from "swr";
 
@@ -8,6 +7,14 @@ interface Projects {
   name: string;
   description: string;
   image: string;
+}
+
+async function fetcher<JSON = any>(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<JSON> {
+  const res = await fetch(input, init);
+  return res.json();
 }
 
 export default function Projects() {
