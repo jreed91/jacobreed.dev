@@ -1,4 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) personal portfolio and blog website for Jacob Reed.
+
+## Features
+
+- 📝 Blog with MDX support
+- 💬 AI-powered chat interface (powered by Claude)
+- 🌙 Dark mode support
+- 📊 Performance analytics with Vercel
+
+## Environment Setup
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Required for AI chat feature
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Optional: Database for future features
+DATABASE_URL=mysql://user:password@localhost:3306/database
+```
+
+Get your Anthropic API key from [https://console.anthropic.com/](https://console.anthropic.com/)
 
 ## Getting Started
 
@@ -14,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) can be accessed on [http://localhost:3000/api/projects](http://localhost:3000/api/projects). This endpoint can be edited in `app/api/projects/route.ts`.
+[API routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) can be accessed on [http://localhost:3000/api/chat](http://localhost:3000/api/chat). The chat API uses Anthropic's Claude for intelligent responses.
 
 The `app/api` directory is mapped to `/api/*`. Files in this directory are treated as [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) instead of React pages.
 

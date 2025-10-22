@@ -33,7 +33,7 @@ export default function Navigation() {
         <div className="flex items-center gap-1">
           <NavItem href="/" text="Home" />
           <NavItem href="/blog" text="Blog" />
-          <NavItem href="/projects" text="Projects" />
+          <NavItem href="/chat" text="Chat" />
         </div>
       </nav>
     </header>

@@ -13,6 +13,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.67.0",
     "@prisma/client": "6.17.1",
     "@tailwindcss/typography": "0.5.19",
     "@vercel/analytics": "1.5.0",
