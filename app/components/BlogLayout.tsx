@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { parseISO, format } from "date-fns";
 
-import { Suspense, type PropsWithChildren } from "react";
-import ViewCounter from "./ViewCounter";
+import { type PropsWithChildren } from "react";
 import { Blog } from "app/db/blog";
 import { CustomMDX } from "./Mdx";
 import TableOfContents from "./TableOfContents";
@@ -24,26 +23,19 @@ export default function BlogLayout({
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
         {blog.metadata.title}
       </h1>
-      <div className="flex flex-col items-start justify-between w-full mt-2 md:flex-row md:items-center">
-        <div className="flex items-center">
-          <Image
-            alt="Jacob Reed"
-            height={24}
-            width={24}
-            src="/static/images/avatar.jpeg"
-            className="rounded-full"
-          />
-          <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-            {"Jacob Reed / "}
-            {format(parseISO(blog.metadata.date), "MMMM dd, yyyy")}
-            {" • "}
-            {blog.metadata.readingTime}
-          </p>
-        </div>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 min-w-32 md:mt-0">
-          <Suspense fallback={<p className="h-5" />}>
-            <ViewCounter slug={blog.slug} />
-          </Suspense>
+      <div className="flex items-center mt-2">
+        <Image
+          alt="Jacob Reed"
+          height={24}
+          width={24}
+          src="/static/images/avatar.jpeg"
+          className="rounded-full"
+        />
+        <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          {"Jacob Reed / "}
+          {format(parseISO(blog.metadata.date), "MMMM dd, yyyy")}
+          {" • "}
+          {blog.metadata.readingTime}
         </p>
       </div>
       <div className="w-full mt-6">
