@@ -3,6 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
 import Footer from "./components/Footer";
 import Navigation from "./components/Navigation";
+import { ThemeProvider } from "./components/ThemeProvider";
 import './global.css';
 
 export const metadata: Metadata = {
@@ -44,22 +45,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head></head>
-      <body>
-        <div className="bg-gray-50 dark:bg-gray-900">
-          <main
-            id="skip"
-            className="flex flex-col justify-center px-8 bg-gray-50 dark:bg-gray-900"
-          >
-            <Navigation />
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col">
+        <ThemeProvider>
+          <Navigation />
+          <main id="skip" className="flex-1 px-4 sm:px-6 lg:px-8">
             {children}
-            <Footer />
-
-            <Analytics />
-            <SpeedInsights />
           </main>
-        </div>
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
       </body>
     </html>
   );

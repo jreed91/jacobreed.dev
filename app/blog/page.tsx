@@ -1,7 +1,6 @@
 import BlogPost from '../components/BlogPost';
 import { getBlogPosts } from 'app/db/blog';
 
-
 export default function Blog() {
   const filteredBlogPosts = getBlogPosts()
     .sort(
@@ -10,18 +9,19 @@ export default function Blog() {
     );
 
   return (
-      <div className="items-center justify-between w-full relative max-w-4xl mx-auto">
-        <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
-          All Posts
-        </h3>
-        {!filteredBlogPosts.length && (
-          <p className="mb-4 text-gray-600 dark:text-gray-400">
-            No posts found.
-          </p>
-        )}
-        {filteredBlogPosts.map((post) => (
-          <BlogPost key={post.metadata.title} blog={post} />
-        ))}
-      </div>
+    <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
+      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+        All Posts
+      </h1>
+      {!filteredBlogPosts.length ? (
+        <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+      ) : (
+        <div className="space-y-4">
+          {filteredBlogPosts.map((post) => (
+            <BlogPost key={post.metadata.title} blog={post} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
