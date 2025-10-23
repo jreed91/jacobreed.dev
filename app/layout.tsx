@@ -49,7 +49,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         <ThemeProvider>
           <Navigation />
-          <main id="skip" className="flex-1 px-4 sm:px-6 lg:px-8">
+          <main id="skip" className="flex-1 px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28">
             {children}
           </main>
           <Footer />
