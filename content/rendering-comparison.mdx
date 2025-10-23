@@ -86,13 +86,14 @@ export default function UserProfile({ userId }) {
 
 **Network Waterfall:**
 ```
-1. HTML Request          → 50ms
-2. JavaScript Download   → 500ms
-3. JavaScript Parse      → 200ms
-4. React Hydration       → 150ms
-5. Data Fetch            → 300ms
-6. Render with Data      → 50ms
-Total: ~1250ms until content visible
+1. HTML Request          → 50ms   (minimal shell)
+2. JavaScript Download   → 600ms  (300KB bundle on 3G/4G)
+3. JavaScript Parse      → 150ms
+4. React Initial Render  → 100ms
+5. Data Fetch            → 200ms  (API call)
+6. Re-render with Data   → 50ms
+Total FCP: ~1150ms (First Contentful Paint)
+Total TTI: ~1150ms (Time to Interactive)
 ```
 
 ## Server-Side Rendering (SSR)
@@ -212,13 +213,13 @@ export default function UserPage({ user }) {
 
 **Network Waterfall:**
 ```
-1. HTML Request + Server Render → 400ms (includes data fetch)
+1. HTML Request + Server Render → 300ms (includes data fetch)
 2. HTML Visible (FCP)           → Content visible!
-3. JavaScript Download          → 500ms
-4. JavaScript Parse             → 200ms
-5. React Hydration              → 150ms
-6. Interactive (TTI)            → 1250ms
-FCP: ~400ms | TTI: ~1250ms
+3. JavaScript Download          → 600ms (300KB bundle on 3G/4G)
+4. JavaScript Parse             → 150ms
+5. React Hydration              → 100ms
+Total FCP: ~300ms (First Contentful Paint)
+Total TTI: ~1150ms (Time to Interactive - 300 + 600 + 150 + 100)
 ```
 
 ## React Server Components (RSC)
@@ -395,13 +396,13 @@ export default function UserPage({ params }: { params: { id: string } }) {
 
 **Network Waterfall:**
 ```
-1. HTML Request + Server Render → 400ms (includes data fetch)
+1. HTML Request + Server Render → 300ms (includes data fetch)
 2. HTML Visible (FCP)           → Content visible!
-3. Small JS Download            → 100ms (only client components)
-4. JavaScript Parse             → 50ms
-5. React Hydration              → 50ms
-6. Interactive (TTI)            → 600ms
-FCP: ~400ms | TTI: ~600ms (2x faster than SSR!)
+3. Small JS Download            → 100ms (50KB - only client components)
+4. JavaScript Parse             → 30ms
+5. React Hydration              → 30ms
+Total FCP: ~300ms (First Contentful Paint - same as SSR)
+Total TTI: ~460ms (Time to Interactive - 2.5x faster than SSR!)
 ```
 
 ## Side-by-Side Comparison
@@ -420,33 +421,45 @@ FCP: ~400ms | TTI: ~600ms (2x faster than SSR!)
 
 ## Real-World Performance Example
 
-Let's say we're building a blog post page. Here's what happens:
+Let's say we're building a user profile page. Here's what happens on a typical 3G/4G connection:
 
 ### CSR Performance
 ```
-HTML download:        50ms   (5KB)
-JavaScript download:  800ms  (300KB bundle)
-Parse/Execute:        200ms
-Data fetch:           400ms
-Total to content:     1450ms
+HTML download:        50ms   (5KB - minimal shell)
+JavaScript download:  600ms  (300KB gzipped bundle)
+Parse/Execute:        150ms
+Initial Render:       100ms
+Data fetch (API):     200ms
+Re-render:            50ms
+--------------------------------
+Total FCP:           1150ms  (when content is visible)
+Total TTI:           1150ms  (when page is interactive)
 ```
 
 ### SSR Performance
 ```
-HTML download:        500ms  (25KB, includes data)
-JavaScript download:  800ms  (300KB bundle)
-Parse/Execute:        200ms
-Hydration:           150ms
-FCP: 500ms | TTI: 1650ms
+HTML download:        300ms  (30KB - includes rendered content + data)
+JavaScript download:  600ms  (300KB gzipped bundle)
+Parse/Execute:        150ms
+Hydration:           100ms
+--------------------------------
+Total FCP:            300ms  (when content is visible)
+Total TTI:           1150ms  (when page is interactive)
+
+Improvement: FCP 3.8x faster than CSR, but TTI is the same
 ```
 
 ### RSC Performance
 ```
-HTML download:        500ms  (25KB, includes data)
-JavaScript download:  200ms  (50KB - only interactive parts)
-Parse/Execute:        50ms
-Hydration:           50ms
-FCP: 500ms | TTI: 800ms
+HTML download:        300ms  (30KB - includes rendered content + data)
+JavaScript download:  100ms  (50KB - only interactive parts)
+Parse/Execute:        30ms
+Hydration:            30ms
+--------------------------------
+Total FCP:            300ms  (when content is visible)
+Total TTI:            460ms  (when page is interactive)
+
+Improvement: FCP 3.8x faster than CSR, TTI 2.5x faster than CSR/SSR
 ```
 
 ## When to Use Each Approach
