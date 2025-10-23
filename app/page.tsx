@@ -9,10 +9,10 @@ export default function Home() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto w-full">
-      <section className="relative py-12 sm:py-16 min-h-[400px] flex items-center">
+    <>
+      <section className="relative py-12 sm:py-16 min-h-[400px] flex items-center w-full -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
         <AnimatedBlob />
-        <div className="relative z-10">
+        <div className="relative z-10 max-w-4xl mx-auto w-full">
           <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 dark:text-gray-200">
             My name is Jacob.
           </h1>
@@ -30,20 +30,22 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="pb-12 sm:pb-16">
-        <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-6 text-black dark:text-white">
-          Writing
-        </h3>
-        {!filteredBlogPosts.length ? (
-          <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
-        ) : (
-          <div className="space-y-4">
-            {filteredBlogPosts.map((post) => (
-              <BlogPost key={post.metadata.title} blog={post} />
-            ))}
-          </div>
-        )}
-      </section>
-    </div>
+      <div className="max-w-4xl mx-auto w-full">
+        <section className="pb-12 sm:pb-16">
+          <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-6 text-black dark:text-white">
+            Writing
+          </h3>
+          {!filteredBlogPosts.length ? (
+            <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+          ) : (
+            <div className="space-y-4">
+              {filteredBlogPosts.map((post) => (
+                <BlogPost key={post.metadata.title} blog={post} />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </>
   );
 }
