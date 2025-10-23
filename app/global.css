@@ -8,3 +8,12 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+/* Animated blob delays */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}

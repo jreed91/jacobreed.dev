@@ -1,4 +1,5 @@
 import BlogPost from "./components/BlogPost";
+import AnimatedBlob from "./components/AnimatedBlob";
 import { getBlogPosts } from "app/db/blog";
 
 export default function Home() {
@@ -9,21 +10,24 @@ export default function Home() {
 
   return (
     <div className="max-w-4xl mx-auto w-full">
-      <section className="py-12 sm:py-16">
-        <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 dark:text-gray-200">
-          My name is Jacob.
-        </h1>
-        <h2 className="text-gray-700 dark:text-gray-200 text-xl sm:text-2xl">
-          I am an experienced Software Engineer @{" "}
-          <a
-            href="https://www.leantechniques.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gray-900 dark:hover:text-white transition-colors underline decoration-gray-400 hover:decoration-gray-900 dark:hover:decoration-white"
-          >
-            Lean TECHniques
-          </a>
-        </h2>
+      <section className="relative py-12 sm:py-16 min-h-[400px] flex items-center">
+        <AnimatedBlob />
+        <div className="relative z-10">
+          <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 dark:text-gray-200">
+            My name is Jacob.
+          </h1>
+          <h2 className="text-gray-700 dark:text-gray-200 text-xl sm:text-2xl">
+            I am an experienced Software Engineer @{" "}
+            <a
+              href="https://www.leantechniques.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-900 dark:hover:text-white transition-colors underline decoration-gray-400 hover:decoration-gray-900 dark:hover:decoration-white"
+            >
+              Lean TECHniques
+            </a>
+          </h2>
+        </div>
       </section>
 
       <section className="pb-12 sm:pb-16">
