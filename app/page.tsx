@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative py-12 sm:py-16 min-h-[400px] flex items-center w-full -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-12 sm:py-16 pb-16 sm:pb-20 min-h-[450px] flex items-center w-screen -ml-4 sm:-ml-6 lg:-ml-8 pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 mb-8 sm:mb-12">
         <AnimatedBlob />
         <div className="relative z-10 max-w-4xl mx-auto w-full">
           <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 dark:text-gray-200">
