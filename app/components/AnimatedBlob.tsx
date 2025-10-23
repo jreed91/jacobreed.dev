@@ -42,8 +42,8 @@ export default function AnimatedBlob() {
         className="absolute w-96 h-96 rounded-full blur-3xl opacity-30 dark:opacity-20 animate-blob"
         style={{
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-          left: `${mousePosition.x ? mousePosition.x - 192 : 'calc(50% - 12rem)'}px`,
-          top: `${mousePosition.y ? mousePosition.y - 192 : 'calc(50% - 12rem)'}px`,
+          left: mousePosition.x ? `${mousePosition.x - 192}px` : 'calc(50% - 12rem)',
+          top: mousePosition.y ? `${mousePosition.y - 192}px` : 'calc(50% - 12rem)',
           transition: 'left 0.3s ease-out, top 0.3s ease-out',
         }}
       />
