@@ -1,10 +1,30 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
+import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google';
 import Footer from "./components/Footer";
 import Navigation from "./components/Navigation";
 import { ThemeProvider } from "./components/ThemeProvider";
 import './global.css';
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+  weight: ['400', '600', '700'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jacobreed.dev'),
@@ -45,8 +65,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col">
+    <html lang="en" suppressHydrationWarning className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="min-h-screen flex flex-col font-body">
         <ThemeProvider>
           <Navigation />
           <main id="skip" className="flex-1 px-4 sm:px-6 lg:px-8">

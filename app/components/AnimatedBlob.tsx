@@ -36,33 +36,33 @@ export default function AnimatedBlob() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Primary animated blob */}
+      {/* Primary animated blob - Sage Green to Muted Gold */}
       <div
         ref={blobRef}
         className="absolute w-96 h-96 rounded-full blur-3xl opacity-30 dark:opacity-20 animate-blob"
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+          background: 'linear-gradient(135deg, #7a9e7e 0%, #c9a961 50%, #f5f1e8 100%)',
           left: mousePosition.x ? `${mousePosition.x - 192}px` : 'calc(50% - 12rem)',
           top: mousePosition.y ? `${mousePosition.y - 192}px` : 'calc(50% - 12rem)',
           transition: 'left 0.3s ease-out, top 0.3s ease-out',
         }}
       />
 
-      {/* Secondary blob for depth */}
+      {/* Secondary blob for depth - Deep Navy to Sage Green */}
       <div
         className="absolute w-80 h-80 rounded-full blur-3xl opacity-20 dark:opacity-15 animate-blob animation-delay-2000"
         style={{
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #feca57 100%)',
+          background: 'linear-gradient(135deg, #1a2332 0%, #3d3d3d 50%, #7a9e7e 100%)',
           right: '10%',
           top: '20%',
         }}
       />
 
-      {/* Tertiary blob for more depth */}
+      {/* Tertiary blob for more depth - Muted Gold to Soft Cream */}
       <div
         className="absolute w-72 h-72 rounded-full blur-3xl opacity-20 dark:opacity-15 animate-blob animation-delay-4000"
         style={{
-          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          background: 'linear-gradient(135deg, #c9a961 0%, #f5f1e8 100%)',
           left: '15%',
           bottom: '10%',
         }}

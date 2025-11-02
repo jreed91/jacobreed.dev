@@ -8,7 +8,7 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
     <Link href={`/blog/${blog.slug}`} className="w-full ">
         <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
           <div className="flex flex-col justify-between md:flex-row">
-            <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
+            <h4 className="w-full mb-2 text-lg font-medium text-deep-navy md:text-xl dark:text-soft-cream">
               {blog.metadata.title}
             </h4>
             <div className="">
@@ -16,7 +16,7 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="h-6 w-6 ml-1"
+              className="h-6 w-6 ml-1 text-sage-green"
             >
               <path
                 stroke="currentColor"
@@ -28,12 +28,12 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
             </svg>
             </div>
           </div>
-          <div className="flex items-center gap-2 mb-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-2 mb-2 text-sm text-sage-green">
             <span>{format(parseISO(blog.metadata.date), 'MMMM dd, yyyy')}</span>
             <span>•</span>
             <span>{blog.metadata.readingTime}</span>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
+          <p className="text-warm-charcoal dark:text-light-gray">{blog.metadata.summary}</p>
         </div>
     </Link>
   );

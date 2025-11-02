@@ -12,9 +12,9 @@ export function NavItem({ href, text }: { href: string; text: string }) {
       href={href}
       className={cn(
         isActive
-          ? "font-semibold text-gray-800 dark:text-gray-200"
-          : "font-normal text-gray-600 dark:text-gray-400",
-        "inline-block px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
+          ? "font-semibold text-deep-navy dark:text-soft-cream border-b-2 border-sage-green"
+          : "font-normal text-warm-charcoal dark:text-light-gray",
+        "inline-block px-3 py-2 rounded-lg hover:bg-light-gray dark:hover:bg-warm-charcoal/50 hover:text-sage-green transition-all"
       )}
       aria-current={isActive ? "page" : undefined}
     >
@@ -25,7 +25,7 @@ export function NavItem({ href, text }: { href: string; text: string }) {
 
 export default function Navigation() {
   return (
-    <header className="w-full border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full border-b border-light-gray dark:border-warm-charcoal">
       <nav
         className="max-w-4xl mx-auto py-4 sm:py-6"
         aria-label="Main navigation"

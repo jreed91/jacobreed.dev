@@ -20,7 +20,7 @@ export default function BlogLayout({
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
-      <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
+      <h1 className="mb-4 text-3xl font-bold tracking-tight text-deep-navy md:text-5xl dark:text-soft-cream">
         {blog.metadata.title}
       </h1>
       <div className="flex items-center mt-2">
@@ -31,7 +31,7 @@ export default function BlogLayout({
           src="/static/images/avatar.jpeg"
           className="rounded-full"
         />
-        <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+        <p className="ml-2 text-sm text-sage-green">
           {"Jacob Reed / "}
           {format(parseISO(blog.metadata.date), "MMMM dd, yyyy")}
           {" • "}
@@ -44,16 +44,17 @@ export default function BlogLayout({
       <div className="w-full mt-4 prose prose-gray dark:prose-invert max-w-none">
         <CustomMDX source={blog.content} />
       </div>
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="text-sm text-sage-green hover:text-muted-gold transition-colors">
         <a
           href={discussUrl(blog.slug)}
           target="_blank"
           rel="noopener noreferrer"
+          className="hover:text-muted-gold"
         >
           {"Discuss on Twitter"}
         </a>
         {` • `}
-        <a href={editUrl(blog.slug)} target="_blank" rel="noopener noreferrer">
+        <a href={editUrl(blog.slug)} target="_blank" rel="noopener noreferrer" className="hover:text-muted-gold">
           {"Edit on GitHub"}
         </a>
       </div>

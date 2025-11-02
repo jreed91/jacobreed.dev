@@ -22,13 +22,13 @@ export default function Projects() {
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-deep-navy dark:text-soft-cream">
         All Projects
       </h1>
       {!projects ? (
-        <p className="text-gray-600 dark:text-gray-400">Loading projects...</p>
+        <p className="text-warm-charcoal dark:text-light-gray">Loading projects...</p>
       ) : projects.length === 0 ? (
-        <p className="text-gray-600 dark:text-gray-400">No projects found.</p>
+        <p className="text-warm-charcoal dark:text-light-gray">No projects found.</p>
       ) : (
         <div className="space-y-6">
           {projects.map((project) => (
@@ -39,14 +39,14 @@ export default function Projects() {
             >
               <article className="w-full transform hover:scale-[1.01] transition-all">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                  <h2 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                  <h2 className="text-lg sm:text-xl font-medium text-deep-navy dark:text-soft-cream group-hover:text-sage-green dark:group-hover:text-muted-gold transition-colors">
                     {project.name}
                   </h2>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className="h-6 w-6 flex-shrink-0 text-gray-600 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors"
+                    className="h-6 w-6 flex-shrink-0 text-sage-green group-hover:text-muted-gold transition-colors"
                     aria-hidden="true"
                   >
                     <path
@@ -58,7 +58,7 @@ export default function Projects() {
                     />
                   </svg>
                 </div>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
+                <p className="mt-2 text-warm-charcoal dark:text-light-gray">
                   {project.description}
                 </p>
               </article>

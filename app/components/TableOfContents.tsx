@@ -69,11 +69,11 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
               href={`#${id}`}
               onClick={(e) => handleClick(e, id)}
               className={`
-                block py-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400
+                block py-1 transition-colors hover:text-sage-green dark:hover:text-muted-gold
                 ${
                   isActive
-                    ? 'text-blue-600 dark:text-blue-400 font-medium'
-                    : 'text-gray-600 dark:text-gray-400'
+                    ? 'text-sage-green dark:text-muted-gold font-medium'
+                    : 'text-warm-charcoal dark:text-light-gray'
                 }
               `}
             >
@@ -88,17 +88,17 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
   return (
     <>
       {/* Mobile/Tablet: Collapsible section */}
-      <div className="lg:hidden mb-8 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <div className="lg:hidden mb-8 border border-light-gray dark:border-warm-charcoal rounded-lg overflow-hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="w-full px-4 py-3 flex items-center justify-between bg-soft-cream/50 dark:bg-deep-navy/50 hover:bg-light-gray dark:hover:bg-warm-charcoal/50 transition-colors"
           aria-expanded={isOpen}
         >
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="text-sm font-semibold text-deep-navy dark:text-soft-cream">
             Table of Contents
           </h3>
           <svg
-            className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${
+            className={`w-5 h-5 text-sage-green transition-transform ${
               isOpen ? 'rotate-180' : ''
             }`}
             fill="none"
@@ -114,7 +114,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
           </svg>
         </button>
         {isOpen && (
-          <div className="px-4 py-3 bg-white dark:bg-gray-900">
+          <div className="px-4 py-3 bg-white dark:bg-deep-navy">
             {tocList}
           </div>
         )}
@@ -123,7 +123,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
       {/* Desktop: Sticky sidebar */}
       <nav className="hidden lg:block sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
         <div className="mb-4">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+          <h3 className="text-sm font-semibold text-deep-navy dark:text-soft-cream mb-2">
             Table of Contents
           </h3>
           {tocList}

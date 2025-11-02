@@ -10,11 +10,11 @@ export default function Blog() {
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-deep-navy dark:text-soft-cream">
         All Posts
       </h1>
       {!filteredBlogPosts.length ? (
-        <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+        <p className="text-warm-charcoal dark:text-light-gray">No posts found.</p>
       ) : (
         <div className="space-y-4">
           {filteredBlogPosts.map((post) => (
