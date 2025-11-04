@@ -2,6 +2,7 @@ import BlogPost from "./components/BlogPost";
 import AnimatedBlob from "./components/AnimatedBlob";
 import { getBlogPosts } from "app/db/blog";
 
+/* Code & Craft Homepage - Professional, clean, restrained */
 export default function Home() {
   const filteredBlogPosts = getBlogPosts().sort(
     (a, b) =>
@@ -10,19 +11,20 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative py-12 sm:py-16 pb-16 sm:pb-20 min-h-[450px] flex items-center w-screen -ml-4 sm:-ml-6 lg:-ml-8 pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 mb-8 sm:mb-12">
+      {/* Hero section with animated blob background */}
+      <section className="relative py-xl sm:py-2xl pb-xl sm:pb-2xl min-h-[450px] flex items-center w-screen -ml-4 sm:-ml-6 lg:-ml-8 pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 mb-lg sm:mb-xl bg-cc-white dark:bg-cc-deep-slate">
         <AnimatedBlob />
-        <div className="relative z-10 max-w-4xl mx-auto w-full">
-          <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-4 dark:text-gray-200">
+        <div className="relative z-10 max-w-[1200px] mx-auto w-full">
+          <h1 className="text-h1 mb-md text-cc-slate dark:text-cc-white">
             My name is Jacob.
           </h1>
-          <h2 className="text-gray-700 dark:text-gray-200 text-xl sm:text-2xl">
+          <h2 className="text-h2 text-cc-warm-gray dark:text-cc-soft-gray">
             I am an experienced Software Engineer @{" "}
             <a
               href="https://www.leantechniques.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-gray-900 dark:hover:text-white transition-colors underline decoration-gray-400 hover:decoration-gray-900 dark:hover:decoration-white"
+              className="text-cc-sage-blue dark:text-cc-sky-blue hover:text-cc-slate dark:hover:text-cc-white transition-colors border-b border-current"
             >
               Lean TECHniques
             </a>
@@ -30,15 +32,16 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto w-full">
-        <section className="pb-12 sm:pb-16">
-          <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-6 text-black dark:text-white">
+      {/* Writing section */}
+      <div className="max-w-[1200px] mx-auto w-full px-10">
+        <section className="pb-xl sm:pb-2xl">
+          <h3 className="text-h2 mb-lg text-cc-slate dark:text-cc-white">
             Writing
           </h3>
           {!filteredBlogPosts.length ? (
-            <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+            <p className="text-body text-cc-warm-gray dark:text-cc-soft-gray">No posts found.</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-md">
               {filteredBlogPosts.map((post) => (
                 <BlogPost key={post.metadata.title} blog={post} />
               ))}

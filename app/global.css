@@ -2,11 +2,109 @@
 @plugin "@tailwindcss/typography";
 @config "../tailwind.config.ts";
 
+/* Code & Craft Design System - Global Styles */
+
 body {
-  @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+  /* Code & Craft colors: white background, slate text */
+  @apply bg-cc-white dark:bg-cc-deep-slate text-cc-slate dark:text-cc-soft-gray;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  font-weight: 400;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* Typography - Code & Craft type scale */
+h1 {
+  @apply text-cc-slate dark:text-cc-white;
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  @apply text-cc-slate dark:text-cc-white;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+h3 {
+  @apply text-cc-slate dark:text-cc-white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+p {
+  @apply text-cc-warm-gray dark:text-cc-soft-gray;
+  line-height: 1.65;
+}
+
+/* Links - Code & Craft link styles */
+a {
+  @apply text-cc-sage-blue dark:text-cc-sky-blue;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  @apply text-cc-slate dark:text-cc-white;
+}
+
+/* Code blocks - Code & Craft code styling */
+pre {
+  @apply bg-cc-light-blue border border-cc-border;
+  padding: 24px;
+  overflow-x: auto;
+  border-radius: 2px;
+}
+
+code {
+  @apply bg-cc-light-blue text-cc-slate;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Prose styles for MDX content */
+.prose {
+  @apply text-cc-warm-gray dark:text-cc-soft-gray;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-cc-slate dark:text-cc-white;
+  font-weight: 600;
+}
+
+.prose a {
+  @apply text-cc-sage-blue dark:text-cc-sky-blue no-underline;
+  border-bottom: 1px solid currentColor;
+}
+
+.prose a:hover {
+  @apply text-cc-slate dark:text-cc-white;
+}
+
+.prose code {
+  @apply bg-cc-light-blue text-cc-slate px-1 py-0.5;
+  border-radius: 2px;
+}
+
+.prose pre {
+  @apply bg-cc-light-blue border border-cc-border;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
 }
 
 /* Animated blob delays */

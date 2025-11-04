@@ -1,6 +1,7 @@
 import BlogPost from '../components/BlogPost';
 import { getBlogPosts } from 'app/db/blog';
 
+/* Code & Craft Blog Page - Clean, professional layout */
 export default function Blog() {
   const filteredBlogPosts = getBlogPosts()
     .sort(
@@ -9,14 +10,14 @@ export default function Blog() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+    <div className="max-w-[1200px] mx-auto w-full py-xl sm:py-2xl px-10">
+      <h1 className="mb-lg text-h2 text-cc-slate dark:text-cc-white">
         All Posts
       </h1>
       {!filteredBlogPosts.length ? (
-        <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+        <p className="text-body text-cc-warm-gray dark:text-cc-soft-gray">No posts found.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-md">
           {filteredBlogPosts.map((post) => (
             <BlogPost key={post.metadata.title} blog={post} />
           ))}

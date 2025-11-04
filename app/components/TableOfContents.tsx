@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Heading } from 'app/db/blog';
 
+/* Code & Craft Table of Contents - Clean borders, consistent colors */
 export default function TableOfContents({ headings }: { headings: Heading[] }) {
   const [activeId, setActiveId] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
   }
 
   const tocList = (
-    <ul className="space-y-2 text-sm">
+    <ul className="space-y-2 text-caption">
       {headings.map(({ id, text, level }) => {
         const isActive = activeId === id;
         return (
@@ -69,11 +70,11 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
               href={`#${id}`}
               onClick={(e) => handleClick(e, id)}
               className={`
-                block py-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400
+                block py-1 transition-colors
                 ${
                   isActive
-                    ? 'text-blue-600 dark:text-blue-400 font-medium'
-                    : 'text-gray-600 dark:text-gray-400'
+                    ? 'text-cc-sage-blue dark:text-cc-sky-blue font-semibold'
+                    : 'text-cc-warm-gray dark:text-cc-soft-gray hover:text-cc-slate dark:hover:text-cc-white'
                 }
               `}
             >
@@ -88,17 +89,17 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
   return (
     <>
       {/* Mobile/Tablet: Collapsible section */}
-      <div className="lg:hidden mb-8 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <div className="lg:hidden mb-lg border border-cc-border dark:border-cc-slate overflow-hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="w-full px-md py-sm flex items-center justify-between bg-cc-light-blue dark:bg-cc-slate hover:bg-cc-border dark:hover:bg-cc-deep-slate transition-colors"
           aria-expanded={isOpen}
         >
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="text-caption font-semibold text-cc-slate dark:text-cc-white">
             Table of Contents
           </h3>
           <svg
-            className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${
+            className={`w-5 h-5 text-cc-warm-gray dark:text-cc-soft-gray transition-transform ${
               isOpen ? 'rotate-180' : ''
             }`}
             fill="none"
@@ -114,7 +115,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
           </svg>
         </button>
         {isOpen && (
-          <div className="px-4 py-3 bg-white dark:bg-gray-900">
+          <div className="px-md py-sm bg-cc-white dark:bg-cc-deep-slate border-t border-cc-border dark:border-cc-slate">
             {tocList}
           </div>
         )}
@@ -122,8 +123,8 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
 
       {/* Desktop: Sticky sidebar */}
       <nav className="hidden lg:block sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        <div className="mb-md">
+          <h3 className="text-caption font-semibold text-cc-slate dark:text-cc-white mb-sm">
             Table of Contents
           </h3>
           {tocList}

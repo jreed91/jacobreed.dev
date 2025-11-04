@@ -3,6 +3,7 @@ import cn from "classnames";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
+/* Code & Craft Navigation - Clean, professional, restrained */
 export function NavItem({ href, text }: { href: string; text: string }) {
   const path = usePathname();
   const isActive = path === href;
@@ -12,9 +13,9 @@ export function NavItem({ href, text }: { href: string; text: string }) {
       href={href}
       className={cn(
         isActive
-          ? "font-semibold text-gray-800 dark:text-gray-200"
-          : "font-normal text-gray-600 dark:text-gray-400",
-        "inline-block px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
+          ? "font-semibold text-cc-slate dark:text-cc-white"
+          : "text-cc-warm-gray dark:text-cc-soft-gray",
+        "inline-block px-3 py-2 transition-colors hover:text-cc-slate dark:hover:text-cc-white"
       )}
       aria-current={isActive ? "page" : undefined}
     >
@@ -25,9 +26,9 @@ export function NavItem({ href, text }: { href: string; text: string }) {
 
 export default function Navigation() {
   return (
-    <header className="w-full border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full border-b border-cc-border dark:border-cc-slate bg-cc-white dark:bg-cc-deep-slate">
       <nav
-        className="max-w-4xl mx-auto py-4 sm:py-6"
+        className="max-w-[1200px] mx-auto py-5 px-10"
         aria-label="Main navigation"
       >
         <div className="flex items-center gap-1">

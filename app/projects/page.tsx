@@ -17,36 +17,37 @@ async function fetcher<JSON = any>(
   return res.json();
 }
 
+/* Code & Craft Projects Page - Clean cards, consistent spacing */
 export default function Projects() {
   const { data: projects } = useSWR<Projects[]>(`/api/projects`, fetcher);
 
   return (
-    <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+    <div className="max-w-[1200px] mx-auto w-full py-xl sm:py-2xl px-10">
+      <h1 className="mb-lg text-h2 text-cc-slate dark:text-cc-white">
         All Projects
       </h1>
       {!projects ? (
-        <p className="text-gray-600 dark:text-gray-400">Loading projects...</p>
+        <p className="text-body text-cc-warm-gray dark:text-cc-soft-gray">Loading projects...</p>
       ) : projects.length === 0 ? (
-        <p className="text-gray-600 dark:text-gray-400">No projects found.</p>
+        <p className="text-body text-cc-warm-gray dark:text-cc-soft-gray">No projects found.</p>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-md">
           {projects.map((project) => (
             <Link
               href={project.slug}
               key={project.slug}
               className="block group"
             >
-              <article className="w-full transform hover:scale-[1.01] transition-all">
+              <article className="w-full border-b border-cc-border dark:border-cc-slate pb-md transition-colors hover:border-cc-sage-blue dark:hover:border-cc-sky-blue">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                  <h2 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                  <h2 className="text-h3 text-cc-slate dark:text-cc-white group-hover:text-cc-sage-blue dark:group-hover:text-cc-sky-blue transition-colors">
                     {project.name}
                   </h2>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className="h-6 w-6 flex-shrink-0 text-gray-600 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors"
+                    className="h-6 w-6 flex-shrink-0 text-cc-warm-gray dark:text-cc-soft-gray group-hover:text-cc-sage-blue dark:group-hover:text-cc-sky-blue transition-colors"
                     aria-hidden="true"
                   >
                     <path
@@ -58,7 +59,7 @@ export default function Projects() {
                     />
                   </svg>
                 </div>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
+                <p className="mt-sm text-body text-cc-warm-gray dark:text-cc-soft-gray">
                   {project.description}
                 </p>
               </article>
