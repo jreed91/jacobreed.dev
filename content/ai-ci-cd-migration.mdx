@@ -1,0 +1,74 @@
+---
+title: "How We Used AI to Automate the 'Boring Stuff' in CI/CD Migration"
+date: "2026-02-07"
+description: "Migrating 600 repos from Azure DevOps to GitHub Actions is no small feat. Here's how we used AI to accelerate the process and avoid manual burnout."
+tags: ["DevOps", "CI/CD", "GitHub Actions", "Azure DevOps", "AI"]
+author: "Jacob Reed"
+---
+
+# How We Used AI to Automate the "Boring Stuff" in CI/CD Migration
+
+If you've ever been tasked with migrating CI/CD pipelines, you know the pain. It is rarely a clean "lift and shift." It's usually a slog of translating logic, fighting with YAML indentation, and trying not to break production in the process.
+
+My colleague Alex McClure and I recently tackled a massive migration project: moving a client from Azure DevOps (ADO) to GitHub Actions. We were staring down the barrel of about 600 active repositories spanning everything from Node and Python to Java and .NET.
+
+The developer in me knew that manually rewriting 600 pipelines was a recipe for burnout. We needed a way to accelerate the process so teams could get back to shipping features, not writing boilerplate.
+
+Here is how we used GitHub Copilot to do the heavy lifting.
+
+### The Problem: No Easy Button
+
+The biggest hurdle with migrating from ADO to GitHub Actions is that there is no perfect automated conversion tool. Microsoft has released some scripts, but in our experience, they don't get you 100% (or even 50%) of the way there.
+
+We had a few hard constraints:
+
+1. Scale: We couldn't manually onboard 600 repos without stalling feature development.
+2. Consistency: We wanted every team to use our new Reusable Workflows (standardized templates for building, testing, and deploying) rather than rolling their own unique configurations.
+3. Security: We needed to ensure secrets weren't being hardcoded or exposed, a major issue we saw in the old ADO pipelines.
+
+### The Fix: AI as the Migration Engine
+
+We realized that while we couldn't script a perfect migration, we could *prompt* one.
+
+We decided to use GitHub Copilot not just for code completion, but as an agent to handle the migration toil.
+
+We built a workflow that looked like this:
+
+#### 1. The Intake (Structuring the Context)
+
+We didn't want developers staring at a blank YAML file. Instead, we created a standard GitHub Issue Template.
+
+To onboard a repo, a developer simply filled out the issue with high-level details:
+
+* Repository Name
+* Tech Stack (e.g., "Node.js backend")
+* Target Environments (e.g., "Dev, QA, Prod")
+* Required Secrets
+
+#### 2. The Prompt
+
+We fed that structured context into GitHub Copilot. We essentially told the AI:
+
+*"Take these details and generate a Pull Request that onboards this specific repo into our shared Reusable Workflows."*
+
+#### 3. The Execution
+
+Copilot would analyze the repository to understand how to run the tests and linting, and then generate the actual workflow file. It handled the mapping of inputs to our standardized templates automatically.
+
+### The Result: 80% Done is Better Than 0%
+
+Was it perfect? No. AI rarely is.
+
+But we found that this approach covered about 80% of the use cases. For the average developer, this changed the task from "Write a complex pipeline from scratch" to "Review this PR and tweak the last 20%."
+
+It lowered the barrier to entry significantly. Instead of reading documentation on our new standardized workflows, the AI applied the standards for them.
+
+### Key Takeaway for Devs
+
+If you are facing a large-scale refactor or migration, stop looking for a perfect script and start looking at how you can prompt an AI to do the grunt work.
+
+By treating the migration as a prompt engineering problem rather than a scripting problem, we saved hundreds of hours of manual configuration. It allowed us to move fast, keep our pipelines secure, and most importantly, keep our sanity.
+
+*You can watch Alex and me break down the full architecture of this solution here:*
+
+[https://youtu.be/AuMV3klFajw?si=WSYLu9_Vxko1ub23](https://youtu.be/AuMV3klFajw?si=WSYLu9_Vxko1ub23)
