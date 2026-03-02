@@ -1,0 +1,4 @@
+## 2024-05-14 - XSS in JSON-LD Script Injection
+**Vulnerability:** Cross-Site Scripting (XSS) vulnerability was found when injecting SEO metadata (JSON-LD) into a `<script type="application/ld+json">` tag using `dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}`.
+**Learning:** Directly stringifying JSON into HTML context does not escape specific HTML characters. An attacker controlling values inside the JSON-LD object (like a blog post title or description) could inject a malicious closing script tag `</script>` followed by their own script tag `<script>alert('XSS')</script>`, potentially leading to XSS if user-generated content or untrusted inputs are used to build the JSON string.
+**Prevention:** Implement a `safeJsonStringify` utility that replaces potentially dangerous characters (such as `<`, `>`, `&`, `\u2028`, `\u2029`) with their respective unicode escape sequences before injection.

@@ -2,6 +2,7 @@ import { getBlogPosts } from 'app/db/blog';
 import BlogLayout from '../../components/BlogLayout';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { safeJsonStringify } from '../../utils/sanitize';
 
 const baseUrl = 'https://jacobreed.dev';
 
@@ -87,7 +88,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
       />
       <BlogLayout blog={post}>
       </BlogLayout>
