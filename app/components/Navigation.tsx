@@ -27,13 +27,14 @@ export default function Navigation() {
   return (
     <header className="w-full border-b border-gray-200 dark:border-gray-800">
       <nav
-        className="max-w-4xl mx-auto py-4 sm:py-6"
+        className="max-w-4xl mx-auto px-4 py-4 sm:py-6"
         aria-label="Main navigation"
       >
         <div className="flex items-center gap-1">
           <NavItem href="/" text="Home" />
           <NavItem href="/blog" text="Blog" />
           <NavItem href="/projects" text="Projects" />
+          <NavItem href="/talks" text="Talks" />
         </div>
       </nav>
     </header>
