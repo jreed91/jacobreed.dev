@@ -54,10 +54,10 @@ export default function Home() {
               <span aria-hidden="true">→</span>
             </Link>
             <Link
-              href="/projects"
+              href="/talks"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
             >
-              View Projects
+              View Talks
             </Link>
           </div>
         </div>
