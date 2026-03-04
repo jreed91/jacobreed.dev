@@ -34,6 +34,7 @@ export default function Navigation() {
           <NavItem href="/" text="Home" />
           <NavItem href="/blog" text="Blog" />
           <NavItem href="/projects" text="Projects" />
+          <NavItem href="/talks" text="Talks" />
         </div>
       </nav>
     </header>
