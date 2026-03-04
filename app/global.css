@@ -17,3 +17,26 @@ body {
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+
+/* Hero staggered fade-in */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero-item-1 { animation: fadeInUp 0.5s ease-out 0.1s both; }
+.hero-item-2 { animation: fadeInUp 0.5s ease-out 0.25s both; }
+.hero-item-3 { animation: fadeInUp 0.5s ease-out 0.4s both; }
+.hero-item-4 { animation: fadeInUp 0.5s ease-out 0.55s both; }
+.hero-item-5 { animation: fadeInUp 0.5s ease-out 0.7s both; }
