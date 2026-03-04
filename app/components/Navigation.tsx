@@ -27,7 +27,7 @@ export default function Navigation() {
   return (
     <header className="w-full border-b border-gray-200 dark:border-gray-800">
       <nav
-        className="max-w-4xl mx-auto py-4 sm:py-6"
+        className="max-w-4xl mx-auto px-4 py-4 sm:py-6"
         aria-label="Main navigation"
       >
         <div className="flex items-center gap-1">
