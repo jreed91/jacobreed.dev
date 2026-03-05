@@ -31,6 +31,10 @@ module.exports = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.youtube.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://www.youtube.com; font-src 'self'; frame-src 'self' https://www.youtube.com; connect-src 'self' https://vitals.vercel-insights.com;"
           }
         ]
       }
