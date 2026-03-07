@@ -62,11 +62,21 @@ export function getTalks(): Talk[] {
 }
 
 export function getYouTubeEmbedUrl(videoUrl: string): string {
+  if (!videoUrl) return '';
+
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
   const match = youtubeRegex.exec(videoUrl);
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  // Security: Prevent XSS by allowing only safe protocols for iframe src
+  const lowerUrl = videoUrl.toLowerCase();
+  if (lowerUrl.startsWith('http://') || lowerUrl.startsWith('https://')) {
+    return videoUrl;
+  }
+
+  // Return a safe fallback for invalid protocols like javascript: or data:
+  return 'about:blank';
 }
