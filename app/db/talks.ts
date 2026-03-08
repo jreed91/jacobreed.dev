@@ -68,5 +68,19 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  // Fallback: Validate that the URL uses a safe protocol to prevent XSS (e.g., javascript: or data:)
+  try {
+    const parsedUrl = new URL(videoUrl);
+    if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+      return videoUrl;
+    }
+  } catch (e) {
+    // If URL parsing fails (e.g., relative URL), optionally allow if it starts with '/'
+    if (videoUrl.startsWith('/')) {
+      return videoUrl;
+    }
+  }
+
+  return ''; // Return empty string for unsafe or invalid URLs
 }
