@@ -68,5 +68,16 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
+
+  // Prevent XSS by allowing only safe protocols or absolute paths
+  if (
+    videoUrl &&
+    !videoUrl.startsWith('http://') &&
+    !videoUrl.startsWith('https://') &&
+    !videoUrl.startsWith('/')
+  ) {
+    return '';
+  }
+
   return videoUrl;
 }
