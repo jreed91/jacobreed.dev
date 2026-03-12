@@ -45,7 +45,11 @@ export default function TypewriterText() {
         );
         return () => clearTimeout(t);
       } else {
-        setState((s) => ({ ...s, isPaused: true }));
+        const t = setTimeout(
+          () => setState((s) => ({ ...s, isPaused: true })),
+          TYPE_SPEED
+        );
+        return () => clearTimeout(t);
       }
     } else {
       if (text.length > 0) {
@@ -56,11 +60,16 @@ export default function TypewriterText() {
         );
         return () => clearTimeout(t);
       } else {
-        setState((s) => ({
-          ...s,
-          isDeleting: false,
-          phraseIdx: (s.phraseIdx + 1) % ROLES.length,
-        }));
+        const t = setTimeout(
+          () =>
+            setState((s) => ({
+              ...s,
+              isDeleting: false,
+              phraseIdx: (s.phraseIdx + 1) % ROLES.length,
+            })),
+          DELETE_SPEED
+        );
+        return () => clearTimeout(t);
       }
     }
   }, [state]);
