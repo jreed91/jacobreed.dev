@@ -76,6 +76,9 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
     if (url.protocol === 'http:' || url.protocol === 'https:') {
       return videoUrl;
     }
+    if (videoUrl.startsWith('/')) {
+      return videoUrl;
+    }
   } catch (e) {}
   return '/';
 }
