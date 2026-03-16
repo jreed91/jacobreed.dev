@@ -68,5 +68,17 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
+
+  // 🛡️ Sentinel: Prevent XSS by validating the protocol of fallback URLs
+  // Only allow http://, https://, or root-relative paths for iframe src
+  if (
+    videoUrl &&
+    !videoUrl.startsWith('http://') &&
+    !videoUrl.startsWith('https://') &&
+    !videoUrl.startsWith('/')
+  ) {
+    return 'about:blank';
+  }
+
   return videoUrl;
 }
