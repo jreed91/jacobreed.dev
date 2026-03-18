@@ -39,6 +39,17 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
 
+  it('returns about:blank for dangerous or unapproved schemes', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('data:text/html,<script>alert(1)</script>')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('vbscript:msgbox(1)')).toBe('about:blank');
+  });
+
+  it('allows root-relative fallback paths', () => {
+    const url = '/videos/local-talk.mp4';
+    expect(getYouTubeEmbedUrl(url)).toBe(url);
+  });
+
   it('handles video IDs with hyphens and underscores', () => {
     const url = 'https://youtu.be/abc-def_123';
     expect(getYouTubeEmbedUrl(url)).toBe(
