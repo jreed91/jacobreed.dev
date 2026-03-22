@@ -35,8 +35,23 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
-  it('returns the original URL unchanged for empty string', () => {
-    expect(getYouTubeEmbedUrl('')).toBe('');
+  it('blocks javascript: URIs', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('blocks data: URIs', () => {
+    const url = 'data:text/html,<script>alert(1)</script>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('allows root-relative URLs', () => {
+    const url = '/static/video.mp4';
+    expect(getYouTubeEmbedUrl(url)).toBe(url);
+  });
+
+  it('returns about:blank for empty string', () => {
+    expect(getYouTubeEmbedUrl('')).toBe('about:blank');
   });
 
   it('handles video IDs with hyphens and underscores', () => {
