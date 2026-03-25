@@ -62,11 +62,28 @@ export function getTalks(): Talk[] {
 }
 
 export function getYouTubeEmbedUrl(videoUrl: string): string {
+  if (!videoUrl) return '';
+
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
   const match = youtubeRegex.exec(videoUrl);
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  // Security: Prevent XSS via unsafe protocols (javascript:, data:, vbscript:)
+  // Only allow http://, https://, or root-relative URLs
+  try {
+    const parsedUrl = new URL(videoUrl, 'http://dummy.com'); // Base helps parse relative URLs
+
+    // If it's a relative URL starting with '/', or an allowed protocol, return it
+    if (videoUrl.startsWith('/') || parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+      return videoUrl;
+    }
+  } catch (e) {
+    // URL parsing failed
+  }
+
+  // Fall back to a safe empty page to prevent execution
+  return 'about:blank';
 }
