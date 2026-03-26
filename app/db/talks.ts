@@ -68,5 +68,16 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
+
+  // Sanitize fallback URL to prevent XSS via unsafe URIs in iframe src
+  if (
+    !videoUrl ||
+    (!videoUrl.startsWith('http://') &&
+      !videoUrl.startsWith('https://') &&
+      !videoUrl.startsWith('/'))
+  ) {
+    return 'about:blank';
+  }
+
   return videoUrl;
 }
