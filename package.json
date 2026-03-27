@@ -38,7 +38,7 @@
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.27",
     "eslint": "^9.39.3",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^16.2.1",
     "jiti": "^2.6.1",
     "node-notifier": "^10.0.1",
     "postcss": "^8.5.8",
