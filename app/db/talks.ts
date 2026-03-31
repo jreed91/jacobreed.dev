@@ -62,6 +62,12 @@ export function getTalks(): Talk[] {
 }
 
 export function getYouTubeEmbedUrl(videoUrl: string): string {
+  // 🛡️ Sentinel: XSS protection
+  // Ensure the URL is an HTTP/HTTPS URL or an absolute path before returning.
+  // If not, fall back to about:blank to prevent javascript: or data: execution in iframe
+  const isSafeUrl = /^(https?:\/\/|\/)/i.test(videoUrl);
+  if (!videoUrl) return '';
+  if (!isSafeUrl) return 'about:blank';
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
   const match = youtubeRegex.exec(videoUrl);
