@@ -68,5 +68,17 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
+
+  // XSS Prevention: Enforce safe protocols for iframes
+  if (!videoUrl) return '';
+  const isSafeUrl =
+    videoUrl.startsWith('http://') ||
+    videoUrl.startsWith('https://') ||
+    videoUrl.startsWith('/');
+
+  if (!isSafeUrl) {
+    return 'about:blank';
+  }
+
   return videoUrl;
 }
