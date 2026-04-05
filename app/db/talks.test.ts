@@ -35,8 +35,16 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
-  it('returns the original URL unchanged for empty string', () => {
-    expect(getYouTubeEmbedUrl('')).toBe('');
+  it('returns about:blank for empty string', () => {
+    expect(getYouTubeEmbedUrl('')).toBe('about:blank');
+  });
+
+  it('returns about:blank for unsafe javascript: protocol', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+  });
+
+  it('returns about:blank for unsafe data: protocol', () => {
+    expect(getYouTubeEmbedUrl('data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=')).toBe('about:blank');
   });
 
   it('handles video IDs with hyphens and underscores', () => {
