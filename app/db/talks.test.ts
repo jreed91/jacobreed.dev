@@ -39,6 +39,26 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
 
+  it('returns about:blank for javascript: URIs', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns about:blank for data: URIs', () => {
+    const url = 'data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('allows root-relative URLs', () => {
+    const url = '/my-video.mp4';
+    expect(getYouTubeEmbedUrl(url)).toBe(url);
+  });
+
+  it('returns about:blank for protocol-relative URLs (prevent SSRF/XSS)', () => {
+    const url = '//malicious.com/video.mp4';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
   it('handles video IDs with hyphens and underscores', () => {
     const url = 'https://youtu.be/abc-def_123';
     expect(getYouTubeEmbedUrl(url)).toBe(
