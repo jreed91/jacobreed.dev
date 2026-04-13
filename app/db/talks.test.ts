@@ -35,8 +35,8 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
-  it('returns the original URL unchanged for empty string', () => {
-    expect(getYouTubeEmbedUrl('')).toBe('');
+  it('returns about:blank for empty string', () => {
+    expect(getYouTubeEmbedUrl('')).toBe('about:blank');
   });
 
   it('handles video IDs with hyphens and underscores', () => {
@@ -44,5 +44,23 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(
       'https://www.youtube.com/embed/abc-def_123'
     );
+  });
+
+  it('allows safe http/https fallback URLs', () => {
+    expect(getYouTubeEmbedUrl('https://example.com/video.mp4')).toBe('https://example.com/video.mp4');
+    expect(getYouTubeEmbedUrl('http://example.com/video.mp4')).toBe('http://example.com/video.mp4');
+  });
+
+  it('allows root-relative fallback URLs', () => {
+    expect(getYouTubeEmbedUrl('/local-video.mp4')).toBe('/local-video.mp4');
+  });
+
+  it('rejects dangerous protocols (javascript:)', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('  javascript:alert(1)')).toBe('about:blank');
+  });
+
+  it('rejects dangerous protocols (data:)', () => {
+    expect(getYouTubeEmbedUrl('data:text/html,<script>alert(1)</script>')).toBe('about:blank');
   });
 });
