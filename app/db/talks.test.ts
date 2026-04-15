@@ -35,6 +35,21 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
+  it('sanitizes unsafe protocols like javascript:', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl(' javascript:alert(1)')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('\tjavascript:alert(1)')).toBe('about:blank');
+  });
+
+  it('sanitizes unsafe protocols like data:', () => {
+    expect(getYouTubeEmbedUrl('data:text/html,<html>')).toBe('about:blank');
+  });
+
+  it('allows protocol-relative URLs or local paths', () => {
+    expect(getYouTubeEmbedUrl('//vimeo.com/123')).toBe('//vimeo.com/123');
+    expect(getYouTubeEmbedUrl('/local/video.mp4')).toBe('/local/video.mp4');
+  });
+
   it('returns the original URL unchanged for empty string', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
