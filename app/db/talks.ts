@@ -65,8 +65,20 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
   const match = youtubeRegex.exec(videoUrl);
+
+  let resultUrl = videoUrl;
   if (match) {
-    return `https://www.youtube.com/embed/${match[1]}`;
+    resultUrl = `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  try {
+    const parsedUrl = new URL(resultUrl, 'http://localhost');
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return 'about:blank';
+    }
+  } catch (e) {
+    return 'about:blank';
+  }
+
+  return resultUrl;
 }
