@@ -68,5 +68,16 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
+
+  // Prevent XSS/SSRF by validating the fallback URL protocol
+  try {
+    const url = new URL(videoUrl, 'http://localhost');
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return 'about:blank';
+    }
+  } catch (e) {
+    return 'about:blank';
+  }
+
   return videoUrl;
 }
