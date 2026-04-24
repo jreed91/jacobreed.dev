@@ -41,7 +41,7 @@
     "eslint-config-next": "^16.1.6",
     "jiti": "^2.6.1",
     "node-notifier": "^10.0.1",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.10",
     "prettier": "^3.8.1",
     "rehype": "^13.0.2",
     "rehype-code-titles": "^1.2.1",
