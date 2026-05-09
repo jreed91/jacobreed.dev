@@ -68,5 +68,24 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  if (!videoUrl) return 'about:blank';
+
+  try {
+    const url = new URL(videoUrl, 'http://localhost');
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      // If base was used to parse relative URLs, we should probably only return
+      // the original videoUrl if we parsed the original as http/https.
+      // But actually, for relative URLs starting with /, protocol will be http:.
+      // Let's just strictly enforce http/https protocols or root-relative URLs.
+      const isRelative = videoUrl.startsWith('/');
+      if (isRelative || url.protocol === 'http:' || url.protocol === 'https:') {
+        return videoUrl;
+      }
+    }
+  } catch (e) {
+    // Ignore error
+  }
+
+  return 'about:blank';
 }
