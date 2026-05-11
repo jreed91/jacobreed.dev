@@ -33,7 +33,7 @@ export default function Projects() {
         <div className="space-y-6">
           {projects.map((project) => (
             <Link
-              href={project.slug}
+              href={`/projects/${encodeURIComponent(project.slug)}`}
               key={project.slug}
               className="block group"
             >
