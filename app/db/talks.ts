@@ -68,5 +68,15 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  // Sentinel: XSS protection for external non-youtube links
+  try {
+    const parsed = new URL(videoUrl, 'http://localhost');
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return videoUrl;
+    }
+  } catch {
+    return 'about:blank';
+  }
+  return 'about:blank';
 }
