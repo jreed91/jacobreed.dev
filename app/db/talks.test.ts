@@ -45,4 +45,12 @@ describe('getYouTubeEmbedUrl', () => {
       'https://www.youtube.com/embed/abc-def_123'
     );
   });
+
+  it('prevents XSS by returning about:blank for javascript: protocol URLs', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+  });
+
+  it('allows root-relative local paths', () => {
+    expect(getYouTubeEmbedUrl('/local-video.mp4')).toBe('/local-video.mp4');
+  });
 });
