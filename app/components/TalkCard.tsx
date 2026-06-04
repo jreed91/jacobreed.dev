@@ -1,10 +1,10 @@
-import { Talk } from 'app/db/talks';
-import Link from 'next/link';
-import { parseISO, format } from 'date-fns';
+import { Talk } from "app/db/talks";
+import Link from "next/link";
+import { parseISO, format } from "date-fns";
 
 export default function TalkCard({ talk }: { talk: Talk }) {
   return (
-    <Link href={`/talks/${talk.slug}`} className="w-full">
+    <Link href={`/talks/${encodeURIComponent(talk.slug)}`} className="w-full">
       <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
         <div className="flex flex-col justify-between md:flex-row">
           <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
@@ -28,7 +28,7 @@ export default function TalkCard({ talk }: { talk: Talk }) {
           </div>
         </div>
         <div className="flex items-center gap-2 mb-2 text-sm text-gray-600 dark:text-gray-400">
-          <span>{format(parseISO(talk.metadata.date), 'MMMM dd, yyyy')}</span>
+          <span>{format(parseISO(talk.metadata.date), "MMMM dd, yyyy")}</span>
           {talk.metadata.event && (
             <>
               <span>•</span>
@@ -36,7 +36,9 @@ export default function TalkCard({ talk }: { talk: Talk }) {
             </>
           )}
         </div>
-        <p className="text-gray-600 dark:text-gray-400">{talk.metadata.summary}</p>
+        <p className="text-gray-600 dark:text-gray-400">
+          {talk.metadata.summary}
+        </p>
       </div>
     </Link>
   );
