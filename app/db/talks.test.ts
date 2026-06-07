@@ -30,13 +30,28 @@ describe('getYouTubeEmbedUrl', () => {
     );
   });
 
-  it('returns the original URL unchanged for non-YouTube URLs', () => {
+  it('returns the original URL unchanged for non-YouTube HTTP/HTTPS URLs', () => {
     const url = 'https://vimeo.com/123456789';
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
   it('returns the original URL unchanged for empty string', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
+  });
+
+  it('returns the original URL unchanged for root-relative paths', () => {
+    const url = '/my-video.mp4';
+    expect(getYouTubeEmbedUrl(url)).toBe(url);
+  });
+
+  it('returns about:blank for dangerous protocols like javascript:', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns about:blank for dangerous protocols like data:', () => {
+    const url = 'data:text/html,<script>alert(1)</script>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
   });
 
   it('handles video IDs with hyphens and underscores', () => {
