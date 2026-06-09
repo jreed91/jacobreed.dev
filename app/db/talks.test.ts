@@ -5,28 +5,28 @@ describe('getYouTubeEmbedUrl', () => {
   it('converts a standard youtube.com watch URL', () => {
     const url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
     expect(getYouTubeEmbedUrl(url)).toBe(
-      'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
     );
   });
 
   it('converts a youtu.be short URL', () => {
     const url = 'https://youtu.be/dQw4w9WgXcQ';
     expect(getYouTubeEmbedUrl(url)).toBe(
-      'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
     );
   });
 
   it('converts a youtube.com/embed URL', () => {
     const url = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
     expect(getYouTubeEmbedUrl(url)).toBe(
-      'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
     );
   });
 
   it('converts a youtube.com/v/ URL', () => {
     const url = 'https://www.youtube.com/v/dQw4w9WgXcQ';
     expect(getYouTubeEmbedUrl(url)).toBe(
-      'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
     );
   });
 
@@ -42,7 +42,17 @@ describe('getYouTubeEmbedUrl', () => {
   it('handles video IDs with hyphens and underscores', () => {
     const url = 'https://youtu.be/abc-def_123';
     expect(getYouTubeEmbedUrl(url)).toBe(
-      'https://www.youtube.com/embed/abc-def_123'
+      'https://www.youtube.com/embed/abc-def_123',
     );
+  });
+
+  it('blocks javascript URLs to prevent XSS', () => {
+    const url = 'javascript:alert("XSS")';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('blocks data URLs to prevent XSS', () => {
+    const url = 'data:text/html,<h1>XSS</h1>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
   });
 });
