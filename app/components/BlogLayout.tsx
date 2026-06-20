@@ -7,10 +7,10 @@ import { CustomMDX } from "./Mdx";
 import TableOfContents from "./TableOfContents";
 
 const editUrl = (slug: string) =>
-  `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${slug}.mdx`;
+  `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${encodeURIComponent(slug)}.mdx`;
 const discussUrl = (slug: string) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
-    `https://jacobreed.dev/blog/${slug}`
+    `https://jacobreed.dev/blog/${encodeURIComponent(slug)}`
   )}`;
 
 export default function BlogLayout({

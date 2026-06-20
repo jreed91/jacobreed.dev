@@ -5,7 +5,7 @@ import { parseISO, format } from 'date-fns';
 export default function BlogPostCard({ title, slug, summary, date, readingTime }: {title: string, slug: string, summary: string, date: string, readingTime: string}) {
 
   return (
-    <Link href={`/blog/${slug}`}  className={cn(
+    <Link href={`/blog/${encodeURIComponent(slug)}`}  className={cn(
       'transform hover:scale-[1.01] transition-all',
       'rounded-xl w-full md:w-1/3 bg-gradient-to-r p-1',
       'bg-gray-200'
