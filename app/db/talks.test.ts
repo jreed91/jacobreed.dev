@@ -39,6 +39,21 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
 
+  it('returns about:blank for malicious javascript: URIs', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns about:blank for malicious data: URIs', () => {
+    const url = 'data:text/html,<script>alert(1)</script>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns original URL for valid https: URIs', () => {
+    const url = 'https://example.com/video';
+    expect(getYouTubeEmbedUrl(url)).toBe('https://example.com/video');
+  });
+
   it('handles video IDs with hyphens and underscores', () => {
     const url = 'https://youtu.be/abc-def_123';
     expect(getYouTubeEmbedUrl(url)).toBe(
