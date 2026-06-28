@@ -30,7 +30,7 @@ describe('getYouTubeEmbedUrl', () => {
     );
   });
 
-  it('returns the original URL unchanged for non-YouTube URLs', () => {
+  it('returns the original URL unchanged for non-YouTube URLs with safe protocol', () => {
     const url = 'https://vimeo.com/123456789';
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
@@ -44,5 +44,20 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(
       'https://www.youtube.com/embed/abc-def_123'
     );
+  });
+
+  it('returns about:blank for javascript: URIs', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns about:blank for data: URIs', () => {
+    const url = 'data:text/html,<script>alert(1)</script>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('returns root relative path because base url is local so http: protocol', () => {
+    const url = '/foo/bar';
+    expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 });

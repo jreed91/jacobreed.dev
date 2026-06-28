@@ -62,11 +62,25 @@ export function getTalks(): Talk[] {
 }
 
 export function getYouTubeEmbedUrl(videoUrl: string): string {
+  if (!videoUrl) return '';
+
+  let finalUrl = videoUrl;
+
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
   const match = youtubeRegex.exec(videoUrl);
   if (match) {
-    return `https://www.youtube.com/embed/${match[1]}`;
+    finalUrl = `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+
+  try {
+    const urlObj = new URL(finalUrl, 'http://localhost');
+    if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+      return finalUrl;
+    }
+  } catch (e) {
+    // If parsing fails, fall back to safe default
+  }
+
+  return 'about:blank';
 }
