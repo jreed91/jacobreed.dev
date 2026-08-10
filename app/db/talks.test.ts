@@ -35,7 +35,7 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
-  it('returns the original URL unchanged for empty string', () => {
+  it('returns empty string for empty string', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
 
@@ -44,5 +44,15 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(
       'https://www.youtube.com/embed/abc-def_123'
     );
+  });
+
+  it('prevents javascript: URLs', () => {
+    const url = 'javascript:alert(1)';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
+  });
+
+  it('prevents data: URLs', () => {
+    const url = 'data:text/html,<script>alert(1)</script>';
+    expect(getYouTubeEmbedUrl(url)).toBe('about:blank');
   });
 });
