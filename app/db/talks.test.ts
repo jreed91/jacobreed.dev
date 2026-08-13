@@ -39,6 +39,10 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
 
+  it('filters out malicious javascript URIs to prevent XSS', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('');
+  });
+
   it('handles video IDs with hyphens and underscores', () => {
     const url = 'https://youtu.be/abc-def_123';
     expect(getYouTubeEmbedUrl(url)).toBe(
