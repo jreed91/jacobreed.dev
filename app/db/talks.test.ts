@@ -30,7 +30,7 @@ describe('getYouTubeEmbedUrl', () => {
     );
   });
 
-  it('returns the original URL unchanged for non-YouTube URLs', () => {
+  it('returns the original URL unchanged for safe non-YouTube URLs', () => {
     const url = 'https://vimeo.com/123456789';
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
@@ -44,5 +44,13 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(
       'https://www.youtube.com/embed/abc-def_123'
     );
+  });
+
+  it('prevents XSS by rejecting javascript: URIs', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('');
+  });
+
+  it('prevents XSS by rejecting data: URIs', () => {
+    expect(getYouTubeEmbedUrl('data:text/html,<script>alert(1)</script>')).toBe('');
   });
 });
