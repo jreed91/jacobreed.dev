@@ -35,6 +35,12 @@ describe('getYouTubeEmbedUrl', () => {
     expect(getYouTubeEmbedUrl(url)).toBe(url);
   });
 
+  it('sanitizes unsafe protocols', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('data:text/html,a')).toBe('about:blank');
+    expect(getYouTubeEmbedUrl('   javascript:alert(2)')).toBe('about:blank');
+  });
+
   it('returns the original URL unchanged for empty string', () => {
     expect(getYouTubeEmbedUrl('')).toBe('');
   });
