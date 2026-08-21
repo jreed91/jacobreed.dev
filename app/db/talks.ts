@@ -68,5 +68,14 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+  if (!videoUrl) return '';
+  try {
+    const parsedUrl = new URL(videoUrl, 'http://localhost');
+    if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+      return videoUrl;
+    }
+  } catch (e) {
+    // Ignore invalid URLs
+  }
+  return 'about:blank';
 }
