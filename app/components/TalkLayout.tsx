@@ -29,15 +29,17 @@ export default function TalkLayout({
             {talk.metadata.event && ` • ${talk.metadata.event}`}
           </p>
         </div>
-        <div className="w-full mt-8 aspect-video rounded-lg overflow-hidden">
-          <iframe
-            src={embedUrl}
-            title={talk.metadata.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full"
-          />
-        </div>
+        {embedUrl && (
+          <div className="w-full mt-8 aspect-video rounded-lg overflow-hidden">
+            <iframe
+              src={embedUrl}
+              title={talk.metadata.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        )}
         {talk.content && (
           <div className="w-full mt-8 prose prose-gray dark:prose-invert max-w-none">
             <CustomMDX source={talk.content} />

@@ -61,6 +61,21 @@ export function getTalks(): Talk[] {
   return getMDXData(path.join(process.cwd(), 'content', 'talks'));
 }
 
+const SAFE_EMBED_PROTOCOLS = ['http:', 'https:'];
+
+/**
+ * Returns true only for absolute URLs served over http(s). Anything else --
+ * `javascript:`, `data:`, `vbscript:`, or an unparseable string -- is unsafe
+ * to interpolate into an iframe `src`.
+ */
+function isSafeEmbedUrl(videoUrl: string): boolean {
+  try {
+    return SAFE_EMBED_PROTOCOLS.includes(new URL(videoUrl).protocol);
+  } catch {
+    return false;
+  }
+}
+
 export function getYouTubeEmbedUrl(videoUrl: string): string {
   const youtubeRegex =
     /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/;
@@ -68,5 +83,7 @@ export function getYouTubeEmbedUrl(videoUrl: string): string {
   if (match) {
     return `https://www.youtube.com/embed/${match[1]}`;
   }
-  return videoUrl;
+  // Non-YouTube URLs are passed through, so they must be protocol-checked
+  // before they reach an iframe src.
+  return isSafeEmbedUrl(videoUrl) ? videoUrl : '';
 }
