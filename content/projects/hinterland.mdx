@@ -1,0 +1,85 @@
+---
+title: 'Hinterland'
+date: '2026-08-06'
+summary: 'A festival app that works where festival apps fail — 15,000 people in a valley with no signal. I shipped the entire festival inside the binary.'
+platform: 'iOS 17+'
+role: 'Solo — product, architecture, implementation'
+tech: 'Swift, SwiftUI, WidgetKit, ActivityKit, CloudKit, WeatherKit, MusicKit, MapKit'
+---
+
+## The problem worth solving
+
+Every music festival has an app, and most of them are useless at the festival. They are
+built like websites: fetch the schedule, fetch the artist, fetch the map. Then 15,000
+people walk into a rural valley in St. Charles, Iowa, the towers saturate, and the one app
+you installed specifically for this weekend spins forever.
+
+I built Hinterland on the opposite assumption. **There is no network.** Everything else
+follows from that one decision.
+
+## What that decision actually cost
+
+It is easy to say "offline-first" and ship a cache. Committing to it means the full
+four-day schedule, every artist bio, all 48 pieces of artist artwork, the festival's four
+maps, the vendor directory and eleven years of past lineups are compiled into the app and
+work in airplane mode.
+
+The network became an enrichment layer instead of a dependency: set-time changes, the
+forecast, crowd ratings, and Apple Music top songs. Every one of them caches what it
+fetches and falls back to what is already on the phone. Nothing in the app has a loading
+state that can strand you.
+
+That is the part I would defend in an interview. The hard call was not the caching — it
+was refusing to let any primary surface depend on a request.
+
+## Building the weekend
+
+The app earns its place before the gates open and during the sets:
+
+- **My Lineup** — star sets to build a personal schedule, with automatic detection of
+  overlapping sets, so the app tells you what you are actually choosing between rather
+  than letting you star two things at 9pm and find out in person.
+- **Reminders** — local notifications 5 to 60 minutes before your starred sets. Scheduled
+  on-device, so they fire with no signal. A push-based reminder would have been simpler to
+  build and would have failed at exactly the moment it mattered.
+- **Widget and Live Activity** — "Up Next" on the Home Screen and Lock Screen, and the set
+  you are watching in the Dynamic Island from 90 minutes out, counting down on its own.
+
+## Details that come from having been there
+
+**Food & Drink** groups all 33 stands by where they are actually parked — East, West and
+South Concourse, VIP, GA+, Basecamp, the mobile carts — because "which stand" is never the
+question. "What can I reach from here" is. Combinable filters cover vegetarian, vegan,
+gluten-free, dairy-free, nut-free and sugar-free.
+
+**Maps** bundles the grounds, concourse, driving and shuttle-parking maps as pinch-zoomable
+artwork, and georeferences the grounds map through MapKit so the blue dot shows where you
+are standing on the festival's own map, not on a generic one.
+
+**Weather** pulls a WeatherKit forecast for the amphitheater itself. Severe and extreme
+National Weather Service advisories break out to the top of the schedule, and every set on
+an artist's page shows what the weather will be doing while they play.
+
+**Past lineups** goes back to 2015 — every headliner, every full bill, day by day. Bundled,
+so it settles the argument about who played 2017 with no signal.
+
+## Making a solo app feel social
+
+Sets can be rated one to five stars once they are under way. Ratings work offline and
+upload later, and scores pool through CloudKit so every set carries the average everyone
+else gave it — while your written notes stay on your phone. It is a shared layer that
+costs no backend to run and degrades to a purely local feature when CloudKit is
+unavailable.
+
+When the last set ends, the Schedule tab becomes the weekend's recap: how many sets you
+saw and for how many hours, your best of the festival, the day you gave the most to, and
+the festival's best sets according to everyone who rated one — shareable as a rendered
+card. Then the year joins the archive, and the app has a reason to exist in November.
+
+## What this project demonstrates
+
+Shipping a real iOS app across the modern Apple surface area — SwiftUI, WidgetKit,
+ActivityKit, CloudKit, WeatherKit, MusicKit and MapKit — with a single architectural
+constraint enforced consistently through all of it. Project generation via XcodeGen so
+there is no `.pbxproj` to conflict on, and a documented capability setup where every
+missing entitlement degrades to a named, explained fallback rather than a silent failure.

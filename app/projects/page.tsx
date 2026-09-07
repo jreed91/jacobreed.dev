@@ -1,46 +1,33 @@
-'use client'
-import Link from "next/link";
-import useSWR from "swr";
-
-interface Projects {
-  slug: string;
-  name: string;
-  description: string;
-  image: string;
-}
-
-async function fetcher<JSON = any>(
-  input: RequestInfo,
-  init?: RequestInit
-): Promise<JSON> {
-  const res = await fetch(input, init);
-  return res.json();
-}
+import Link from 'next/link';
+import { getProjects, techTags } from 'app/db/projects';
 
 export default function Projects() {
-  const { data: projects } = useSWR<Projects[]>(`/api/projects`, fetcher);
+  const projects = getProjects();
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
-        All Projects
+      <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+        Projects
       </h1>
-      {!projects ? (
-        <p className="text-gray-600 dark:text-gray-400">Loading projects...</p>
-      ) : projects.length === 0 ? (
+      <p className="mb-10 max-w-2xl text-gray-600 dark:text-gray-400">
+        Apps I designed, built and shipped end to end. Each one started from a constraint
+        worth taking seriously — no signal, a plan that breaks, two people editing the same
+        list — and the write-ups are about the decisions that came out of it.
+      </p>
+      {projects.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-400">No projects found.</p>
       ) : (
         <div className="space-y-6">
           {projects.map((project) => (
             <Link
-              href={project.slug}
+              href={`/projects/${project.slug}`}
               key={project.slug}
               className="block group"
             >
               <article className="w-full transform hover:scale-[1.01] transition-all">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                   <h2 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-gray-100 group-hover:text-black dark:group-hover:text-white transition-colors">
-                    {project.name}
+                    {project.metadata.title}
                   </h2>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -58,9 +45,28 @@ export default function Projects() {
                     />
                   </svg>
                 </div>
+                {project.metadata.platform && (
+                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    {project.metadata.platform}
+                  </p>
+                )}
                 <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  {project.description}
+                  {project.metadata.summary}
                 </p>
+                {techTags(project).length > 0 && (
+                  <ul className="flex flex-wrap gap-2 mt-3 list-none p-0">
+                    {techTags(project)
+                      .slice(0, 4)
+                      .map((tag) => (
+                        <li
+                          key={tag}
+                          className="px-2 py-1 text-xs rounded-md bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                        >
+                          {tag}
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </article>
             </Link>
           ))}
@@ -69,4 +75,3 @@ export default function Projects() {
     </div>
   );
 }
-

@@ -1,19 +1,13 @@
-// We'll return mock data instead of using Prisma since there's no DATABASE_URL configured
-export async function GET() {
-    const mockProjects = [
-        {
-            slug: "project-1",
-            name: "Project 1",
-            description: "A sample project description",
-            image: "/static/images/avatar.jpeg"
-        },
-        {
-            slug: "project-2",
-            name: "Project 2",
-            description: "Another sample project description",
-            image: "/static/images/avatar.jpeg"
-        }
-    ];
+import { getProjects } from 'app/db/projects';
 
-    return new Response(JSON.stringify(mockProjects));
+// Served from content/projects rather than Prisma since there's no DATABASE_URL configured
+export async function GET() {
+    const projects = getProjects().map((project) => ({
+        slug: project.slug,
+        name: project.metadata.title,
+        description: project.metadata.summary,
+        image: project.metadata.image ?? '/static/images/avatar.jpeg',
+    }));
+
+    return new Response(JSON.stringify(projects));
 }
