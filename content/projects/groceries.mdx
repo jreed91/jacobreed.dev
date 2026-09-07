@@ -1,87 +1,120 @@
 ---
 title: 'Groceries'
 date: '2026-09-07'
-summary: 'A shared household grocery list for iOS, Watch and the Lock Screen, backed by your own Supabase project — local-first, so the list never waits on a signal at the back of a shop.'
+summary: 'A shared grocery list across iPhone, Apple Watch, the Lock Screen and Siri — where every one of those surfaces writes through a single path, and the list never waits on a signal.'
 platform: 'iOS 17+, watchOS'
+role: 'Solo — product, architecture, implementation'
 tech: 'Swift, SwiftUI, Core Data, Supabase, WidgetKit, ActivityKit, WatchConnectivity, App Intents, FoundationModels'
 ---
 
-## What it is
+## The problem worth solving
 
-A grocery app for one household — your stores, your products, your list — shared live
-between two people and backed by your own Supabase project rather than someone else's
-service. One invitation shares everything, forever, including whatever you add next week.
+Two people, one household, one list. The app has to be right at the moment two people are
+editing simultaneously, one of them is standing at the back of a shop with one bar of
+signal, and the other is at home adding to it.
 
-## Local-first, on purpose
+This is the project I would point at to explain how I think about distributed state,
+because a grocery list is a deceptively hard version of the problem: many writers, many
+devices, terrible connectivity, and a failure mode — an item silently not arriving — that
+nobody reports as a bug because the app looks fine.
+
+## One rule, applied everywhere: the phone is the only writer
+
+The app has an unusual number of surfaces. A Live Activity on the Lock Screen and Dynamic
+Island for the trip itself, with tappable rows in aisle order, that starts on its own when
+you walk into a shop you pinned. An Apple Watch app. A Home Screen widget. "Hey Siri, add
+milk to Groceries."
+
+Every one of them could have talked to the database directly. None of them do.
+
+- The **widget** reads a JSON snapshot rather than running its own Core Data stack — a
+  second sync stack in a widget process is a well-known way to corrupt a store.
+- The **Live Activity's** buttons run a `LiveActivityIntent` back in the app's process, so
+  a check-off from the Lock Screen and one from the list screen are the same write.
+- The **watch** has no Core Data stack, no Supabase client and no sync cursor. It draws a
+  copy and posts check-offs back.
+
+So the household's sync engine sees one kind of write from one process, and your partner's
+phone cannot tell whether an item was checked off from a wrist, a Lock Screen, or the app.
+Two devices reconciling their own edits over a link that comes and goes is how a list ends
+up with two of everything.
+
+## The hardest problem, and how I solved it
+
+The watch is that discipline stretched across two devices, and it breaks the rule's
+comfortable assumption: **a tap has to land now**, and the phone may be minutes away from
+hearing about it.
+
+So the watch keeps the check-offs it has not seen confirmed and draws them over the phone's
+copy, retiring each one when a payload arrives that already agrees with it. Convergence by
+*agreement* rather than by clock — deliberately, because two devices' clocks differ by more
+than the round trip takes, so "which of these is newer" is not a question either side can
+answer, while "does this already say what I asked for" is.
+
+Until confirmation lands, the screen says **Waiting for your iPhone**. The other person in
+the shop cannot see the item is picked up yet, and it is better to know that than to be
+quietly wrong.
+
+The two directions even use different WatchConnectivity primitives, each chosen for what it
+guarantees: the list travels as an application context, which keeps exactly one payload
+queued and replaces it (if the watch missed six changes, only the seventh is worth
+delivering); check-offs travel as user info, which queues in order and survives both apps
+being killed.
+
+## Local-first as a product decision
 
 Every read the UI does is local and every write lands locally first. That is not an
-optimisation; it is the whole premise. The moment this app is most needed is standing at
-the back of a shop with one bar of signal, so the list can never be waiting on a network.
-Core Data is the local store and `SupabaseSyncEngine` moves changes in and out around it.
+optimisation — it is the premise. The moment this app is most needed is at the back of a
+shop with one bar of signal, so the list can never wait on a network. Core Data is the
+local store and `SupabaseSyncEngine` moves changes around it.
 
-`SyncBookkeeper` marks local writes in exactly one place — observing the context's
-will-save rather than asking each of several dozen write paths to remember a flag — and
-deletions leave a tombstone, because deleting the local object does nothing to the row in
+`SyncBookkeeper` marks local writes in exactly one place, observing the context's will-save
+rather than asking each of several dozen write paths to remember a flag. That is a
+migration one forgotten call away from an item that silently never reaches the other phone.
+Deletions leave a tombstone, because deleting the local object does nothing to the row in
 Postgres and the next pull would bring it straight back.
 
-## Everywhere you actually shop
+Sharing is one idea repeated: `Household` is the root, every table carries a
+`household_id`, and row-level security says you can read a row only if you belong to that
+household. That single policy across twelve tables **is** the sharing model. There is no
+other check, which is what makes it reviewable.
 
-The interesting part of this app is how many surfaces it has, and the rule that governs
-all of them: **the phone is the only writer.**
+## Shipping AI without letting it degrade the app
 
-- **A Live Activity for the trip.** Start shopping and the list moves to the Lock Screen
-  and Dynamic Island — the next few items in aisle order, each one tappable, so the phone
-  never has to come out of your pocket between aisles. Pin a shop on the map and it starts
-  itself when you walk in.
-- **An Apple Watch app.** The list on your wrist in aisle order, every row a tap to check
-  off, and it keeps working with the phone in a bag on the other side of the shop.
-- **A Home Screen widget**, and "Hey Siri, add milk to Groceries."
+Apple Intelligence runs on-device through FoundationModels and files unfamiliar items into
+the right aisle. Two decisions kept it from making the app worse:
 
-The widget reads a JSON snapshot rather than running its own Core Data stack. The Live
-Activity's buttons run a `LiveActivityIntent` back in the app's process. The watch posts
-check-offs back and the phone applies them. So every write in the household goes through
-one repository in one process, and your partner's phone cannot tell whether an item was
-checked off from a wrist, a Lock Screen, or the app.
+**It is never on the typing path.** Suggestions come cheapest-first — your catalog, then a
+bundled vocabulary — and the model is only asked for a word neither has ever seen, after
+typing stops for 450ms. A model between a keystroke and a suggestion list makes the screen
+slower, not smarter.
 
-The watch is that discipline stretched across two devices, which introduces the one real
-problem: a tap has to land now, and the phone may be minutes away from hearing about it.
-So the watch draws its unconfirmed check-offs over the phone's copy and retires each one
-when a payload arrives that already agrees with it — convergence by agreement rather than
-by clock, because two devices' clocks differ by more than the round trip takes.
+**It is not trusted.** `ItemIntelligenceSanitizer` sits between the model and the UI: the
+aisle has to be one your household actually has, the unit one the app writes, the name has
+to still refer to what you typed. It can fix "brocoli"; it cannot answer "Cabbage" when you
+typed "kimchi". Anything failing is dropped, so a bad guess degrades to *no suggestion*
+rather than the wrong thing in the cart.
 
-## Lists that match how you shop
+The whole feature is reached through a protocol with no Apple framework behind it, so the
+fallback path on a device that cannot run the model is not an afterthought — it is the same
+code with the provider absent.
 
-Items route to the store you usually buy them at. Lists group into categories in the order
-you walk that store, each with its own colour. Adding an item means picking from products
-you have bought before rather than searching a generic database. Dietary rules are tags
-plus rules you write — gluten-free is just the one that ships enabled.
+## Testing the things that fail silently
 
-**Recipes** import by pasting a link: the app reads the schema.org recipe data cooking
-sites already publish for search engines. No AI and no scraping — the page is fetched
-straight to your phone. Ingredients are parsed and matched against your catalog; confident
-matches link automatically and the rest are yours to confirm, because a wrong silent match
-means the wrong thing in the cart. That confirmation is remembered.
-
-## On-device intelligence, off the typing path
-
-Suggestions come from three sources, cheapest first, and the language model is never
-between a keystroke and a suggestion: your catalog first, then a bundled grocery
-vocabulary, and only then — for a word neither has ever seen, after typing stops for
-450ms — Apple Intelligence, running on the phone through FoundationModels.
-
-Because the model is a guesser, `ItemIntelligenceSanitizer` sits between it and the UI: the
-aisle has to be one your household actually has, the unit one the app writes, and the name
-has to still refer to what you typed. It can fix "brocoli"; it cannot answer "Cabbage" when
-you typed "kimchi". Anything that fails is dropped, so a bad guess degrades to *no
-suggestion* rather than to the wrong thing in the cart.
-
-Nothing about your groceries leaves the device — which is the only reason the feature
-belongs in an app whose premise is "no server to run".
-
-## Testing what can be tested
-
-All the grocery logic lives in `GroceryKit`, a platform-neutral Swift package with no
+All the logic lives in `GroceryKit`, a platform-neutral Swift package with no
 Apple-framework dependencies, so it tests anywhere Swift runs, including Linux and CI.
-Three Python checks gate the things that fail silently rather than loudly: the Core Data
-model against what the sync engine assumes, weak-linking of frameworks newer than the
-deployment target, and privacy manifests against the code that is actually there.
+
+Three Python checks in CI gate the failures that are invisible rather than loud: the Core
+Data model against what the sync engine assumes (an entity missing `updatedAt` is invisible
+to the push, and the symptom is not an error — it is an item that never arrives), the
+weak-linking of frameworks newer than the deployment target (getting this wrong is a
+launch-time `dyld` kill on every older OS, with nothing in the source to show for it), and
+privacy manifests against the code actually present.
+
+## What this project demonstrates
+
+Distributed state across five surfaces and two devices, with one invariant holding all of
+it together. Backend design — Postgres schema, migrations, row-level security — alongside
+the client. And judgment about where the risk actually lives: I put the test effort into
+the paths that destroy data and the ones that fail without telling anyone, not the ones
+that are easy to test.

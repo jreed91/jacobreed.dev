@@ -6,9 +6,14 @@ export default function Projects() {
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
-        All Projects
+      <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+        Projects
       </h1>
+      <p className="mb-10 max-w-2xl text-gray-600 dark:text-gray-400">
+        Apps I designed, built and shipped end to end. Each one started from a constraint
+        worth taking seriously — no signal, a plan that breaks, two people editing the same
+        list — and the write-ups are about the decisions that came out of it.
+      </p>
       {projects.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-400">No projects found.</p>
       ) : (

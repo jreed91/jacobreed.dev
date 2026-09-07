@@ -14,9 +14,11 @@ export default function ProjectLayout({ project }: { project: Project }) {
         <p className="text-lg text-gray-600 dark:text-gray-400">
           {project.metadata.summary}
         </p>
-        {project.metadata.platform && (
+        {(project.metadata.platform || project.metadata.role) && (
           <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-            {project.metadata.platform}
+            {[project.metadata.platform, project.metadata.role]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
         )}
         {tech.length > 0 && (

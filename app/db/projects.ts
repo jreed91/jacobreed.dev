@@ -6,6 +6,7 @@ type ProjectMetadata = {
   date: string;
   summary: string;
   platform?: string;
+  role?: string;
   tech?: string;
   repo?: string;
   image?: string;

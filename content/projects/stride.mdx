@@ -1,61 +1,90 @@
 ---
 title: 'Stride'
 date: '2026-08-05'
-summary: 'A SwiftUI running coach that builds an adaptive training plan and rebuilds it around the workouts you miss, with on-device coaching, route generation and live run tracking.'
+summary: 'Training plans break the first week you miss a run. I built a running coach that rebuilds the plan around the sessions you skipped instead of leaving you behind it.'
 platform: 'iOS'
+role: 'Solo — product, architecture, implementation'
 tech: 'Swift, SwiftUI, HealthKit, CloudKit, ActivityKit, WidgetKit, FoundationModels, MapKit'
 ---
 
-## What it is
+## The problem worth solving
 
-Stride generates a training plan from your goal race and then keeps it honest as life
-happens. Most plans are a PDF that stops being true the first week you miss a session;
-this one treats the plan as something that gets rebuilt rather than abandoned.
+A training plan is a PDF that stops being true in week two. You miss a Tuesday, then a
+long run, and now every remaining session is calibrated for a version of you that did the
+work. Most apps respond by showing you what you failed to do.
 
-## The plan, and what happens when you miss it
+Stride treats the plan as something that gets **rebuilt**, not something you fall behind.
+That is the product, and it is also the hardest part of the engineering.
 
-`TrainingPlanService` builds the schedule from your goal, fitness level and available
-equipment. From there a set of services exist specifically to handle the plan going wrong:
-`MissedWorkoutDetector` and `MissedWorkoutShift` notice what you skipped,
-`WorkoutReorderPlanner` and `PlanRebuildWindow` decide what can move and how far, and
-`AdaptableWorkoutSelector` picks the substitute. The plan absorbs the miss instead of
-leaving you behind it.
+## Designing for the plan going wrong
 
-## Running
+Generating a first plan is the easy half — `TrainingPlanService` builds it from your goal
+race, fitness level and available equipment. The interesting half is the set of services
+that exist purely for when reality diverges from it:
 
-Live tracking covers pace, splits and heart-rate zones, with a voice coach
-(`RunVoiceCoach`) announcing splits as you go, lap recording, and pace alerts when you
-drift off the prescription. A Live Activity puts the run on the Lock Screen and in the
-Dynamic Island; Home Screen widgets carry the next session.
+- `MissedWorkoutDetector` and `MissedWorkoutShift` — notice what was skipped and decide
+  what that means
+- `WorkoutReorderPlanner` and `PlanRebuildWindow` — decide what can move, and how far it
+  is safe to move it
+- `AdaptableWorkoutSelector` — pick the substitute session
 
-**Route Genius** generates new routes from wherever you are standing, through the
-OpenRouteService Directions API. The API token is read from the device Keychain rather
-than shipped in the bundle — you paste it once in Settings and it is stored
-`AfterFirstUnlockThisDeviceOnly`, never in `UserDefaults` and never synced through iCloud.
+Splitting it this way was deliberate. Each piece is a pure decision with an input and an
+output, which means the plan-repair logic is unit-testable without a device, a simulator,
+or a fabricated week of HealthKit data. The alternative — repair logic scattered through
+view models — is the version that quietly stops working and nobody notices, because the
+failure is a slightly wrong plan rather than a crash.
 
-## Coaching that knows your context
+## Coaching that earns the word
 
-The coach layer reads your recent training rather than reciting generic advice.
-`CoachSituation`, `CoachBaseline` and `SmartCoachCards` assemble what is worth saying
-right now, ranked — a primary card with a derivation line showing where its numbers came
-from, and supporting cards beneath it.
+The coach layer reads your actual recent training rather than reciting generic advice.
+`CoachSituation`, `CoachBaseline` and `SmartCoachCards` assemble what is worth saying right
+now and rank it — one primary card carrying a derivation line that shows where its numbers
+came from, with supporting cards beneath it.
 
-Two policies exist because the standard advice is actively wrong for the people they
-cover, and both are backed by evidence write-ups in the repo:
+That derivation line matters more than it looks. Advice a runner cannot trace is advice a
+runner ignores, and an app that says "take it easy today" without saying why is
+indistinguishable from an app guessing.
 
-- **`HeatAdaptationPolicy`** — how much to pull back, and for how long, when the weather
-  turns. Paired with `HeatAdvisoryService` and a WeatherKit forecast.
+Two policies exist because the standard advice is actively wrong for the people they cover,
+and I wrote up the evidence behind both in the repo rather than pattern-matching what other
+apps do:
+
+- **`HeatAdaptationPolicy`** — how much to pull back when the weather turns, and for how
+  long, paired with `HeatAdvisoryService` and a WeatherKit forecast.
 - **`PregnancyRunningPolicy`** and `PregnancyPlanService` — plan generation for running
   through pregnancy.
 
-## Under the hood
+## The run itself
+
+Live tracking covers pace, splits and heart-rate zones, with a voice coach announcing
+splits, lap recording, and pace alerts when you drift off the prescription. A Live Activity
+puts the run on the Lock Screen and in the Dynamic Island; widgets carry the next session
+to the Home Screen.
+
+**Route Genius** generates new routes from wherever you are standing. Its
+OpenRouteService token is read from the device Keychain rather than shipped in the bundle —
+you paste it once in Settings and it is stored `AfterFirstUnlockThisDeviceOnly`, never in
+`UserDefaults` and never synced through iCloud. A secret in a plist is the easy version and
+the wrong one.
+
+## How I know it works
 
 Workouts sync through HealthKit and CloudKit, `AppContainer` is the composition root for
 every repository and service, and the Xcode project is generated from `project.yml` with
-XcodeGen rather than committed — so there is no `.pbxproj` to conflict on. CI lints with
-SwiftLint, builds, and gates on tests; Xcode Cloud handles archive and TestFlight builds,
-assembling release notes from commit history.
+XcodeGen so there is no `.pbxproj` to conflict on. CI lints with SwiftLint, builds, and
+gates on tests; Xcode Cloud handles archive and TestFlight builds, assembling release notes
+from commit history.
 
 There is also a UI-test target, `UXCaptureTests`, that drives the app and captures every
-screen with seeded demo data — which is how the app's UX has been reviewed from what
-actually lands on the glass rather than from reading source.
+screen with seeded demo data. I have used it to review the app from **what actually lands
+on the glass** rather than from reading source — which surfaces a different class of defect
+entirely: text overflowing its frame, controls dimmed with no explanation, two screens
+disagreeing about the same number, empty states rendering as a blank box. Several of those
+reviews are in the repo, each finding cited to a `file:line` and tracked to a fix.
+
+## What this project demonstrates
+
+Domain modelling where the domain is genuinely hard and the failure mode is subtle rather
+than loud. Testable architecture chosen for a specific reason. Enough product judgment to
+know that the feature worth building was not "generate a plan" — every app does that — but
+"survive the user missing it."
