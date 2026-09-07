@@ -45,4 +45,34 @@ describe('getYouTubeEmbedUrl', () => {
       'https://www.youtube.com/embed/abc-def_123'
     );
   });
+
+  it('rejects javascript: URLs', () => {
+    expect(getYouTubeEmbedUrl('javascript:alert(1)')).toBe('');
+  });
+
+  it('rejects data: URLs', () => {
+    expect(
+      getYouTubeEmbedUrl('data:text/html,<script>alert(1)</script>')
+    ).toBe('');
+  });
+
+  it('rejects vbscript: URLs', () => {
+    expect(getYouTubeEmbedUrl('vbscript:msgbox(1)')).toBe('');
+  });
+
+  it('rejects protocol-relative and relative URLs', () => {
+    expect(getYouTubeEmbedUrl('//evil.example.com/embed')).toBe('');
+    expect(getYouTubeEmbedUrl('/not-a-video')).toBe('');
+  });
+
+  it('ignores leading and trailing whitespace tricks', () => {
+    expect(getYouTubeEmbedUrl('  javascript:alert(1)')).toBe('');
+    expect(getYouTubeEmbedUrl('java\tscript:alert(1)')).toBe('');
+  });
+
+  it('still canonicalizes a YouTube ID embedded in an unsafe URL', () => {
+    expect(
+      getYouTubeEmbedUrl('javascript:alert(1)//youtu.be/dQw4w9WgXcQ')
+    ).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
+  });
 });
