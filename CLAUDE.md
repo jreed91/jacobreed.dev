@@ -15,36 +15,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Tech Stack
 
 ### Core Framework
-- **Next.js 16.1** - React framework with App Router architecture
+- **Next.js 16.3** - React framework with App Router architecture
 - **React 19.2** - UI library
-- **TypeScript 5.9** - Type safety (strict: false, strictNullChecks: true)
-- **Node 20.x** - Runtime environment (v20.18.0 pinned via .nvmrc)
+- **TypeScript 6.0** - Type safety (strict: false, strictNullChecks: true)
+- **Node 22.x** - Runtime environment (v22.22.2 pinned via .nvmrc, `engines` requires >=22.12.0)
 
 ### Styling
-- **Tailwind CSS 4.2** - Utility-first CSS framework (v4 with `@tailwindcss/postcss`)
+- **Tailwind CSS 4.3** - Utility-first CSS framework (v4 with `@tailwindcss/postcss`)
 - **@tailwindcss/typography** - Beautiful typographic defaults for MDX content
 - **next-themes 0.4** - Dark mode implementation (system default, class attribute)
 - **classnames** - Conditional CSS class utility
 
 ### Content & Data
 - **next-mdx-remote 6.0** - MDX rendering for blog posts
-- **Prisma 7.4** - ORM for MySQL database
+- **Prisma 7.10** - ORM for MySQL database
 - **sugar-high** - Syntax highlighting for code blocks
 - **rehype-code-titles** - Code block title annotations
 - **rehype-slug** - Anchor link generation for headings
 - **reading-time** - Automatic reading time calculation
 
 ### Data Fetching
-- **SWR 2.4** - React Hooks for data fetching and caching (used in projects page)
+- **SWR 2.5** - React Hooks for data fetching and caching (used in projects page)
 
 ### Utilities
-- **date-fns 4.1** - Date manipulation and formatting
-- **sharp 0.34** - Image optimization
+- **date-fns 4.4** - Date manipulation and formatting
+- **sharp 0.35** - Image optimization
 
 ### Development Tools
-- **Vitest 4.0** - Unit testing framework
+- **Vitest 5.0** - Unit testing framework
 - **ESLint 9** - Code linting (flat config via `eslint.config.mjs`)
-- **Prettier 3.8** - Code formatting
+- **Prettier 3.9** - Code formatting
 
 ## Project Structure
 
