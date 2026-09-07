@@ -1,0 +1,87 @@
+---
+title: 'Groceries'
+date: '2026-09-07'
+summary: 'A shared household grocery list for iOS, Watch and the Lock Screen, backed by your own Supabase project — local-first, so the list never waits on a signal at the back of a shop.'
+platform: 'iOS 17+, watchOS'
+tech: 'Swift, SwiftUI, Core Data, Supabase, WidgetKit, ActivityKit, WatchConnectivity, App Intents, FoundationModels'
+---
+
+## What it is
+
+A grocery app for one household — your stores, your products, your list — shared live
+between two people and backed by your own Supabase project rather than someone else's
+service. One invitation shares everything, forever, including whatever you add next week.
+
+## Local-first, on purpose
+
+Every read the UI does is local and every write lands locally first. That is not an
+optimisation; it is the whole premise. The moment this app is most needed is standing at
+the back of a shop with one bar of signal, so the list can never be waiting on a network.
+Core Data is the local store and `SupabaseSyncEngine` moves changes in and out around it.
+
+`SyncBookkeeper` marks local writes in exactly one place — observing the context's
+will-save rather than asking each of several dozen write paths to remember a flag — and
+deletions leave a tombstone, because deleting the local object does nothing to the row in
+Postgres and the next pull would bring it straight back.
+
+## Everywhere you actually shop
+
+The interesting part of this app is how many surfaces it has, and the rule that governs
+all of them: **the phone is the only writer.**
+
+- **A Live Activity for the trip.** Start shopping and the list moves to the Lock Screen
+  and Dynamic Island — the next few items in aisle order, each one tappable, so the phone
+  never has to come out of your pocket between aisles. Pin a shop on the map and it starts
+  itself when you walk in.
+- **An Apple Watch app.** The list on your wrist in aisle order, every row a tap to check
+  off, and it keeps working with the phone in a bag on the other side of the shop.
+- **A Home Screen widget**, and "Hey Siri, add milk to Groceries."
+
+The widget reads a JSON snapshot rather than running its own Core Data stack. The Live
+Activity's buttons run a `LiveActivityIntent` back in the app's process. The watch posts
+check-offs back and the phone applies them. So every write in the household goes through
+one repository in one process, and your partner's phone cannot tell whether an item was
+checked off from a wrist, a Lock Screen, or the app.
+
+The watch is that discipline stretched across two devices, which introduces the one real
+problem: a tap has to land now, and the phone may be minutes away from hearing about it.
+So the watch draws its unconfirmed check-offs over the phone's copy and retires each one
+when a payload arrives that already agrees with it — convergence by agreement rather than
+by clock, because two devices' clocks differ by more than the round trip takes.
+
+## Lists that match how you shop
+
+Items route to the store you usually buy them at. Lists group into categories in the order
+you walk that store, each with its own colour. Adding an item means picking from products
+you have bought before rather than searching a generic database. Dietary rules are tags
+plus rules you write — gluten-free is just the one that ships enabled.
+
+**Recipes** import by pasting a link: the app reads the schema.org recipe data cooking
+sites already publish for search engines. No AI and no scraping — the page is fetched
+straight to your phone. Ingredients are parsed and matched against your catalog; confident
+matches link automatically and the rest are yours to confirm, because a wrong silent match
+means the wrong thing in the cart. That confirmation is remembered.
+
+## On-device intelligence, off the typing path
+
+Suggestions come from three sources, cheapest first, and the language model is never
+between a keystroke and a suggestion: your catalog first, then a bundled grocery
+vocabulary, and only then — for a word neither has ever seen, after typing stops for
+450ms — Apple Intelligence, running on the phone through FoundationModels.
+
+Because the model is a guesser, `ItemIntelligenceSanitizer` sits between it and the UI: the
+aisle has to be one your household actually has, the unit one the app writes, and the name
+has to still refer to what you typed. It can fix "brocoli"; it cannot answer "Cabbage" when
+you typed "kimchi". Anything that fails is dropped, so a bad guess degrades to *no
+suggestion* rather than to the wrong thing in the cart.
+
+Nothing about your groceries leaves the device — which is the only reason the feature
+belongs in an app whose premise is "no server to run".
+
+## Testing what can be tested
+
+All the grocery logic lives in `GroceryKit`, a platform-neutral Swift package with no
+Apple-framework dependencies, so it tests anywhere Swift runs, including Linux and CI.
+Three Python checks gate the things that fail silently rather than loudly: the Core Data
+model against what the sync engine assumes, weak-linking of frameworks newer than the
+deployment target, and privacy manifests against the code that is actually there.

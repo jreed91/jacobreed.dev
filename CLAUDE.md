@@ -35,7 +35,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **reading-time** - Automatic reading time calculation
 
 ### Data Fetching
-- **SWR 2.4** - React Hooks for data fetching and caching (used in projects page)
+- **SWR 2.4** - React Hooks for data fetching and caching
 
 ### Utilities
 - **date-fns 4.1** - Date manipulation and formatting
@@ -52,7 +52,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 jacobreed.dev/
 ├── app/                    # Next.js App Router
 │   ├── api/
-│   │   └── projects/      # Projects API endpoint (GET, returns mock data)
+│   │   └── projects/      # Projects API endpoint (GET, reads content/projects)
 │   │       └── route.ts
 │   ├── blog/              # Blog pages
 │   │   ├── [slug]/        # Dynamic blog post pages
@@ -70,9 +70,12 @@ jacobreed.dev/
 │   │   └── ThemeProvider.tsx   # next-themes wrapper (client)
 │   ├── db/                # Data access utilities
 │   │   ├── blog.ts        # File-based blog post loading
+│   │   ├── projects.ts    # File-based project loading (content/projects)
 │   │   ├── blog.test.ts   # Vitest tests for blog data
 │   │   └── prisma.ts      # Prisma client singleton
-│   ├── projects/          # Projects page (uses SWR + /api/projects)
+│   ├── projects/          # Projects listing + per-project detail pages
+│   │   ├── [slug]/        # Dynamic project pages with JSON-LD, OG metadata
+│   │   │   └── page.tsx
 │   │   └── page.tsx
 │   ├── apple-icon.tsx     # Dynamic Apple touch icon (180x180, Edge runtime)
 │   ├── global.css         # Global styles + Tailwind imports
@@ -88,12 +91,14 @@ jacobreed.dev/
 │   ├── copilot-jetbrains.mdx
 │   ├── dad.mdx
 │   ├── migrate-cloudformation.mdx
-│   └── migrate-postgres-instances.mdx
+│   ├── migrate-postgres-instances.mdx
+│   ├── projects/          # MDX project pages (4 projects)
+│   └── talks/             # MDX talk pages
 ├── prisma/                # Database schema (MySQL)
 │   └── schema.prisma
 ├── public/                # Static assets
 │   ├── favicon.ico
-│   └── static/images/     # Blog and profile images
+│   └── static/images/     # Blog, project and profile images
 ├── backups/               # Backup files
 ├── .github/               # GitHub workflows and templates
 │   ├── workflows/
@@ -145,7 +150,7 @@ Using **MySQL** with Prisma ORM. Requires `DATABASE_URL` environment variable.
   - `description` (String, Text) - Project description
   - `image` (String, Text) - Project image URL
 
-> **Note:** The `/api/projects` route currently returns mock data. The Prisma client is set up but requires `DATABASE_URL` to be configured for live database queries.
+> **Note:** The `/api/projects` route serves the MDX files in `content/projects` rather than the database. The Prisma client is set up but requires `DATABASE_URL` to be configured for live database queries.
 
 ### Environment Variables
 - `DATABASE_URL` - MySQL connection string (required for Prisma, not needed for blog/static content)
@@ -300,7 +305,7 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 
 ### Data Fetching
 - Server Components: Fetch directly in components (blog posts use file-based loading)
-- Client Components: Use SWR for caching and revalidation (projects page)
+- Client Components: Use SWR for caching and revalidation
 - API Routes: Use for dynamic data and external integrations
 
 ### Error Handling

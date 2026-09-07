@@ -1,0 +1,64 @@
+---
+title: 'Hinterland'
+date: '2026-08-06'
+summary: 'An offline-first iOS app for the Hinterland Music Festival — the whole festival ships inside the binary, because the valley has no signal.'
+platform: 'iOS 17+'
+tech: 'Swift, SwiftUI, WidgetKit, ActivityKit, CloudKit, WeatherKit, MusicKit, MapKit'
+---
+
+## The problem
+
+Hinterland Music Festival puts 15,000 people in a rural valley in St. Charles, Iowa.
+Cell service there is unusable — not slow, unusable — which makes a festival app that
+fetches its schedule the one kind of app that cannot work at the moment you need it.
+
+So this one assumes there is no network at all.
+
+## Everything ships in the binary
+
+The full four-day schedule, every artist bio, all 48 pieces of artist artwork, the
+festival's four maps, the vendor directory and eleven years of past lineups are bundled
+into the app. All of it works in airplane mode.
+
+The network is only ever used to enrich what is already on the phone — set-time changes,
+the forecast, crowd ratings, and each artist's top songs — and every one of those caches
+what it fetches and falls back to what it already had.
+
+## Building your weekend
+
+- **Schedule** — four days across the Main, Miniland and Campfire stages, filterable by
+  stage, with a card at the top showing what is on now or up next.
+- **My Lineup** — star sets to build a personal schedule, with automatic detection of
+  overlapping sets so you can see what you are choosing between.
+- **Reminders** — local notifications 5–60 minutes before your starred sets, scheduled
+  on-device so they fire with no signal.
+- **Widget and Live Activity** — "Up Next" on the Home Screen and Lock Screen, and the set
+  you are watching in the Dynamic Island from 90 minutes out, counting down on its own.
+
+## The rest of the grounds
+
+**Food & Drink** covers all 33 stands, grouped by where they are actually parked — East,
+West and South Concourse, VIP, GA+, Basecamp and the mobile carts — with combinable
+filters for vegetarian, vegan, gluten-free, dairy-free, nut-free and sugar-free.
+
+**Maps** bundles the grounds, concourse, driving and shuttle-parking maps as pinch-zoomable
+artwork, plus a MapKit view that georeferences the grounds map so the blue dot shows where
+you are standing on it.
+
+**Weather** pulls a WeatherKit forecast for the amphitheater itself. Severe and extreme
+National Weather Service advisories break out onto the top of the schedule, and each set on
+an artist's page shows what the weather will be doing while they play.
+
+**Past lineups** goes back to 2015 — every headliner and every full bill, day by day, side
+stages marked. Bundled, so it settles the argument about who played 2017 with no signal.
+
+## Rating sets, and the recap
+
+Any set can be rated one to five stars once it is under way, with an optional line about
+it. Rating works with no signal and uploads later; scores are pooled through CloudKit so
+every set also carries the average everyone else gave it. Your notes stay on your phone.
+
+Once the last set ends, the Schedule tab becomes a wrap-up of the weekend: how many sets
+you saw and for how many hours, your best of the festival, the day you gave the most to,
+and the festival's best sets according to everyone who rated one — shareable as a rendered
+card. Then the year joins the archive.
