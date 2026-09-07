@@ -18,51 +18,41 @@ export default function TypewriterText() {
     text: "",
     phraseIdx: 0,
     isDeleting: false,
-    isPaused: false,
   });
 
   useEffect(() => {
-    const { text, phraseIdx, isDeleting, isPaused } = state;
+    const { text, phraseIdx, isDeleting } = state;
     const phrase = ROLES[phraseIdx];
 
-    if (isPaused) {
-      const t = setTimeout(
-        () => setState((s) => ({ ...s, isPaused: false, isDeleting: true })),
-        PAUSE_MS
-      );
-      return () => clearTimeout(t);
-    }
+    // A finished phrase lingers before it starts deleting.
+    const isComplete = !isDeleting && text.length === phrase.length;
+    const delay = isComplete
+      ? PAUSE_MS
+      : isDeleting
+        ? DELETE_SPEED
+        : TYPE_SPEED;
 
-    if (!isDeleting) {
-      if (text.length < phrase.length) {
-        const t = setTimeout(
-          () =>
-            setState((s) => ({
+    const t = setTimeout(() => {
+      setState((s) => {
+        const current = ROLES[s.phraseIdx];
+
+        if (!s.isDeleting) {
+          return s.text.length < current.length
+            ? { ...s, text: current.slice(0, s.text.length + 1) }
+            : { ...s, isDeleting: true };
+        }
+
+        return s.text.length > 0
+          ? { ...s, text: s.text.slice(0, -1) }
+          : {
               ...s,
-              text: phrase.slice(0, s.text.length + 1),
-            })),
-          TYPE_SPEED
-        );
-        return () => clearTimeout(t);
-      } else {
-        setState((s) => ({ ...s, isPaused: true }));
-      }
-    } else {
-      if (text.length > 0) {
-        const t = setTimeout(
-          () =>
-            setState((s) => ({ ...s, text: s.text.slice(0, -1) })),
-          DELETE_SPEED
-        );
-        return () => clearTimeout(t);
-      } else {
-        setState((s) => ({
-          ...s,
-          isDeleting: false,
-          phraseIdx: (s.phraseIdx + 1) % ROLES.length,
-        }));
-      }
-    }
+              isDeleting: false,
+              phraseIdx: (s.phraseIdx + 1) % ROLES.length,
+            };
+      });
+    }, delay);
+
+    return () => clearTimeout(t);
   }, [state]);
 
   return (
