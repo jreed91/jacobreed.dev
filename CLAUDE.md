@@ -43,7 +43,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Development Tools
 - **Vitest 5.0** - Unit testing framework
-- **ESLint 9** - Code linting (flat config via `eslint.config.mjs`)
+- **ESLint 10** - Code linting (flat config via `eslint.config.mjs`)
 - **Prettier 3.9** - Code formatting
 
 ## Project Structure
@@ -110,7 +110,7 @@ jacobreed.dev/
 │   └── git-commit-instructions.md
 ├── CLAUDE.md              # This file
 ├── ROADMAP.md             # Development roadmap
-├── eslint.config.mjs      # ESLint v9 flat config
+├── eslint.config.mjs      # ESLint v10 flat config
 ├── next.config.js         # Next.js config (reactStrictMode: true)
 ├── postcss.config.js      # PostCSS with @tailwindcss/postcss
 ├── prisma.config.ts       # Prisma config (reads DATABASE_URL)
