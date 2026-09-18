@@ -86,11 +86,19 @@ function extractHeadings(content: string): Heading[] {
   return headings;
 }
 
+/**
+ * Slugs come from filenames on disk, so strip anything that is not safe in a
+ * URL path segment before the value reaches a link, the sitemap or the feed.
+ */
+export function sanitizeSlug(value: string): string {
+  return value.replace(/[^A-Za-z0-9_-]/g, '');
+}
+
 function getMDXData(dir: string) {
   let mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file));
-    let slug = path.basename(file, path.extname(file));
+    let slug = sanitizeSlug(path.basename(file, path.extname(file)));
 
     // Calculate reading time
     const readingTimeResult = readingTime(content);

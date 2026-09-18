@@ -6,6 +6,7 @@ import {
   getRelatedPosts,
   getSortedBlogPosts,
   parseTags,
+  sanitizeSlug,
   tagSlug,
 } from './blog';
 import fs from 'fs';
@@ -372,6 +373,26 @@ describe('post frontmatter', () => {
   it('every slug is kebab-case', () => {
     getBlogPosts().forEach((post) => {
       expect(post.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+    });
+  });
+});
+
+describe('sanitizeSlug', () => {
+  it('leaves an ordinary slug untouched', () => {
+    expect(sanitizeSlug('migrate-postgres-instances')).toBe(
+      'migrate-postgres-instances'
+    );
+  });
+
+  it('strips characters that are unsafe in a URL path segment', () => {
+    expect(sanitizeSlug('javascript:alert(1)')).toBe('javascriptalert1');
+    expect(sanitizeSlug('../../etc/passwd')).toBe('etcpasswd');
+    expect(sanitizeSlug('post "onload=x')).toBe('postonloadx');
+  });
+
+  it('is applied to the slug of every loaded post', () => {
+    getBlogPosts().forEach((post) => {
+      expect(sanitizeSlug(post.slug)).toBe(post.slug);
     });
   });
 });

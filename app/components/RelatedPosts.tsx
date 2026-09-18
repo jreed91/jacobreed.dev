@@ -15,7 +15,7 @@ export default function RelatedPosts({ posts }: { posts: Blog[] }) {
       <ul className="space-y-4">
         {posts.map((post) => (
           <li key={post.slug}>
-            <Link href={`/blog/${post.slug}`} className="group block">
+            <Link href={`/blog/${encodeURIComponent(post.slug)}`} className="group block">
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors">
                 {post.metadata.title}
               </h3>
