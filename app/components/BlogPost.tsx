@@ -34,6 +34,19 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
             <span>{blog.metadata.readingTime}</span>
           </div>
           <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
+          {blog.metadata.tags.length > 0 && (
+            // Plain pills rather than links: this card is already one big anchor.
+            <ul className="flex flex-wrap gap-2 mt-3" aria-label="Tags">
+              {blog.metadata.tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="inline-flex rounded-full border border-gray-200 dark:border-gray-700 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
     </Link>
   );

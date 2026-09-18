@@ -3,6 +3,21 @@
  */
 module.exports = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      // Old non-kebab-case post slugs, kept alive for links already in the wild.
+      {
+        source: '/blog/CDK',
+        destination: '/blog/cdk-lambda-canary',
+        permanent: true
+      },
+      {
+        source: '/blog/Explain',
+        destination: '/blog/postgres-query-plans',
+        permanent: true
+      }
+    ];
+  },
   async headers() {
     return [
       {

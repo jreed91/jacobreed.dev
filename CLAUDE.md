@@ -57,7 +57,11 @@ jacobreed.dev/
 │   ├── blog/              # Blog pages
 │   │   ├── [slug]/        # Dynamic blog post pages
 │   │   │   └── page.tsx   # Per-post page with JSON-LD, OG metadata
-│   │   └── page.tsx       # Blog listing page
+│   │   ├── tag/[tag]/     # Posts filtered by tag
+│   │   │   └── page.tsx
+│   │   └── page.tsx       # Blog listing page (with tag browser)
+│   ├── feed.xml/          # RSS 2.0 feed
+│   │   └── route.ts
 │   ├── components/        # React components
 │   │   ├── AnimatedBlob.tsx    # Animated gradient blobs (client)
 │   │   ├── BlogLayout.tsx      # Blog post layout wrapper (server)
@@ -66,7 +70,9 @@ jacobreed.dev/
 │   │   ├── Footer.tsx          # Site footer (server)
 │   │   ├── Mdx.tsx             # MDX renderer with sugar-high (server)
 │   │   ├── Navigation.tsx      # Main nav header (client)
+│   │   ├── RelatedPosts.tsx    # Tag-based "Keep reading" block (server)
 │   │   ├── TableOfContents.tsx # Dynamic TOC with IntersectionObserver (client)
+│   │   ├── TagList.tsx         # Tag pills linking to tag pages (server)
 │   │   └── ThemeProvider.tsx   # next-themes wrapper (client)
 │   ├── db/                # Data access utilities
 │   │   ├── blog.ts        # File-based blog post loading
@@ -77,21 +83,25 @@ jacobreed.dev/
 │   │   ├── [slug]/        # Dynamic project pages with JSON-LD, OG metadata
 │   │   │   └── page.tsx
 │   │   └── page.tsx
+│   ├── utils/             # Shared helpers
+│   │   ├── ogCard.tsx     # Shared 1200x630 social card renderer
+│   │   └── sanitize.ts    # JSON-LD escaping
 │   ├── apple-icon.tsx     # Dynamic Apple touch icon (180x180, Edge runtime)
 │   ├── global.css         # Global styles + Tailwind imports
 │   ├── icon.tsx           # Dynamic favicon (32x32, Edge runtime)
 │   ├── layout.tsx         # Root layout (Analytics, SpeedInsights, ThemeProvider)
+│   ├── opengraph-image.tsx # Site-level social card (1200x630)
 │   ├── page.tsx           # Home page with animated hero
 │   ├── robots.ts          # robots.txt generator
 │   └── sitemap.ts         # sitemap.xml generator
 ├── content/               # MDX blog posts (7 posts)
-│   ├── CDK.mdx
-│   ├── Explain.mdx
 │   ├── ai-accelerator-not-solution.mdx
+│   ├── cdk-lambda-canary.mdx
 │   ├── copilot-jetbrains.mdx
 │   ├── dad.mdx
 │   ├── migrate-cloudformation.mdx
 │   ├── migrate-postgres-instances.mdx
+│   ├── postgres-query-plans.mdx
 │   ├── projects/          # MDX project pages (4 projects)
 │   └── talks/             # MDX talk pages
 ├── prisma/                # Database schema (MySQL)
@@ -111,7 +121,7 @@ jacobreed.dev/
 ├── CLAUDE.md              # This file
 ├── ROADMAP.md             # Development roadmap
 ├── eslint.config.mjs      # ESLint v10 flat config
-├── next.config.js         # Next.js config (reactStrictMode: true)
+├── next.config.js         # Next.js config (security headers, legacy slug redirects)
 ├── postcss.config.js      # PostCSS with @tailwindcss/postcss
 ├── prisma.config.ts       # Prisma config (reads DATABASE_URL)
 ├── tailwind.config.ts     # Tailwind config with blob animation keyframes
@@ -166,6 +176,7 @@ type Metadata = {
   summary: string;
   image?: string;
   readingTime: string;  // e.g. "5 min read"
+  tags: string[];       // Parsed from a comma separated frontmatter list
 };
 
 type Heading = {
@@ -198,15 +209,20 @@ type Blog = {
 title: My Post Title
 date: '2024-01-15'
 summary: A short description of the post
-image: /static/images/my-image.jpg  # optional
+image: /static/images/my-image.jpg  # optional, used as the social card
+tags: aws, postgres                 # optional, comma separated
 ---
 ```
+
+> **Note:** A post with no `image` gets a generated social card from
+> `app/blog/[slug]/opengraph-image.tsx` instead. Tags drive `/blog/tag/[tag]`
+> pages and the "Keep reading" related-posts block.
 
 > **Note:** The frontmatter key is `date` (not `publishedAt`). Use this key when creating new posts.
 
 ### Adding a New Blog Post
 1. Create a `.mdx` file in `/content/` using kebab-case filename (e.g., `my-new-post.mdx`)
-2. Add frontmatter with `title`, `date`, `summary`, and optionally `image`
+2. Add frontmatter with `title`, `date`, `summary`, and optionally `image` and `tags`
 3. Write content in MDX — the slug is automatically derived from the filename
 
 ### MDX Components
@@ -281,6 +297,9 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 - **Sitemap**: auto-generated from blog posts via `app/sitemap.ts`
 - **Robots**: generated via `app/robots.ts`
 - **Icons**: dynamic favicon (`app/icon.tsx`) and Apple touch icon (`app/apple-icon.tsx`) using Edge runtime
+- **Social cards**: generated per post/talk/project by `opengraph-image.tsx` routes sharing `app/utils/ogCard.tsx`; frontmatter `image` wins when present
+- **RSS**: `app/feed.xml/route.ts`, linked from the root metadata and the footer
+- **Redirects**: legacy `/blog/CDK` and `/blog/Explain` URLs redirect permanently in `next.config.js`
 
 ## Testing
 

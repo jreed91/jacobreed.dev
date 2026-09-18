@@ -2,14 +2,16 @@ import Image from "next/image";
 import { parseISO, format } from "date-fns";
 
 import { type PropsWithChildren } from "react";
-import { Blog } from "app/db/blog";
+import { Blog, getRelatedPosts } from "app/db/blog";
 import { CustomMDX } from "./Mdx";
+import RelatedPosts from "./RelatedPosts";
 import TableOfContents from "./TableOfContents";
+import TagList from "./TagList";
 
 const editUrl = (slug: string) =>
-  `https://github.com/jreed91/jacobreed.dev/edit/master/data/blog/${slug}.mdx`;
+  `https://github.com/jreed91/jacobreed.dev/edit/master/content/${slug}.mdx`;
 const discussUrl = (slug: string) =>
-  `https://mobile.twitter.com/search?q=${encodeURIComponent(
+  `https://x.com/search?q=${encodeURIComponent(
     `https://jacobreed.dev/blog/${slug}`
   )}`;
 
@@ -38,6 +40,11 @@ export default function BlogLayout({
           {blog.metadata.readingTime}
         </p>
       </div>
+      {blog.metadata.tags.length > 0 && (
+        <div className="w-full mt-4">
+          <TagList tags={blog.metadata.tags} />
+        </div>
+      )}
       <div className="w-full mt-6">
         <TableOfContents headings={blog.headings} />
       </div>
@@ -57,6 +64,7 @@ export default function BlogLayout({
           {"Edit on GitHub"}
         </a>
       </div>
+      <RelatedPosts posts={getRelatedPosts(blog.slug)} />
     </article>
     </div>
   );

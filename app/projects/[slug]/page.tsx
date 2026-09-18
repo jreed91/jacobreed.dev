@@ -27,9 +27,9 @@ export async function generateMetadata({
 
   const { title, summary: description, image } = project.metadata;
 
-  const ogImage = image
-    ? `${baseUrl}${image}`
-    : `${baseUrl}/static/images/avatar.jpeg`;
+  // Projects without their own image fall back to the generated card in
+  // opengraph-image.tsx, which Next.js applies when `images` is omitted here.
+  const ogImage = image ? `${baseUrl}${image}` : undefined;
 
   return {
     title,
@@ -39,13 +39,13 @@ export async function generateMetadata({
       description,
       type: 'website',
       url: `${baseUrl}/projects/${slug}`,
-      images: [{ url: ogImage }],
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
       creator: '@jacobreed91',
     },
   };

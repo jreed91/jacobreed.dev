@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     image,
   } = post.metadata;
 
-  const ogImage = image
-    ? `${baseUrl}${image}`
-    : `${baseUrl}/static/images/avatar.jpeg`;
+  // Posts without their own image fall back to the generated card in
+  // opengraph-image.tsx, which Next.js applies when `images` is omitted here.
+  const ogImage = image ? `${baseUrl}${image}` : undefined;
 
   return {
     title,
@@ -41,17 +41,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'article',
       publishedTime,
       url: `${baseUrl}/blog/${slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
       creator: '@jacobreed91',
     },
   };

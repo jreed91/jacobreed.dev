@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import sitemap from './sitemap';
-import { getBlogPosts } from './db/blog';
+import { getAllTags, getBlogPosts } from './db/blog';
 import { getTalks } from './db/talks';
 
 describe('sitemap', () => {
@@ -53,6 +53,14 @@ describe('sitemap', () => {
     const urls = entries.map((e) => e.url);
     talks.forEach((talk) => {
       expect(urls).toContain(`https://jacobreed.dev/talks/${talk.slug}`);
+    });
+  });
+
+  it('includes an entry for every tag page', async () => {
+    const entries = await sitemap();
+    const urls = entries.map((e) => e.url);
+    getAllTags().forEach((tag) => {
+      expect(urls).toContain(`https://jacobreed.dev/blog/tag/${tag.slug}`);
     });
   });
 

@@ -4,6 +4,16 @@ This document outlines technical enhancements to improve blog engagement, SEO, a
 
 ## ✅ Completed
 
+### Content Discovery (Phase 3, partial)
+- [x] `tags` frontmatter field, parsed into `Metadata.tags`
+- [x] Tag pills on post cards and post pages
+- [x] Tag archive pages at `/blog/tag/[tag]`, listed in the sitemap
+- [x] Related posts ("Keep reading") ranked by shared tags
+
+### Feeds & Social (Phase 4/5, partial)
+- [x] RSS feed at `/feed.xml`, linked from root metadata and the footer
+- [x] Generated 1200x630 social cards for posts, talks and projects
+
 ### SEO Foundation (Phase 1)
 - [x] Dynamic metadata generation with `generateMetadata()` for blog posts
 - [x] Open Graph tags for social media previews
@@ -89,14 +99,14 @@ function calculateReadingTime(content: string): number {
 ### Phase 3: Content Discovery & Organization
 **Impact**: High | **Effort**: Medium | **Timeline**: 3-5 days
 
-#### 3.1 Tagging System
-- [ ] Add `tags` field to MDX frontmatter
-- [ ] Update blog metadata type to include tags
-- [ ] Create tag extraction utility
-- [ ] Create tag cloud or tag list component
-- [ ] Create tag archive pages `/blog/tag/[tag]`
-- [ ] Add tags to blog post cards
-- [ ] Create tag filter on main blog page
+#### 3.1 Tagging System ✅ Done
+- [x] Add `tags` field to MDX frontmatter
+- [x] Update blog metadata type to include tags
+- [x] Create tag extraction utility (`parseTags`, `getAllTags`, `tagSlug`)
+- [x] Create tag cloud or tag list component (`TagList.tsx`)
+- [x] Create tag archive pages `/blog/tag/[tag]`
+- [x] Add tags to blog post cards
+- [x] Create tag filter on main blog page
 
 **Files to modify**:
 - `app/db/blog.ts` (add tags to Metadata type)
@@ -106,8 +116,8 @@ function calculateReadingTime(content: string): number {
 - `app/components/TagList.tsx` (new)
 
 **Suggested tags for existing posts**:
-- CDK.mdx: `aws`, `cdk`, `testing`, `deployment`
-- Explain.mdx: `postgresql`, `database`, `performance`, `query-optimization`
+- cdk-lambda-canary.mdx: `aws`, `cdk`, `testing`, `deployment`
+- postgres-query-plans.mdx: `postgres`, `database`, `performance`, `query-optimization`
 - copilot-jetbrains.mdx: `developer-tools`, `ai`, `jetbrains`, `productivity`
 - migrate-cloudformation.mdx: `aws`, `terraform`, `iac`, `migration`
 - migrate-postgres-instances.mdx: `postgresql`, `database`, `migration`, `rds`
@@ -117,9 +127,9 @@ function calculateReadingTime(content: string): number {
 
 #### 3.2 Related Posts
 - [ ] Create algorithm to find related posts (by tags, similar titles, or keywords)
-- [ ] Create `RelatedPosts.tsx` component
-- [ ] Display 2-3 related posts at bottom of each article
-- [ ] Include post title, summary, and thumbnail
+- [x] Create `RelatedPosts.tsx` component
+- [x] Display 2-3 related posts at bottom of each article
+- [x] Include post title, summary, and date (no thumbnail)
 - [ ] Track clicks on related posts
 
 **Files to create/modify**:
@@ -195,10 +205,10 @@ npm install @giscus/react
 
 ---
 
-#### 4.3 RSS Feed
-- [ ] Create RSS feed for blog posts
-- [ ] Add RSS link to navigation/footer
-- [ ] Include full post content or summary
+#### 4.3 RSS Feed ✅ Done
+- [x] Create RSS feed for blog posts (`app/feed.xml/route.ts`)
+- [x] Add RSS link to navigation/footer
+- [x] Include full post content or summary (summary, plus tags as categories)
 
 **Next.js implementation**:
 - Create `app/feed.xml/route.ts`
@@ -242,7 +252,7 @@ npm install @giscus/react
 #### 5.3 Image Optimization
 - [ ] Ensure all blog images use Next.js Image component
 - [ ] Add proper alt text to all images
-- [ ] Generate optimized OG images for social sharing
+- [x] Generate optimized OG images for social sharing (`app/utils/ogCard.tsx`)
 - [ ] Lazy load images below the fold
 - [ ] Add blur placeholders
 
@@ -379,14 +389,14 @@ npm run new-post "My Post Title"
 | Feature | Impact | Effort | Priority |
 |---------|--------|--------|----------|
 | Social Share Buttons | High | Low | P0 |
-| Reading Time | High | Low | P0 |
-| Table of Contents | High | Medium | P1 |
-| Tagging System | High | Medium | P1 |
-| Related Posts | High | Medium | P1 |
+| Reading Time | High | Low | ✅ Done |
+| Table of Contents | High | Medium | ✅ Done |
+| Tagging System | High | Medium | ✅ Done |
+| Related Posts | High | Medium | ✅ Done |
 | Comments (Giscus) | Medium | Low | P1 |
 | Newsletter | Medium | Medium | P2 |
 | Search | Medium | Medium | P2 |
-| RSS Feed | Medium | Low | P2 |
+| RSS Feed | Medium | Low | ✅ Done |
 | Google Analytics | Medium | Low | P2 |
 | View Tracking DB | Medium | Medium | P2 |
 | Code Block Copy | Medium | Low | P2 |

@@ -2,21 +2,7 @@
 title: Making Sense of Postgres Query Plans
 date: '2025-09-01'
 summary: An overview of Postgres Query Plans and how to use them
----
-
-## Table of Contents
-1. [Why Query Plans Matter for Apps](#why-query-plans-matter-for-apps)
-2. [`EXPLAIN` vs `EXPLAIN ANALYZE`](#explain-vs-explain-analyze)
-3. [How to Read a Plan (App-Load Edition)](#how-to-read-a-plan-app-load-edition)
-4. [Common Plan Nodes (Quick Reference)](#common-plan-nodes-quick-reference)
-5. [Worked Example #1: Indexing to Avoid Seq Scan + Sort](#worked-example-1-indexing-to-avoid-seq-scan--sort)
-6. [Worked Example #2: Bad Join Choice → Nested Loop Explosion](#worked-example-2-bad-join-choice--nested-loop-explosion)
-7. [Using AI Alongside `EXPLAIN`](#using-ai-alongside-explain)
-8. [CI Guardrails: Catch Plan Regressions Early](#ci-guardrails-catch-plan-regressions-early)
-9. [Stats, Skew & Practical Knobs](#stats-skew--practical-knobs)
-10. [Checklist Before You Ship](#checklist-before-you-ship)
-11. [Appendix: Recipes & One-Liners](#appendix-recipes--one-liners)
-
+tags: postgres, database, performance, query-optimization
 ---
 
 ## Why Query Plans Matter for Apps
