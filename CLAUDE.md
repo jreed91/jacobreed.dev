@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Core Framework
 - **Next.js 16.3** - React framework with App Router architecture
-- **React 19.2** - UI library
+- **React 19.3** - UI library
 - **TypeScript 6.0** - Type safety (strict: false, strictNullChecks: true)
 - **Node 22.x** - Runtime environment (v22.22.2 pinned via .nvmrc, `engines` requires >=22.12.0)
 
@@ -30,12 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **next-mdx-remote 6.0** - MDX rendering for blog posts
 - **Prisma 7.10** - ORM for MySQL database
 - **sugar-high** - Syntax highlighting for code blocks
-- **rehype-code-titles** - Code block title annotations
-- **rehype-slug** - Anchor link generation for headings
 - **reading-time** - Automatic reading time calculation
-
-### Data Fetching
-- **SWR 2.5** - React Hooks for data fetching and caching
 
 ### Utilities
 - **date-fns 4.4** - Date manipulation and formatting
@@ -227,9 +222,10 @@ tags: aws, postgres                 # optional, comma separated
 
 ### MDX Components
 Custom components in `app/components/Mdx.tsx`:
-- Code blocks with titles via `rehype-code-titles`
-- Anchor links on headings via `rehype-slug`
 - Syntax highlighting via `sugar-high`
+
+> **Note:** `MDXRemote` is rendered without rehype plugins. Heading anchor ids are
+> generated directly in `getBlogPosts()` (`app/db/blog.ts`), not by `rehype-slug`.
 
 ## Code Style & Conventions
 
@@ -319,12 +315,10 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 ### Performance
 - Optimize images with Next.js Image component and sharp
 - Use React Server Components for data fetching when possible
-- Use SWR for client-side data fetching and caching
 - Static generation for all blog post pages via `generateStaticParams()`
 
 ### Data Fetching
 - Server Components: Fetch directly in components (blog posts use file-based loading)
-- Client Components: Use SWR for caching and revalidation
 - API Routes: Use for dynamic data and external integrations
 
 ### Error Handling
@@ -349,4 +343,4 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 - **Platform**: Vercel (optimized for Next.js)
 - **Analytics**: Vercel Analytics and Speed Insights enabled in root layout
 - **Environment Variables**: Configure `DATABASE_URL` for Prisma (optional for blog-only functionality)
-- **Node Version**: 20.x (specified in `package.json` engines and `.nvmrc`)
+- **Node Version**: 22.x (`engines` requires >=22.12.0; `.nvmrc` pins v22.22.2)
