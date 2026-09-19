@@ -2,7 +2,8 @@
 title: CDK - A Canary in a Coal Mine
 date: '2021-08-03'
 summary: A safe way to deploy your lambdas
-image: /static/images/canary_art22.jpg
+image: /static/images/canary_art22-2.jpg
+tags: aws, cdk, testing, deployment
 ---
 When developing new lambdas using the CDK it's easy to get comfortable with the normal deployment process. Just run "cdk deploy" and your application is deployed, right?! Wrong! How do you know the lambda deployment worked properly? Do you really want to cut all your traffic over to the new lambda without performing integration tests? Well if this is you the CDK has tools just for the job.
 
@@ -14,7 +15,7 @@ A canary is a type of bird that used to be used in coal mines to give an early w
 
 ## Get Started
 
-A canary is a type of bird that used to be used in coal mines to give an early warning signs of potential dangers. That same analogy can be used with a lambda. Here is what we're going to be building:
+Here is what we're going to be building:
 
 1. A Lambda that will be our "Live" version.
 2. A Lambda that will be our integration test version.

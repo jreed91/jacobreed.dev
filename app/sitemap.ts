@@ -1,4 +1,4 @@
-import { getBlogPosts } from 'app/db/blog';
+import { getAllTags, getBlogPosts } from 'app/db/blog';
 import { getTalks } from 'app/db/talks';
 import { getProjects } from 'app/db/projects';
 
@@ -18,10 +18,15 @@ export default async function sitemap() {
     lastModified: project.metadata.date,
   }));
 
+  const tags = getAllTags().map((tag) => ({
+    url: `https://jacobreed.dev/blog/tag/${tag.slug}`,
+    lastModified: new Date().toISOString().split('T')[0],
+  }));
+
   const routes = ['', '/blog', '/projects', '/talks'].map((route) => ({
     url: `https://jacobreed.dev${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }));
 
-  return [...routes, ...blogs, ...talks, ...projects];
+  return [...routes, ...blogs, ...talks, ...projects, ...tags];
 }

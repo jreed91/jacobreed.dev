@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { getBlogPosts } from './blog';
+import {
+  getAllTags,
+  getBlogPosts,
+  getBlogPostsByTag,
+  getRelatedPosts,
+  getSortedBlogPosts,
+  parseTags,
+  sanitizeSlug,
+  tagSlug,
+} from './blog';
 import fs from 'fs';
 import path from 'path';
 
@@ -236,6 +245,154 @@ describe('getBlogPosts', () => {
         expect(typeof post.metadata.image).toBe('string');
         expect(post.metadata.image).toMatch(/^\/static\//);
       }
+    });
+  });
+});
+
+// ─── tags ─────────────────────────────────────────────────────────────────────
+
+describe('parseTags', () => {
+  it('returns an empty array when the field is missing', () => {
+    expect(parseTags(undefined)).toEqual([]);
+    expect(parseTags('')).toEqual([]);
+  });
+
+  it('splits a comma separated list and trims each tag', () => {
+    expect(parseTags('aws, cdk , testing')).toEqual(['aws', 'cdk', 'testing']);
+  });
+
+  it('accepts a bracketed list', () => {
+    expect(parseTags('[aws, cdk]')).toEqual(['aws', 'cdk']);
+  });
+
+  it('lowercases tags and drops empty entries', () => {
+    expect(parseTags('AWS, , CDK,')).toEqual(['aws', 'cdk']);
+  });
+
+  it('strips quotes around individual tags', () => {
+    expect(parseTags("'aws', \"cdk\"")).toEqual(['aws', 'cdk']);
+  });
+});
+
+describe('tagSlug', () => {
+  it('kebab-cases a tag', () => {
+    expect(tagSlug('Query Optimization')).toBe('query-optimization');
+  });
+
+  it('does not produce leading or trailing hyphens', () => {
+    expect(tagSlug('  aws!  ')).toBe('aws');
+  });
+});
+
+describe('getAllTags', () => {
+  it('returns every tag used by a post, with a count and a slug', () => {
+    const tags = getAllTags();
+    const used = new Set(getBlogPosts().flatMap((post) => post.metadata.tags));
+
+    expect(tags.length).toBe(used.size);
+    tags.forEach((entry) => {
+      expect(used.has(entry.tag)).toBe(true);
+      expect(entry.slug).toBe(tagSlug(entry.tag));
+      expect(entry.count).toBeGreaterThan(0);
+    });
+  });
+
+  it('is sorted by count, most used first', () => {
+    const counts = getAllTags().map((entry) => entry.count);
+    expect([...counts].sort((a, b) => b - a)).toEqual(counts);
+  });
+});
+
+describe('getBlogPostsByTag', () => {
+  it('returns only posts carrying the tag', () => {
+    const [first] = getAllTags();
+    const posts = getBlogPostsByTag(first.tag);
+
+    expect(posts.length).toBe(first.count);
+    posts.forEach((post) => {
+      expect(post.metadata.tags.map(tagSlug)).toContain(first.slug);
+    });
+  });
+
+  it('matches on the tag slug as well as the raw tag', () => {
+    const [first] = getAllTags();
+    expect(getBlogPostsByTag(first.slug).map((p) => p.slug)).toEqual(
+      getBlogPostsByTag(first.tag).map((p) => p.slug)
+    );
+  });
+
+  it('returns an empty array for an unknown tag', () => {
+    expect(getBlogPostsByTag('definitely-not-a-tag')).toEqual([]);
+  });
+});
+
+describe('getRelatedPosts', () => {
+  it('never includes the post itself', () => {
+    getBlogPosts().forEach((post) => {
+      const related = getRelatedPosts(post.slug);
+      expect(related.map((p) => p.slug)).not.toContain(post.slug);
+    });
+  });
+
+  it('returns up to the requested number of posts', () => {
+    const related = getRelatedPosts(getBlogPosts()[0].slug, 2);
+    expect(related.length).toBeLessThanOrEqual(2);
+  });
+
+  it('prefers posts sharing the most tags', () => {
+    const post = getBlogPosts().find((p) => p.slug === 'migrate-postgres-instances');
+    expect(post).toBeDefined();
+
+    const [top] = getRelatedPosts(post!.slug);
+    const shared = top.metadata.tags.filter((tag) =>
+      post!.metadata.tags.map(tagSlug).includes(tagSlug(tag))
+    );
+    expect(shared.length).toBeGreaterThan(0);
+  });
+
+  it('returns an empty array for an unknown slug', () => {
+    expect(getRelatedPosts('not-a-real-post')).toEqual([]);
+  });
+});
+
+describe('getSortedBlogPosts', () => {
+  it('returns posts newest first', () => {
+    const dates = getSortedBlogPosts().map((post) => Number(new Date(post.metadata.date)));
+    expect([...dates].sort((a, b) => b - a)).toEqual(dates);
+  });
+});
+
+describe('post frontmatter', () => {
+  it('every post carries at least one tag', () => {
+    getBlogPosts().forEach((post) => {
+      expect(Array.isArray(post.metadata.tags)).toBe(true);
+      expect(post.metadata.tags.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('every slug is kebab-case', () => {
+    getBlogPosts().forEach((post) => {
+      expect(post.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+    });
+  });
+});
+
+describe('sanitizeSlug', () => {
+  it('leaves an ordinary slug untouched', () => {
+    expect(sanitizeSlug('migrate-postgres-instances')).toBe(
+      'migrate-postgres-instances'
+    );
+  });
+
+  it('strips characters that are unsafe in a URL path segment', () => {
+    expect(sanitizeSlug('javascript:alert(1)')).toBe('javascriptalert1');
+    expect(sanitizeSlug('../../etc/passwd')).toBe('etcpasswd');
+    expect(sanitizeSlug('post "onload=x')).toBe('postonloadx');
+  });
+
+  it('is applied to the slug of every loaded post', () => {
+    getBlogPosts().forEach((post) => {
+      expect(sanitizeSlug(post.slug)).toBe(post.slug);
     });
   });
 });

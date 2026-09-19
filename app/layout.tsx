@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     template: '%s | Jacob Reed',
   },
   description: 'Software Engineer specializing in AWS, DevOps, and Database Performance. Writing about cloud infrastructure, PostgreSQL, and developer tools.',
+  alternates: {
+    canonical: '/',
+    types: {
+      'application/rss+xml': [{ url: '/feed.xml', title: 'Jacob Reed' }],
+    },
+  },
   openGraph: {
     title: 'Jacob Reed - Software Engineer',
     description: 'Software Engineer specializing in AWS, DevOps, and Database Performance',

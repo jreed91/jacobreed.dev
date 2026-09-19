@@ -3,16 +3,10 @@ title: How to Migrate Between Two RDS Postgres Instances
 date: '2021-12-20'
 image: /static/images/iu-2.png
 summary: A walkthrough on how to migrate between two RDS Postgres Instances
+tags: postgres, database, migration, aws
 ---
 
 When searching for how to migrate between two RDS instances you may be met with articles that point you in the direction of using Amazon Database Migration Services (DMS), from experience DON'T DO IT. You'll be met with constant unexplainable failures, digging through logs that tell you nothing and paying AWS for support. DMS might be great for more complex migrations i.e. moving from one database engine to another. For Postgres -> Postgres migrations there is an easier option!
-
-- [Enter Postgres Logical Replication](#enter-postgres-logical-replication)
-  - [Getting Started](#getting-started)
-  - [Database Setup](#database-setup)
-  - [Enabling the Publication](#enabling-the-publication)
-  - [Enabling the Subscription](#enabling-the-subscription)
-  - [Wrapping Up](#wrapping-up)
 
 # Enter Postgres Logical Replication
 

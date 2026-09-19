@@ -5,7 +5,7 @@ import { parseISO, format } from 'date-fns';
 
 export default function BlogPost ({ blog }: { blog: Blog}) {
   return (
-    <Link href={`/blog/${blog.slug}`} className="w-full ">
+    <Link href={`/blog/${encodeURIComponent(blog.slug)}`} className="w-full ">
         <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
           <div className="flex flex-col justify-between md:flex-row">
             <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
@@ -34,6 +34,19 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
             <span>{blog.metadata.readingTime}</span>
           </div>
           <p className="text-gray-600 dark:text-gray-400">{blog.metadata.summary}</p>
+          {blog.metadata.tags.length > 0 && (
+            // Plain pills rather than links: this card is already one big anchor.
+            <ul className="flex flex-wrap gap-2 mt-3" aria-label="Tags">
+              {blog.metadata.tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="inline-flex rounded-full border border-gray-200 dark:border-gray-700 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
     </Link>
   );
