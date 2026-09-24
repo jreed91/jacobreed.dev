@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Core Framework
 - **Next.js 16.3** - React framework with App Router architecture
 - **React 19.3** - UI library
-- **TypeScript 6.0** - Type safety (strict: false, strictNullChecks: true)
+- **TypeScript 7.0** - Type safety (strict: false, strictNullChecks: true)
 - **Node 22.x** - Runtime environment (v22.22.2 pinned via .nvmrc, `engines` requires >=22.12.0)
 
 ### Styling
@@ -38,7 +38,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Development Tools
 - **Vitest 5.0** - Unit testing framework
-- **ESLint 10** - Code linting (flat config via `eslint.config.mjs`)
+- **oxlint 1.85** - Code linting (config in `.oxlintrc.json`)
 - **Prettier 3.9** - Code formatting
 
 ## Project Structure
@@ -115,7 +115,7 @@ jacobreed.dev/
 │   └── git-commit-instructions.md
 ├── CLAUDE.md              # This file
 ├── ROADMAP.md             # Development roadmap
-├── eslint.config.mjs      # ESLint v10 flat config
+├── .oxlintrc.json         # oxlint config (react, nextjs, jsx-a11y, typescript plugins)
 ├── next.config.js         # Next.js config (security headers, legacy slug redirects)
 ├── postcss.config.js      # PostCSS with @tailwindcss/postcss
 ├── prisma.config.ts       # Prisma config (reads DATABASE_URL)
@@ -128,7 +128,7 @@ jacobreed.dev/
 ### Development
 ```bash
 npm run dev              # Start dev server with Turbo (http://localhost:3000)
-npm run lint             # Run ESLint
+npm run lint             # Run oxlint
 npm test                 # Run Vitest tests
 ```
 

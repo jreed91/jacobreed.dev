@@ -10,6 +10,7 @@ export default function Footer() {
             <NavItem href="https://github.com/jreed91" text="GitHub" />
             {/* Plain anchor: /feed.xml is a route handler, not a page, so it
                 should not go through client-side navigation. */}
+            {/* oxlint-disable-next-line nextjs/no-html-link-for-pages */}
             <a
               href="/feed.xml"
               className="inline-block px-3 py-2 rounded-lg font-normal text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
