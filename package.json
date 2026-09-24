@@ -9,7 +9,7 @@
     "build": "next build",
     "generate-prisma": "prisma generate --schema ./prisma/schema.prisma",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "oxlint",
     "test": "vitest"
   },
   "dependencies": {
@@ -35,13 +35,10 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
-    "eslint": "^10.11.0",
-    "eslint-config-next": "^16.3.5",
-    "espree": "^11.2.0",
+    "oxlint": "^1.85.0",
     "postcss": "^8.5.28",
     "prettier": "^3.9.8",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.70.0",
+    "typescript": "^7.0.2",
     "vitest": "^5.0.1"
   },
   "overrides": {

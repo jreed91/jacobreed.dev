@@ -86,8 +86,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
       />
-      <BlogLayout blog={post}>
-      </BlogLayout>
+      <BlogLayout blog={post} />
     </>
   );
 }

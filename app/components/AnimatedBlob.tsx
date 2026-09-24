@@ -10,7 +10,6 @@ export default function AnimatedBlob() {
       if (!blobRef.current) return;
 
       const blob = blobRef.current;
-      const rect = blob.getBoundingClientRect();
       const containerRect = blob.parentElement?.getBoundingClientRect();
 
       if (containerRect) {

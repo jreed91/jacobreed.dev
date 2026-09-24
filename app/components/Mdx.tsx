@@ -18,7 +18,7 @@ export function CustomMDX(props) {
     // @ts-ignore
     <MDXRemote
       {...props}
-      components={{ ...components, ...(props.components || {}) }}
+      components={{ ...components, ...props.components }}
     />
   );
 }
