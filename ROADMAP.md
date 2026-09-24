@@ -234,13 +234,12 @@ npm install @giscus/react
 
 #### 5.2 Enhanced View Tracking
 - [ ] Persist view counts to database (currently in-memory)
-- [ ] Add Prisma schema for views
+- [ ] Choose a storage backend for view counts
 - [ ] Track scroll depth
 - [ ] Track time spent on page
 - [ ] Track engagement score (scroll + time + interactions)
 
 **Files to modify**:
-- `prisma/schema.prisma` (ensure views table exists)
 - `app/api/views/[slug]/route.ts`
 - `app/components/ViewCounter.tsx`
 
