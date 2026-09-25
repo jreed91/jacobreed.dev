@@ -66,17 +66,17 @@ When the user requests a new API endpoint:
 
 5. **Common patterns**:
 
-   **Reading from database (Prisma)**:
+   **Reading file-based content**:
    ```typescript
    import { NextResponse } from 'next/server';
-   import prisma from '@/app/db/prisma';
+   import { getProjects } from '@/app/db/projects';
 
    export async function GET() {
      try {
-       const items = await prisma.projects.findMany();
+       const items = getProjects();
        return NextResponse.json(items);
      } catch (error) {
-       console.error('Database error:', error);
+       console.error('Failed to load projects:', error);
        return NextResponse.json(
          { error: 'Failed to fetch data' },
          { status: 500 }
@@ -161,64 +161,6 @@ When the user requests a new API endpoint:
    curl "http://localhost:3000/api/your-route?id=123&limit=5"
    ```
 
-## Full Example: Blog Views API
-
-```typescript
-// app/api/views/[slug]/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/db/prisma';
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
-  try {
-    const { slug } = params;
-
-    const views = await prisma.views.findUnique({
-      where: { slug },
-    });
-
-    return NextResponse.json({
-      slug,
-      views: views?.count || 0,
-    });
-  } catch (error) {
-    console.error('Error fetching views:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch views' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
-  try {
-    const { slug } = params;
-
-    const views = await prisma.views.upsert({
-      where: { slug },
-      create: { slug, count: 1 },
-      update: { count: { increment: 1 } },
-    });
-
-    return NextResponse.json({
-      slug,
-      views: views.count,
-    });
-  } catch (error) {
-    console.error('Error updating views:', error);
-    return NextResponse.json(
-      { error: 'Failed to update views' },
-      { status: 500 }
-    );
-  }
-}
-```
-
 ## HTTP Status Codes
 
 Use appropriate status codes:
@@ -241,9 +183,8 @@ Use appropriate status codes:
 
 ## Project-Specific Notes
 
-- Prisma client is available at `@/app/db/prisma`
-- Database schema is in `prisma/schema.prisma`
-- Existing routes: `/api/projects`, `/api/views/[slug]`
+- There is no database; content is loaded from files in `content/` via `app/db/`
+- Existing routes: `/api/projects`
 - Use `NextResponse.json()` for JSON responses
 - Log errors for debugging
 - Consider caching for frequently accessed data

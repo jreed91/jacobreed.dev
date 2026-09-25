@@ -1,6 +1,5 @@
 import { getProjects } from 'app/db/projects';
 
-// Served from content/projects rather than Prisma since there's no DATABASE_URL configured
 export async function GET() {
     const projects = getProjects().map((project) => ({
         slug: project.slug,

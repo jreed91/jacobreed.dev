@@ -28,7 +28,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Content & Data
 - **next-mdx-remote 6.0** - MDX rendering for blog posts
-- **Prisma 7.10** - ORM for MySQL database
 - **sugar-high** - Syntax highlighting for code blocks
 - **reading-time** - Automatic reading time calculation
 
@@ -72,8 +71,7 @@ jacobreed.dev/
 │   ├── db/                # Data access utilities
 │   │   ├── blog.ts        # File-based blog post loading
 │   │   ├── projects.ts    # File-based project loading (content/projects)
-│   │   ├── blog.test.ts   # Vitest tests for blog data
-│   │   └── prisma.ts      # Prisma client singleton
+│   │   └── blog.test.ts   # Vitest tests for blog data
 │   ├── projects/          # Projects listing + per-project detail pages
 │   │   ├── [slug]/        # Dynamic project pages with JSON-LD, OG metadata
 │   │   │   └── page.tsx
@@ -99,8 +97,6 @@ jacobreed.dev/
 │   ├── postgres-query-plans.mdx
 │   ├── projects/          # MDX project pages (4 projects)
 │   └── talks/             # MDX talk pages
-├── prisma/                # Database schema (MySQL)
-│   └── schema.prisma
 ├── public/                # Static assets
 │   ├── favicon.ico
 │   └── static/images/     # Blog, project and profile images
@@ -118,7 +114,6 @@ jacobreed.dev/
 ├── .oxlintrc.json         # oxlint config (react, nextjs, jsx-a11y, typescript plugins)
 ├── next.config.js         # Next.js config (security headers, legacy slug redirects)
 ├── postcss.config.js      # PostCSS with @tailwindcss/postcss
-├── prisma.config.ts       # Prisma config (reads DATABASE_URL)
 ├── tailwind.config.ts     # Tailwind config with blob animation keyframes
 └── tsconfig.json          # TypeScript config
 ```
@@ -138,27 +133,9 @@ npm run build            # Build for production (Next.js build)
 npm run start            # Start production server
 ```
 
-### Database
-```bash
-npm run generate-prisma  # Generate Prisma Client from schema
-```
+## Data
 
-## Database Schema
-
-Using **MySQL** with Prisma ORM. Requires `DATABASE_URL` environment variable.
-
-### Current Models
-
-- **projects** - Stores project information
-  - `slug` (String, PK, VarChar 128) - Project identifier
-  - `name` (String, Text) - Project name
-  - `description` (String, Text) - Project description
-  - `image` (String, Text) - Project image URL
-
-> **Note:** The `/api/projects` route serves the MDX files in `content/projects` rather than the database. The Prisma client is set up but requires `DATABASE_URL` to be configured for live database queries.
-
-### Environment Variables
-- `DATABASE_URL` - MySQL connection string (required for Prisma, not needed for blog/static content)
+There is no database. Blog posts, projects and talks are MDX files under `content/`, loaded at build time by the helpers in `app/db/`. The `/api/projects` route serves `content/projects`.
 
 ## Key Data Types
 
@@ -237,7 +214,7 @@ Custom components in `app/components/Mdx.tsx`:
 
 ### File Naming
 - **PascalCase**: Components and their files (`BlogPost.tsx`, `Navigation.tsx`)
-- **camelCase**: Functions, variables, non-component files (`blog.ts`, `prisma.ts`)
+- **camelCase**: Functions, variables, non-component files (`blog.ts`, `projects.ts`)
 - **kebab-case**: MDX content files (`copilot-jetbrains.mdx`)
 
 ### Component Guidelines
@@ -342,5 +319,5 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 
 - **Platform**: Vercel (optimized for Next.js)
 - **Analytics**: Vercel Analytics and Speed Insights enabled in root layout
-- **Environment Variables**: Configure `DATABASE_URL` for Prisma (optional for blog-only functionality)
+- **Environment Variables**: None required
 - **Node Version**: 22.x (`engines` requires >=22.12.0; `.nvmrc` pins v22.22.2)
