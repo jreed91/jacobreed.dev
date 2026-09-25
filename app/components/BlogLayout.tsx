@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { parseISO, format } from "date-fns";
 
-import { type PropsWithChildren } from "react";
 import { Blog, getRelatedPosts } from "app/db/blog";
 import { CustomMDX } from "./Mdx";
 import RelatedPosts from "./RelatedPosts";
@@ -15,10 +14,7 @@ const discussUrl = (slug: string) =>
     `https://jacobreed.dev/blog/${slug}`
   )}`;
 
-export default function BlogLayout({
-  children,
-  blog,
-}: PropsWithChildren<{ blog: Blog }>) {
+export default function BlogLayout({ blog }: { blog: Blog }) {
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
