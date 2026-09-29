@@ -1,5 +1,10 @@
 import { NavItem } from "./Navigation";
 
+// Read once at module load rather than during render: the footer is a static
+// server component, so the year is fixed at build time either way, and calling
+// Date() in the body trips oxlint's react(purity) rule.
+const currentYear = new Date().getFullYear();
+
 export default function Footer() {
   return (
     <footer className="w-full border-t border-gray-200 dark:border-gray-800 mt-auto">
@@ -19,7 +24,7 @@ export default function Footer() {
             </a>
           </nav>
           <div className="text-sm text-gray-700 dark:text-gray-300">
-            &copy; {new Date().getFullYear()} Jacob Reed
+            &copy; {currentYear} Jacob Reed
           </div>
         </div>
       </div>
