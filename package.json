@@ -24,17 +24,17 @@
     "react-dom": "^19.3.0",
     "reading-time": "^1.5.0",
     "sharp": "^0.35.5",
-    "sugar-high": "^2.5.0",
+    "sugar-high": "^2.5.1",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
-    "oxlint": "^1.86.0",
-    "postcss": "^8.5.28",
+    "oxlint": "^1.87.0",
+    "postcss": "^8.5.29",
     "prettier": "^3.9.9",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.3"
   }
 }
