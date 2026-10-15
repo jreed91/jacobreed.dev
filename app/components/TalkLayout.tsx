@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { parseISO, format } from 'date-fns';
 import { type PropsWithChildren } from 'react';
 import { Talk, getYouTubeEmbedUrl } from 'app/db/talks';
+import ArticleHeader from './ArticleHeader';
 import { CustomMDX } from './Mdx';
 
 export default function TalkLayout({
@@ -10,27 +11,27 @@ export default function TalkLayout({
   const embedUrl = getYouTubeEmbedUrl(talk.metadata.videoUrl);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-16">
+    <div className="w-full max-w-4xl mx-auto pt-8 sm:pt-12 mb-16">
       <article className="flex flex-col items-start justify-center w-full">
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-ink md:text-5xl">
-          {talk.metadata.title}
-        </h1>
-        <div className="flex items-center mt-2">
-          <Image
-            alt="Jacob Reed"
-            height={24}
-            width={24}
-            src="/static/images/avatar.jpeg"
-            className="rounded-full"
-          />
-          <p className="ml-2 text-sm text-ink-soft">
-            {'Jacob Reed / '}
-            {format(parseISO(talk.metadata.date), 'MMMM dd, yyyy')}
-            {talk.metadata.event && ` • ${talk.metadata.event}`}
-          </p>
-        </div>
+        <ArticleHeader section="Talks" sectionHref="/talks" title={talk.metadata.title}>
+          <div className="flex items-center gap-2">
+            <Image
+              alt="Jacob Reed"
+              height={28}
+              width={28}
+              src="/static/images/avatar.jpeg"
+              className="rounded-full"
+            />
+            <p className="text-sm text-muted">
+              <span className="font-semibold text-ink-soft">Jacob Reed</span>
+              {' · '}
+              {format(parseISO(talk.metadata.date), 'MMMM d, yyyy')}
+              {talk.metadata.event && ` · ${talk.metadata.event}`}
+            </p>
+          </div>
+        </ArticleHeader>
         {embedUrl && (
-          <div className="w-full mt-8 aspect-video rounded-lg overflow-hidden">
+          <div className="w-full aspect-video rounded-xl overflow-hidden border border-line bg-sunken">
             <iframe
               src={embedUrl}
               title={talk.metadata.title}

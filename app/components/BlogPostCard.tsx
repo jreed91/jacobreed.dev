@@ -10,7 +10,7 @@ export default function BlogPostCard({ title, slug, summary, date, readingTime }
     )}>
         <div className="flex flex-col justify-between h-full p-6">
           <div className="flex flex-col md:flex-row justify-between">
-            <h4 className="text-lg md:text-lg font-medium w-full text-ink tracking-tight">
+            <h4 className="text-lg font-semibold w-full text-ink">
               {title}
             </h4>
             </div>

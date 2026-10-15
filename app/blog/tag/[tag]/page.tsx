@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BlogPost from 'app/components/BlogPost';
+import PageHeader from 'app/components/PageHeader';
 import TagList from 'app/components/TagList';
 import { getAllTags, getBlogPostsByTag } from 'app/db/blog';
 
@@ -60,12 +61,9 @@ export default async function TagPage({
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-ink">
-        {match.tag}
-      </h1>
-      <p className="mb-8 text-muted">
-        {posts.length} {posts.length === 1 ? 'post' : 'posts'}
-      </p>
+      <PageHeader eyebrow="blog / tag" title={match.tag}>
+        {posts.length} {posts.length === 1 ? 'post' : 'posts'} tagged {match.tag}.
+      </PageHeader>
       <div className="mb-8">
         <TagList tags={allTags.map((entry) => entry.tag)} activeTag={match.tag} />
       </div>

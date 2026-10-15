@@ -65,9 +65,17 @@ export default function Home() {
 
       <div className="max-w-4xl mx-auto w-full">
         <section className="pb-12 sm:pb-16">
-          <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-6 text-ink">
-            Writing
-          </h3>
+          <div className="flex items-baseline justify-between gap-4 mb-6">
+            <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-ink">
+              Writing
+            </h3>
+            <Link
+              href="/blog"
+              className="text-sm font-semibold text-muted hover:text-accent transition-colors"
+            >
+              All posts →
+            </Link>
+          </div>
           {!filteredBlogPosts.length ? (
             <p className="text-muted">No posts found.</p>
           ) : (

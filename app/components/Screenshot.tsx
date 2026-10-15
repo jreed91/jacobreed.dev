@@ -25,7 +25,7 @@ export default function Screenshot({
           alt={alt}
           width={width}
           height={height}
-          className="w-full max-w-sm h-auto rounded-xl border border-line"
+          className="w-full max-w-sm h-auto rounded-xl border border-line bg-sunken"
         />
       </div>
       {caption && (

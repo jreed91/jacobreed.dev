@@ -7,7 +7,7 @@ export default function TalkCard({ talk }: { talk: Talk }) {
     <Link href={`/talks/${encodeURIComponent(talk.slug)}`} className="group block w-full">
       <div className="w-full mb-4 card-surface p-5 sm:p-6">
         <div className="flex flex-col justify-between md:flex-row">
-          <h4 className="w-full mb-2 text-lg font-medium text-ink md:text-xl group-hover:text-accent transition-colors">
+          <h4 className="w-full mb-2 text-lg font-semibold text-ink md:text-xl group-hover:text-accent transition-colors">
             {talk.metadata.title}
           </h4>
           <div className="">
