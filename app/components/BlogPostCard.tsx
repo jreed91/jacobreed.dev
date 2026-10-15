@@ -5,7 +5,7 @@ import { parseISO, format } from 'date-fns';
 export default function BlogPostCard({ title, slug, summary, date, readingTime }: {title: string, slug: string, summary: string, date: string, readingTime: string}) {
 
   return (
-    <Link href={`/blog/${slug}`}  className={cn(
+    <Link href={`/blog/${encodeURIComponent(slug)}`} className={cn(
       'w-full md:w-1/3 card-surface'
     )}>
         <div className="flex flex-col justify-between h-full p-6">
