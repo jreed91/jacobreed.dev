@@ -1,3 +1,4 @@
+import PageHeader from '../components/PageHeader';
 import TalkCard from '../components/TalkCard';
 import { getTalks } from 'app/db/talks';
 
@@ -9,11 +10,11 @@ export default function Talks() {
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
-        Talks
-      </h1>
+      <PageHeader eyebrow="talks" title="Talks">
+        Talks I&apos;ve given on developer tooling and how teams ship software.
+      </PageHeader>
       {!talks.length ? (
-        <p className="text-gray-600 dark:text-gray-400">No talks found.</p>
+        <p className="text-muted">No talks found.</p>
       ) : (
         <div className="space-y-4">
           {talks.map((talk) => (

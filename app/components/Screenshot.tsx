@@ -25,11 +25,11 @@ export default function Screenshot({
           alt={alt}
           width={width}
           height={height}
-          className="w-full max-w-sm h-auto rounded-xl border border-gray-200 dark:border-gray-800"
+          className="w-full max-w-sm h-auto rounded-xl border border-line bg-sunken"
         />
       </div>
       {caption && (
-        <figcaption className="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+        <figcaption className="mt-3 text-center text-sm text-muted">
           {caption}
         </figcaption>
       )}

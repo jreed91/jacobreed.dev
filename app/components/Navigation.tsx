@@ -12,9 +12,9 @@ export function NavItem({ href, text }: { href: string; text: string }) {
       href={href}
       className={cn(
         isActive
-          ? "font-semibold text-gray-800 dark:text-gray-200"
-          : "font-normal text-gray-600 dark:text-gray-400",
-        "inline-block px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-all"
+          ? "font-semibold text-ink"
+          : "font-normal text-muted",
+        "inline-block px-3 py-2 rounded-lg hover:bg-line transition-all"
       )}
       aria-current={isActive ? "page" : undefined}
     >
@@ -25,13 +25,18 @@ export function NavItem({ href, text }: { href: string; text: string }) {
 
 export default function Navigation() {
   return (
-    <header className="w-full border-b border-gray-200 dark:border-gray-800">
+    <header className="w-full border-b border-line">
       <nav
         className="max-w-4xl mx-auto px-4 py-4 sm:py-6"
         aria-label="Main navigation"
       >
-        <div className="flex items-center gap-1">
-          <NavItem href="/" text="Home" />
+        <div className="flex flex-wrap items-center gap-1">
+          <NextLink
+            href="/"
+            className="mr-auto pr-2 font-display text-lg sm:text-xl font-semibold text-ink hover:text-accent transition-colors"
+          >
+            jacobreed<span className="text-accent">.dev</span>
+          </NextLink>
           <NavItem href="/blog" text="Blog" />
           <NavItem href="/projects" text="Projects" />
           <NavItem href="/talks" text="Talks" />
