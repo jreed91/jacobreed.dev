@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BlogPost from "./components/BlogPost";
-import HeroCanvas from "./components/HeroCanvas";
+import GummyCanvas from "./components/GummyCanvas";
+import GummyName from "./components/GummyName";
 import TypewriterText from "./components/TypewriterText";
 import { getBlogPosts } from "app/db/blog";
 
@@ -13,7 +14,7 @@ export default function Home() {
   return (
     <>
       <section className="relative py-14 sm:py-20 pb-20 sm:pb-28 min-h-[520px] flex items-center w-screen -ml-4 sm:-ml-6 lg:-ml-8 pl-4 sm:pl-6 lg:pl-8 pr-4 sm:pr-6 lg:pr-8 mb-8 sm:mb-12 overflow-hidden">
-        <HeroCanvas />
+        <GummyCanvas />
 
         {/* Subtle gradient wash behind text */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-50/40 via-transparent to-sky-50/30 dark:from-violet-950/20 dark:via-transparent dark:to-sky-950/20 pointer-events-none" />
@@ -26,7 +27,7 @@ export default function Home() {
           </p>
 
           <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-3 text-gray-900 dark:text-gray-100 hero-item-2">
-            My name is Jacob.
+            My name is <GummyName />.
           </h1>
 
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-600 dark:text-slate-300 mb-3 hero-item-3 min-h-[1.5em]">
