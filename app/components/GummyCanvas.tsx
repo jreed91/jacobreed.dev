@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { GUMMY_COLORS, tint } from "./gummy/colors";
+import { readGummyColors, tint } from "./gummy/colors";
 import { layoutWord } from "./gummy/wordLayout";
 import { Body, GummySim } from "./gummy/sim";
 
@@ -21,6 +21,7 @@ export default function GummyCanvas() {
     if (!canvas || !section || !word || !ctx) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const colors = readGummyColors(document.documentElement);
     let sim: GummySim;
     let dpr = 1;
     let wordLeft = 0;
@@ -91,7 +92,7 @@ export default function GummyCanvas() {
       const order = sim.bodies
         .map((body, i) => ({ body, i }))
         .sort((a, b) => Number(a.body.state !== "anchored") - Number(b.body.state !== "anchored"));
-      for (const { body, i } of order) drawGummy(ctx, body, GUMMY_COLORS[i % GUMMY_COLORS.length]);
+      for (const { body, i } of order) drawGummy(ctx, body, colors[i % colors.length]);
     };
 
     let frame = 0;
@@ -181,37 +182,63 @@ function drawGummy(ctx: CanvasRenderingContext2D, body: Body, color: string) {
     path.closePath();
   }
 
+  // Lighting scales with the letter's rest size; the box follows its stretch.
   const h = body.height;
-  const w = body.maxX - body.minX;
+  const { minX, minY, maxX, maxY } = body;
+  const w = maxX - minX;
 
+  // Body: translucent candy, lighter where light comes through the top, with
+  // a coloured shadow like light passing through gelatin.
   ctx.save();
-  const fill = ctx.createLinearGradient(0, body.minY, 0, body.maxY);
-  fill.addColorStop(0, tint(color, 0.35, 0.92));
-  fill.addColorStop(1, tint(color, 0, 0.92));
+  const fill = ctx.createLinearGradient(0, minY, 0, maxY);
+  fill.addColorStop(0, tint(color, 0.3, 0.86));
+  fill.addColorStop(0.55, tint(color, 0, 0.84));
+  fill.addColorStop(1, tint(color, -0.12, 0.9));
   ctx.fillStyle = fill;
-  ctx.shadowColor = tint(color, -0.2, 0.35);
-  ctx.shadowBlur = h * 0.18;
-  ctx.shadowOffsetY = h * 0.07;
+  ctx.shadowColor = tint(color, 0, 0.45);
+  ctx.shadowBlur = h * 0.22;
+  ctx.shadowOffsetY = h * 0.1;
   ctx.fill(path, "evenodd");
   ctx.restore();
 
-  // Glossy highlight and a soft inner rim, clipped to the letter.
   ctx.save();
   ctx.clip(path, "evenodd");
-  const gx = body.minX + w * 0.3;
-  const gy = body.minY + h * 0.18;
-  const gloss = ctx.createRadialGradient(gx, gy, 0, gx, gy, h * 0.55);
-  gloss.addColorStop(0, "rgba(255, 255, 255, 0.6)");
-  gloss.addColorStop(0.45, "rgba(255, 255, 255, 0.12)");
-  gloss.addColorStop(1, "rgba(255, 255, 255, 0)");
-  ctx.fillStyle = gloss;
-  ctx.fillRect(body.minX, body.minY, w, h);
-  ctx.lineWidth = Math.max(2, h * 0.06);
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+
+  // Thicker candy at the edges reads darker and more saturated.
+  ctx.lineWidth = h * 0.1;
+  ctx.strokeStyle = tint(color, -0.35, 0.55);
+  ctx.shadowColor = tint(color, -0.35, 0.8);
+  ctx.shadowBlur = h * 0.12;
   ctx.stroke(path);
+  ctx.shadowColor = "transparent";
+
+  // Light catching the inside of the top-left edge.
+  ctx.translate(h * 0.035, h * 0.045);
+  ctx.lineWidth = h * 0.05;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+  ctx.stroke(path);
+  ctx.translate(-h * 0.035, -h * 0.045);
+
+  // A soft glow through the middle and a crisp specular highlight.
+  const cx = minX + w * 0.5;
+  const cy = minY + (maxY - minY) * 0.55;
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, h * 0.6);
+  glow.addColorStop(0, tint(color, 0.45, 0.35));
+  glow.addColorStop(1, tint(color, 0.45, 0));
+  ctx.fillStyle = glow;
+  ctx.fillRect(minX, minY, w, maxY - minY);
+
+  const sx = minX + w * 0.28;
+  const sy = minY + h * 0.16;
+  const spec = ctx.createRadialGradient(sx, sy, 0, sx, sy, h * 0.22);
+  spec.addColorStop(0, "rgba(255, 255, 255, 0.85)");
+  spec.addColorStop(0.35, "rgba(255, 255, 255, 0.35)");
+  spec.addColorStop(1, "rgba(255, 255, 255, 0)");
+  ctx.fillStyle = spec;
+  ctx.fillRect(minX, minY, w, maxY - minY);
   ctx.restore();
 
   ctx.lineWidth = 1;
-  ctx.strokeStyle = tint(color, -0.25, 0.45);
+  ctx.strokeStyle = tint(color, -0.4, 0.5);
   ctx.stroke(path);
 }

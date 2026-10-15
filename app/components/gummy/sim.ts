@@ -25,8 +25,12 @@ export interface Body {
   linkRest: Float64Array;
   // Outline particle indices, one array per contour, in drawing order.
   contours: number[][];
+  // Signed rest area of each contour, kept roughly constant so squashing bulges.
+  areas: Float64Array;
   state: BodyState;
   timer: number;
+  // Seconds of extra damping left after a release, so the snap back stays tidy.
+  settle: number;
   phase: number;
   height: number;
   minX: number;
@@ -42,6 +46,8 @@ export interface LayoutGlyph {
 
 interface Grab {
   body: number;
+  // Per-particle grab weight, so the home spring lets go of the part being pulled.
+  held: Float64Array;
   indices: number[];
   weights: number[];
   offX: number[];
@@ -54,21 +60,28 @@ const SUBSTEP = 1 / 120;
 const MAX_SUBSTEPS = 4;
 const ITERATIONS = 2;
 const GRAVITY = 2600;
-const LINK_K = 0.6;
-const SHAPE_K = 0.12;
-const SHAPE_K_FREE = 0.18;
-const ANCHOR_K = 0.035;
-const RETURN_K = 0.06;
-const GRAB_K = 0.35;
-const DAMP_ANCHORED = 0.985;
+const LINK_K = 0.22;
+const SHAPE_K = 0.035;
+const SHAPE_K_FREE = 0.07;
+const SHAPE_K_GRABBED = 0.006;
+const AREA_K = 0.6;
+const ANCHOR_K = 0.02;
+const ANCHOR_K_HOLD = 0.08; // while the letter is being pulled
+const SETTLE_TIME = 0.2;
+const SETTLE_DAMP = 0.95;
+const SETTLE_SHAPE_K = 0.1;
+const RETURN_K = 0.05;
+const GRAB_K = 0.5;
+const GRAB_REACH = 0.32; // in heights of the tallest letter
+const DAMP_ANCHORED = 0.994;
 const DAMP_FREE = 0.997;
 const RESTITUTION = 0.45;
 const FRICTION = 0.7;
-const POP_DISTANCE = 1.1; // in heights of the tallest letter
+const POP_DISTANCE = 3; // in heights of the tallest letter
 const RETURN_DELAY = 2.8; // seconds a loose letter lingers before hopping home
 const HOP_SPEED = 900;
 const BREATH = 0.018;
-const MAX_STRETCH = 2.5;
+const MAX_STRETCH = 10;
 
 export class GummySim {
   bodies: Body[] = [];
@@ -110,8 +123,17 @@ export class GummySim {
     const b = this.hitTest(x, y);
     if (b < 0) return false;
     const body = this.bodies[b];
-    const reach = body.height * 0.45;
-    const grab: Grab = { body: b, indices: [], weights: [], offX: [], offY: [], startX: x, startY: y };
+    const reach = this.unit * GRAB_REACH;
+    const grab: Grab = {
+      body: b,
+      held: new Float64Array(body.x.length),
+      indices: [],
+      weights: [],
+      offX: [],
+      offY: [],
+      startX: x,
+      startY: y,
+    };
     for (let i = 0; i < body.x.length; i++) {
       const dx = body.x[i] - x;
       const dy = body.y[i] - y;
@@ -119,6 +141,7 @@ export class GummySim {
       if (d < reach) {
         grab.indices.push(i);
         grab.weights.push(1 - d / reach);
+        grab.held[i] = 1 - d / reach;
         grab.offX.push(dx);
         grab.offY.push(dy);
       }
@@ -155,6 +178,7 @@ export class GummySim {
     if (!this.grab) return;
     const body = this.bodies[this.grab.body];
     if (body.state === "loose") body.timer = 0;
+    body.settle = SETTLE_TIME;
     this.grab = null;
   }
 
@@ -191,7 +215,11 @@ export class GummySim {
 
     for (let b = 0; b < this.bodies.length; b++) {
       const body = this.bodies[b];
-      const damp = body.state === "anchored" ? DAMP_ANCHORED : DAMP_FREE;
+      let damp = body.state === "anchored" ? DAMP_ANCHORED : DAMP_FREE;
+      if (body.settle > 0) {
+        body.settle -= h;
+        damp = SETTLE_DAMP;
+      }
       const gy = body.state === "loose" ? g : 0;
       for (let i = 0; i < body.x.length; i++) {
         const vx = (body.x[i] - body.px[i]) * damp;
@@ -205,13 +233,20 @@ export class GummySim {
 
     if (this.grab) this.applyGrab();
 
+    const held = this.grab ? this.bodies[this.grab.body] : null;
     for (const body of this.bodies) {
-      for (let it = 0; it < ITERATIONS; it++) solveLinks(body);
-      matchShape(body, body.state === "anchored" ? SHAPE_K : SHAPE_K_FREE);
+      for (let it = 0; it < ITERATIONS; it++) {
+        solveLinks(body);
+        keepArea(body, AREA_K);
+      }
+      let k = body.state === "anchored" ? SHAPE_K : SHAPE_K_FREE;
+      if (body === held) k = SHAPE_K_GRABBED;
+      else if (body.settle > 0) k = SETTLE_SHAPE_K;
+      matchShape(body, k);
       this.applyHome(body, h);
     }
 
-    this.collideBodies();
+    this.collideBodies(held);
     for (const body of this.bodies) {
       if (body.state !== "anchored") this.collideBounds(body);
       updateBounds(body);
@@ -271,23 +306,26 @@ export class GummySim {
     const sx = 1 - breath * 0.6;
     const sy = 1 + breath;
     const base = body.homeY + body.height * 0.5;
+    const held = grabbed ? this.grab?.held : null;
     for (let i = 0; i < body.x.length; i++) {
       const tx = body.homeX + body.qx[i] * sx;
       // Breathe from the baseline so letters do not float.
       const ty = base + (body.homeY + body.qy[i] - base) * sy;
-      body.x[i] += (tx - body.x[i]) * k;
-      body.y[i] += (ty - body.y[i]) * k;
+      const ki = held ? ANCHOR_K_HOLD * (1 - held[i]) : k;
+      body.x[i] += (tx - body.x[i]) * ki;
+      body.y[i] += (ty - body.y[i]) * ki;
     }
   }
 
-  private collideBodies(): void {
+  private collideBodies(held: Body | null): void {
     const r2 = this.radius * 2;
     const r2sq = r2 * r2;
     for (let a = 0; a < this.bodies.length; a++) {
       const A = this.bodies[a];
       for (let b = a + 1; b < this.bodies.length; b++) {
         const B = this.bodies[b];
-        if (A.state === "anchored" && B.state === "anchored") continue;
+        // Letters at home overlap a touch; only collide when one is moving.
+        if (A.state === "anchored" && B.state === "anchored" && A !== held && B !== held) continue;
         if (A.maxX + r2 < B.minX || B.maxX + r2 < A.minX || A.maxY + r2 < B.minY || B.maxY + r2 < A.minY) continue;
         for (let i = 0; i < A.x.length; i++) {
           const ax = A.x[i];
@@ -408,8 +446,10 @@ function buildBody(glyph: LayoutGlyph, spacing: number, index: number): Body {
     links: Int32Array.from(links),
     linkRest: Float64Array.from(rest),
     contours,
+    areas: Float64Array.from(contours, (ids) => contourArea(xs, ys, ids)),
     state: "anchored",
     timer: 0,
+    settle: 0,
     phase: index * 1.3,
     height: maxY - minY,
     minX,
@@ -442,6 +482,40 @@ function resample(contour: [number, number][], spacing: number): [number, number
     out.push([ax + (bx - ax) * t, ay + (by - ay) * t]);
   }
   return out;
+}
+
+function contourArea(x: ArrayLike<number>, y: ArrayLike<number>, ids: number[]): number {
+  let a = 0;
+  for (let k = 0, m = ids.length - 1; k < ids.length; m = k++) {
+    a += x[ids[m]] * y[ids[k]] - x[ids[k]] * y[ids[m]];
+  }
+  return a / 2;
+}
+
+/** Pushes each outline in or out along its normals to restore its rest area. */
+function keepArea(body: Body, k: number): void {
+  const { x, y } = body;
+  for (let c = 0; c < body.contours.length; c++) {
+    const ids = body.contours[c];
+    const n = ids.length;
+    const diff = body.areas[c] - contourArea(x, y, ids);
+    let norm = 0;
+    const gx = new Float64Array(n);
+    const gy = new Float64Array(n);
+    for (let k2 = 0; k2 < n; k2++) {
+      const prev = ids[(k2 + n - 1) % n];
+      const next = ids[(k2 + 1) % n];
+      gx[k2] = (y[next] - y[prev]) / 2;
+      gy[k2] = (x[prev] - x[next]) / 2;
+      norm += gx[k2] * gx[k2] + gy[k2] * gy[k2];
+    }
+    if (norm === 0) continue;
+    const lambda = (diff / norm) * k;
+    for (let k2 = 0; k2 < n; k2++) {
+      x[ids[k2]] += gx[k2] * lambda;
+      y[ids[k2]] += gy[k2] * lambda;
+    }
+  }
 }
 
 function solveLinks(body: Body): void {

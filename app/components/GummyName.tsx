@@ -1,5 +1,5 @@
 import { ADVANCE, ASCENT, DESCENT, GLYPHS, UNITS_PER_EM } from "./gummy/glyphs";
-import { GUMMY_COLORS, tint } from "./gummy/colors";
+import { GUMMY_CANDY } from "./gummy/colors";
 import { WORD_HEIGHT_EM } from "./gummy/wordLayout";
 
 // The gummy word is drawn a bit larger than the surrounding heading text.
@@ -17,7 +17,7 @@ export default function GummyName() {
         data-gummy-name
         aria-hidden="true"
         viewBox={`0 ${-ASCENT} ${ADVANCE} ${ASCENT - DESCENT}`}
-        className="inline-block overflow-visible drop-shadow-[0_6px_10px_rgba(77,124,255,0.25)]"
+        className="inline-block overflow-visible drop-shadow-[0_6px_10px_color-mix(in_srgb,var(--candy-blueberry)_25%,transparent)]"
         style={{
           height: `${WORD_HEIGHT_EM * SCALE}em`,
           width: `${(ADVANCE / UNITS_PER_EM) * SCALE}em`,
@@ -25,10 +25,10 @@ export default function GummyName() {
         }}
       >
         <defs>
-          {GUMMY_COLORS.map((color, i) => (
-            <linearGradient key={color} id={`gummy-${i}`} x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0" stopColor={tint(color, 0.35)} />
-              <stop offset="1" stopColor={color} />
+          {GUMMY_CANDY.map((name, i) => (
+            <linearGradient key={name} id={`gummy-${i}`} x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" style={{ stopColor: `color-mix(in srgb, var(--candy-${name}) 70%, white)` }} />
+              <stop offset="1" style={{ stopColor: `var(--candy-${name})` }} />
             </linearGradient>
           ))}
         </defs>
