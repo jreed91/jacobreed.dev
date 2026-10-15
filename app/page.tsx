@@ -17,30 +17,30 @@ export default function Home() {
         <GummyCanvas />
 
         {/* Subtle gradient wash behind text */}
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-50/40 via-transparent to-sky-50/30 dark:from-violet-950/20 dark:via-transparent dark:to-sky-950/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-accent-soft via-transparent to-transparent pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto w-full">
           {/* Code-aesthetic label */}
-          <p className="font-mono text-xs sm:text-sm text-slate-400 dark:text-slate-500 mb-4 hero-item-1">
-            <span className="text-violet-400 dark:text-violet-500">{"// "}</span>
+          <p className="font-mono text-xs sm:text-sm text-muted mb-4 hero-item-1">
+            <span className="text-accent">{"// "}</span>
             jacobreed.dev
           </p>
 
-          <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-3 text-gray-900 dark:text-gray-100 hero-item-2">
+          <h1 className="font-bold text-4xl sm:text-5xl lg:text-6xl mb-3 text-ink hero-item-2">
             My name is <GummyName />.
           </h1>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-600 dark:text-slate-300 mb-3 hero-item-3 min-h-[1.5em]">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-ink-soft mb-3 hero-item-3 min-h-[1.5em]">
             <TypewriterText />
           </h2>
 
-          <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg mb-8 hero-item-4">
+          <p className="text-muted text-base sm:text-lg mb-8 hero-item-4">
             at{" "}
             <a
               href="https://www.leantechniques.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors underline decoration-gray-300 dark:decoration-gray-600 hover:decoration-violet-400 underline-offset-2"
+              className="text-ink-soft hover:text-accent transition-colors underline decoration-accent decoration-2 underline-offset-4"
             >
               Lean TECHniques
             </a>
@@ -49,14 +49,14 @@ export default function Home() {
           <div className="flex flex-wrap gap-3 hero-item-5">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-white transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 btn-primary text-sm"
             >
               Read the Blog
               <span aria-hidden="true">→</span>
             </Link>
             <Link
               href="/talks"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-line text-ink-soft text-sm font-medium hover:border-line-strong hover:text-ink transition-colors"
             >
               View Talks
             </Link>
@@ -66,11 +66,19 @@ export default function Home() {
 
       <div className="max-w-4xl mx-auto w-full">
         <section className="pb-12 sm:pb-16">
-          <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl mb-6 text-black dark:text-white">
-            Writing
-          </h3>
+          <div className="flex items-baseline justify-between gap-4 mb-6">
+            <h3 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-ink">
+              Writing
+            </h3>
+            <Link
+              href="/blog"
+              className="text-sm font-semibold text-muted hover:text-accent transition-colors"
+            >
+              All posts →
+            </Link>
+          </div>
           {!filteredBlogPosts.length ? (
-            <p className="text-gray-600 dark:text-gray-400">No posts found.</p>
+            <p className="text-muted">No posts found.</p>
           ) : (
             <div className="space-y-4">
               {filteredBlogPosts.map((post) => (
