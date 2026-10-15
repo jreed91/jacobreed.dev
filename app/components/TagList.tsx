@@ -24,7 +24,7 @@ export default function TagList({
             <Link
               href={`/blog/tag/${slug}`}
               aria-current={isActive ? 'page' : undefined}
-              className={isActive ? 'pill-candy pill-candy-active' : 'pill-candy'}
+              className={isActive ? 'tag-pill tag-pill-active' : 'tag-pill'}
               style={candyStyle(tag)}
             >
               {tag}

@@ -44,7 +44,7 @@ export default function BlogLayout({ blog }: { blog: Blog }) {
       <div className="w-full mt-6">
         <TableOfContents headings={blog.headings} />
       </div>
-      <div className="w-full mt-4 prose prose-candy max-w-none">
+      <div className="w-full mt-4 prose prose-brand max-w-none">
         <CustomMDX source={blog.content} />
       </div>
       <div className="text-sm text-ink-soft">

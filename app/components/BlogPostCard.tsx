@@ -6,7 +6,7 @@ export default function BlogPostCard({ title, slug, summary, date, readingTime }
 
   return (
     <Link href={`/blog/${slug}`}  className={cn(
-      'w-full md:w-1/3 card-candy'
+      'w-full md:w-1/3 card-surface'
     )}>
         <div className="flex flex-col justify-between h-full p-6">
           <div className="flex flex-col md:flex-row justify-between">

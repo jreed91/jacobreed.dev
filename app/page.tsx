@@ -48,7 +48,7 @@ export default function Home() {
           <div className="flex flex-wrap gap-3 hero-item-5">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 btn-candy text-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 btn-primary text-sm"
             >
               Read the Blog
               <span aria-hidden="true">→</span>

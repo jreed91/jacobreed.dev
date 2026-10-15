@@ -43,7 +43,7 @@ export default function ProjectLayout({ project }: { project: Project }) {
             {'View on GitHub'}
           </a>
         )}
-        <div className="w-full mt-8 prose prose-candy max-w-none">
+        <div className="w-full mt-8 prose prose-brand max-w-none">
           <CustomMDX source={project.content} components={{ Screenshot }} />
         </div>
       </article>

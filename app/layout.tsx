@@ -1,22 +1,23 @@
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next";
-import { Fredoka, JetBrains_Mono, Nunito } from "next/font/google";
+import { Figtree, Fredoka, JetBrains_Mono } from "next/font/google";
 import Footer from "./components/Footer";
 import Navigation from "./components/Navigation";
 import { ThemeProvider } from "./components/ThemeProvider";
 import './global.css';
 
+// Fredoka is reserved for the name: the wordmark and the gummy hero letters.
 const fredoka = Fredoka({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['600', '700'],
   variable: '--font-fredoka',
   display: 'swap',
 });
 
-const nunito = Nunito({
+const figtree = Figtree({
   subsets: ['latin'],
-  variable: '--font-nunito',
+  variable: '--font-figtree',
   display: 'swap',
 });
 
@@ -73,7 +74,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fredoka.variable} ${nunito.variable} ${jetbrainsMono.variable}`}
+      className={`${fredoka.variable} ${figtree.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col">

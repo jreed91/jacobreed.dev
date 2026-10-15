@@ -41,7 +41,7 @@ export default function TalkLayout({
           </div>
         )}
         {talk.content && (
-          <div className="w-full mt-8 prose prose-candy max-w-none">
+          <div className="w-full mt-8 prose prose-brand max-w-none">
             <CustomMDX source={talk.content} />
           </div>
         )}

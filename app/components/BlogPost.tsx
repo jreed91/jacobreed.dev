@@ -7,7 +7,7 @@ import { candyStyle } from 'app/utils/candy';
 export default function BlogPost ({ blog }: { blog: Blog}) {
   return (
     <Link href={`/blog/${encodeURIComponent(blog.slug)}`} className="group block w-full">
-        <div className="w-full mb-4 card-candy p-5 sm:p-6">
+        <div className="w-full mb-4 card-surface p-5 sm:p-6">
           <div className="flex flex-col justify-between md:flex-row">
             <h4 className="w-full mb-2 text-lg font-medium text-ink md:text-xl group-hover:text-accent transition-colors">
               {blog.metadata.title}
@@ -39,7 +39,7 @@ export default function BlogPost ({ blog }: { blog: Blog}) {
             // Plain pills rather than links: this card is already one big anchor.
             <ul className="flex flex-wrap gap-2 mt-3" aria-label="Tags">
               {blog.metadata.tags.map((tag) => (
-                <li key={tag} className="pill-candy" style={candyStyle(tag)}>
+                <li key={tag} className="tag-pill" style={candyStyle(tag)}>
                   {tag}
                 </li>
               ))}

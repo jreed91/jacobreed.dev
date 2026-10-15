@@ -37,7 +37,7 @@ export function renderOgCard({
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
-          background: 'linear-gradient(135deg, #1a1326 0%, #2a1d45 60%, #3b1f5e 100%)',
+          background: 'linear-gradient(135deg, #15121c 0%, #221a38 100%)',
           fontFamily: 'sans-serif',
         }}
       >
@@ -50,8 +50,7 @@ export function renderOgCard({
               width: 56,
               height: 56,
               borderRadius: 14,
-              background: '#7c2df0',
-              boxShadow: '0 4px 0 #5a1cc2',
+              background: '#6339d6',
               color: 'white',
               fontSize: 26,
               fontWeight: 700,
@@ -59,13 +58,13 @@ export function renderOgCard({
           >
             JR
           </div>
-          <div style={{ display: 'flex', color: '#ffc93c', fontSize: 28 }}>{eyebrow}</div>
+          <div style={{ display: 'flex', color: '#c4adff', fontSize: 28 }}>{eyebrow}</div>
         </div>
 
         <div
           style={{
             display: 'flex',
-            color: '#f4eefb',
+            color: '#f1eef7',
             fontSize: titleSize(title),
             fontWeight: 700,
             lineHeight: 1.15,
@@ -80,7 +79,7 @@ export function renderOgCard({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            color: '#a196b2',
+            color: '#9d97ad',
             fontSize: 26,
           }}
         >

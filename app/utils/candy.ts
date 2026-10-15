@@ -17,7 +17,7 @@ export function candyFor(label: string): Candy {
   return CANDY[hash % CANDY.length];
 }
 
-/** Inline style that feeds a `.pill-candy` its color. */
+/** Inline style that feeds a `.tag-pill` its color. */
 export function candyStyle(label: string): CSSProperties {
   return { '--c': `var(--candy-${candyFor(label)})` } as CSSProperties;
 }
