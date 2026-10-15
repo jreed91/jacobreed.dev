@@ -3,12 +3,12 @@ import { getProjects, techTags } from './projects';
 
 describe('getProjects', () => {
   it('loads every project in content/projects', () => {
-    expect(getProjects().length).toBe(4);
+    expect(getProjects().length).toBe(5);
   });
 
   it('gives each project a slug taken from its filename', () => {
     const slugs = getProjects().map((p) => p.slug).sort();
-    expect(slugs).toEqual(['agentbar', 'groceries', 'hinterland', 'stride']);
+    expect(slugs).toEqual(['agentbar', 'groceries', 'hinterland', 'pr-bar', 'stride']);
   });
 
   it('parses the frontmatter every project page renders', () => {
