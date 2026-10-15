@@ -60,10 +60,10 @@ export default async function TagPage({
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+      <h1 className="mb-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-ink">
         {match.tag}
       </h1>
-      <p className="mb-8 text-gray-600 dark:text-gray-400">
+      <p className="mb-8 text-muted">
         {posts.length} {posts.length === 1 ? 'post' : 'posts'}
       </p>
       <div className="mb-8">

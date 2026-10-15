@@ -9,11 +9,11 @@ export default function Talks() {
 
   return (
     <div className="max-w-4xl mx-auto w-full py-8 sm:py-12">
-      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white">
+      <h1 className="mb-8 text-2xl sm:text-3xl lg:text-4xl font-bold text-ink">
         Talks
       </h1>
       {!talks.length ? (
-        <p className="text-gray-600 dark:text-gray-400">No talks found.</p>
+        <p className="text-muted">No talks found.</p>
       ) : (
         <div className="space-y-4">
           {talks.map((talk) => (

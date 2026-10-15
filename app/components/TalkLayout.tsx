@@ -12,7 +12,7 @@ export default function TalkLayout({
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
+        <h1 className="mb-4 text-3xl font-bold tracking-tight text-ink md:text-5xl">
           {talk.metadata.title}
         </h1>
         <div className="flex items-center mt-2">
@@ -23,7 +23,7 @@ export default function TalkLayout({
             src="/static/images/avatar.jpeg"
             className="rounded-full"
           />
-          <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <p className="ml-2 text-sm text-ink-soft">
             {'Jacob Reed / '}
             {format(parseISO(talk.metadata.date), 'MMMM dd, yyyy')}
             {talk.metadata.event && ` • ${talk.metadata.event}`}
@@ -41,7 +41,7 @@ export default function TalkLayout({
           </div>
         )}
         {talk.content && (
-          <div className="w-full mt-8 prose prose-gray dark:prose-invert max-w-none">
+          <div className="w-full mt-8 prose prose-candy max-w-none">
             <CustomMDX source={talk.content} />
           </div>
         )}

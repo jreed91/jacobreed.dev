@@ -4,10 +4,10 @@ import { parseISO, format } from 'date-fns';
 
 export default function TalkCard({ talk }: { talk: Talk }) {
   return (
-    <Link href={`/talks/${talk.slug}`} className="w-full">
-      <div className="w-full mb-8 transform hover:scale-[1.01] transition-all">
+    <Link href={`/talks/${talk.slug}`} className="group block w-full">
+      <div className="w-full mb-4 card-candy p-5 sm:p-6">
         <div className="flex flex-col justify-between md:flex-row">
-          <h4 className="w-full mb-2 text-lg font-medium text-gray-900 md:text-xl dark:text-gray-100">
+          <h4 className="w-full mb-2 text-lg font-medium text-ink md:text-xl group-hover:text-accent transition-colors">
             {talk.metadata.title}
           </h4>
           <div className="">
@@ -15,7 +15,7 @@ export default function TalkCard({ talk }: { talk: Talk }) {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="h-6 w-6 ml-1"
+              className="hidden md:block h-6 w-6 ml-1 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all"
             >
               <path
                 stroke="currentColor"
@@ -27,7 +27,7 @@ export default function TalkCard({ talk }: { talk: Talk }) {
             </svg>
           </div>
         </div>
-        <div className="flex items-center gap-2 mb-2 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-2 mb-2 text-sm text-muted">
           <span>{format(parseISO(talk.metadata.date), 'MMMM dd, yyyy')}</span>
           {talk.metadata.event && (
             <>
@@ -36,7 +36,7 @@ export default function TalkCard({ talk }: { talk: Talk }) {
             </>
           )}
         </div>
-        <p className="text-gray-600 dark:text-gray-400">{talk.metadata.summary}</p>
+        <p className="text-muted">{talk.metadata.summary}</p>
       </div>
     </Link>
   );

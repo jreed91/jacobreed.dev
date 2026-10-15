@@ -254,6 +254,8 @@ import BlogPostCard from '@/app/components/BlogPostCard';
 - Follow mobile-first responsive design
 - Leverage custom typography plugin for MDX content
 - Support both light and dark mode color schemes
+- **Brand ("Candy Shop")**: color and font tokens live at the top of `app/global.css`. Use the semantic utilities (`bg-paper`, `bg-surface`, `bg-sunken`, `text-ink`, `text-ink-soft`, `text-muted`, `border-line`, `text-accent`...) instead of raw `gray-*`/`dark:` pairs; they switch with the `.dark` class on their own. Candy colors (`cherry`, `tangerine`, `lemon`, `lime`, `blueberry`, `grape`) are for tags and playful accents; `candyStyle()` in `app/utils/candy.ts` gives a tag a stable color for `.pill-candy`. Shared pieces: `.btn-candy`, `.card-candy`, `.prose-candy`.
+- **Fonts**: Fredoka (`font-display`, all h1–h4), Nunito (`font-sans`, body), JetBrains Mono (`font-mono`), loaded with `next/font/google` in `app/layout.tsx`.
 - Custom animation: `animate-blob` with `.animation-delay-2000` and `.animation-delay-4000` helper classes defined in `global.css`
 
 ### API Routes

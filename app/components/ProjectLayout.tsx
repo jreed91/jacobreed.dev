@@ -8,14 +8,14 @@ export default function ProjectLayout({ project }: { project: Project }) {
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
+        <h1 className="mb-4 text-3xl font-bold tracking-tight text-ink md:text-5xl">
           {project.metadata.title}
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
+        <p className="text-lg text-muted">
           {project.metadata.summary}
         </p>
         {(project.metadata.platform || project.metadata.role) && (
-          <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-3 text-sm text-muted">
             {[project.metadata.platform, project.metadata.role]
               .filter(Boolean)
               .join(' · ')}
@@ -26,7 +26,7 @@ export default function ProjectLayout({ project }: { project: Project }) {
             {tech.map((tag) => (
               <li
                 key={tag}
-                className="px-2 py-1 text-xs rounded-md bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                className="px-2 py-1 text-xs rounded-md bg-sunken text-ink-soft"
               >
                 {tag}
               </li>
@@ -38,12 +38,12 @@ export default function ProjectLayout({ project }: { project: Project }) {
             href={project.metadata.repo}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 text-sm text-gray-700 underline dark:text-gray-300"
+            className="mt-4 text-sm text-ink-soft underline decoration-accent decoration-2 underline-offset-4 hover:text-accent"
           >
             {'View on GitHub'}
           </a>
         )}
-        <div className="w-full mt-8 prose prose-gray dark:prose-invert max-w-none">
+        <div className="w-full mt-8 prose prose-candy max-w-none">
           <CustomMDX source={project.content} components={{ Screenshot }} />
         </div>
       </article>

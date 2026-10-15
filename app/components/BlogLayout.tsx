@@ -18,7 +18,7 @@ export default function BlogLayout({ blog }: { blog: Blog }) {
   return (
     <div className="w-full max-w-4xl mx-auto mb-16">
       <article className="flex flex-col items-start justify-center w-full">
-      <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
+      <h1 className="mb-4 text-3xl font-bold tracking-tight text-ink md:text-5xl">
         {blog.metadata.title}
       </h1>
       <div className="flex items-center mt-2">
@@ -29,7 +29,7 @@ export default function BlogLayout({ blog }: { blog: Blog }) {
           src="/static/images/avatar.jpeg"
           className="rounded-full"
         />
-        <p className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+        <p className="ml-2 text-sm text-ink-soft">
           {"Jacob Reed / "}
           {format(parseISO(blog.metadata.date), "MMMM dd, yyyy")}
           {" • "}
@@ -44,10 +44,10 @@ export default function BlogLayout({ blog }: { blog: Blog }) {
       <div className="w-full mt-6">
         <TableOfContents headings={blog.headings} />
       </div>
-      <div className="w-full mt-4 prose prose-gray dark:prose-invert max-w-none">
+      <div className="w-full mt-4 prose prose-candy max-w-none">
         <CustomMDX source={blog.content} />
       </div>
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="text-sm text-ink-soft">
         <a
           href={discussUrl(blog.slug)}
           target="_blank"
