@@ -23,7 +23,14 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split('T')[0],
   }));
 
-  const routes = ['', '/blog', '/projects', '/talks'].map((route) => ({
+  const routes = [
+    '',
+    '/blog',
+    '/projects',
+    '/talks',
+    '/stride/privacy',
+    '/stride/support',
+  ].map((route) => ({
     url: `https://jacobreed.dev${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }));
