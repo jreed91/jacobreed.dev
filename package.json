@@ -17,25 +17,25 @@
     "@vercel/speed-insights": "^2.0.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.4.0",
-    "next": "^16.4.0",
+    "next": "^16.4.2",
     "next-mdx-remote": "^6.0.0",
     "next-themes": "^0.4.6",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "reading-time": "^1.5.0",
     "sharp": "^0.35.5",
-    "sugar-high": "^2.6.0",
+    "sugar-high": "^2.6.1",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
-    "oxlint": "^1.87.0",
-    "postcss": "^8.5.29",
+    "oxlint": "^1.88.0",
+    "postcss": "^8.5.31",
     "prettier": "^3.9.10",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.4"
+    "vitest": "^5.0.5"
   },
   "overrides": {
     "postcss-selector-parser": "^7.1.6"
