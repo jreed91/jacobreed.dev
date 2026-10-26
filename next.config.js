@@ -18,6 +18,17 @@ module.exports = {
       }
     ];
   },
+  async rewrites() {
+    return [
+      // The Stride landing page is a standalone page in the app's own
+      // branding, outside the site layout. /stride/privacy and /stride/support
+      // stay App Router pages.
+      {
+        source: '/stride',
+        destination: '/stride/index.html'
+      }
+    ];
+  },
   async headers() {
     return [
       {

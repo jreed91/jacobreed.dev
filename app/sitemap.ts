@@ -28,6 +28,7 @@ export default async function sitemap() {
     '/blog',
     '/projects',
     '/talks',
+    '/stride',
     '/stride/privacy',
     '/stride/support',
   ].map((route) => ({
