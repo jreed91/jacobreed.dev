@@ -24,7 +24,7 @@
     "react-dom": "^19.3.1",
     "reading-time": "^1.5.0",
     "sharp": "^0.35.5",
-    "sugar-high": "^2.6.1",
+    "sugar-high": "^2.6.2",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
