@@ -25,6 +25,7 @@ describe('sitemap', () => {
     expect(urls).toContain('https://jacobreed.dev');
     expect(urls).toContain('https://jacobreed.dev/blog');
     expect(urls).toContain('https://jacobreed.dev/projects');
+    expect(urls).toContain('https://jacobreed.dev/stride');
     expect(urls).toContain('https://jacobreed.dev/stride/privacy');
     expect(urls).toContain('https://jacobreed.dev/stride/support');
   });
