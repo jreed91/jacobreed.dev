@@ -199,6 +199,28 @@
   .points li::before { content: ""; width: 10px; height: 10px; margin: 8px 0 0 6px; border-radius: 50%; background: var(--route); }
   .points strong { color: var(--text); font-weight: 650; }
 
+  /* AI coach: the one section on a hero ground, because it's the headline feature. */
+  .coach { padding-top: 40px; }
+  .coach .band {
+    position: relative; overflow: hidden;
+    border: 1px solid var(--stroke); border-radius: 26px;
+    background:
+      radial-gradient(ellipse 60% 70% at 15% 30%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%),
+      linear-gradient(var(--hero-top), var(--hero-bottom));
+    padding: 64px 56px;
+  }
+  .coach .band > .map { position: absolute; inset: 0; pointer-events: none; mask-image: radial-gradient(ellipse at 20% 40%, #000, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at 20% 40%, #000, transparent 75%); }
+  .coach .row { position: relative; grid-template-columns: 0.8fr 1.2fr; }
+  .coach h2 { font-size: clamp(34px, 4.4vw, 52px); margin-top: 16px; }
+  .coach .copy > p { margin-top: 18px; font-size: 19px; color: var(--text-soft); max-width: 46ch; }
+  .abilities { list-style: none; padding: 0; margin: 32px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; }
+  .abilities li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; }
+  .abilities .tile { width: 40px; height: 40px; }
+  .abilities .tile svg { width: 20px; height: 20px; }
+  .abilities strong { display: block; color: var(--text); font-weight: 700; font-size: 17px; }
+  .abilities span { color: var(--text-soft); font-size: 15.5px; line-height: 1.5; }
+  .coach .copy > p.note { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--stroke); font-size: 15px; color: var(--text-soft); max-width: 62ch; }
+
   /* More features */
   .more h2 { font-size: clamp(32px, 4vw, 46px); max-width: 18ch; margin-top: 16px; }
   .grid { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -244,6 +266,9 @@
     .hero { padding-top: 104px; }
     .hero .wrap, .row { grid-template-columns: 1fr; gap: 40px; }
     .row.flip .copy { order: 0; }
+    .coach .row { grid-template-columns: 1fr; }
+    .coach .shot { order: 2; }
+    .coach .band { padding: 44px 28px; }
     .row + .row { margin-top: 88px; }
     .stage { min-height: 520px; }
     .grid { grid-template-columns: 1fr 1fr; }
@@ -252,6 +277,8 @@
   @media (max-width: 600px) {
     .top nav a:not(.keep) { display: none; }
     .grid { grid-template-columns: 1fr; }
+    .abilities { grid-template-columns: 1fr; }
+    .coach .band { padding: 36px 20px; border-radius: 22px; }
     .phone, .hero .phone { width: 260px; border-radius: 46px; }
     .phone img { border-radius: 38px; }
     .stage { min-height: 470px; }
@@ -275,6 +302,7 @@
       Stride
     </a>
     <nav aria-label="Stride">
+      <a href="#coach">AI coach</a>
       <a href="#features">Features</a>
       <a href="#privacy">Privacy</a>
       <a class="keep" href="/stride/support">Support</a>
@@ -289,7 +317,7 @@
       <div>
         <span class="eyebrow"><span class="pin"></span>Running coach for iPhone and Apple Watch</span>
         <h1>Training plans that adapt to your pace.</h1>
-        <p class="lede">Stride builds a plan around your race, tells you exactly what to run today, and rebuilds the plan when you miss a run instead of leaving you behind it.</p>
+        <p class="lede">Stride builds a plan around your race, tells you exactly what to run today, and rebuilds the plan when you miss a run. After every run, an AI coach tells you what it meant and what to do next.</p>
         <div class="cta">
           <a class="btn btn-primary" data-app-store href="#" aria-disabled="true">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c.02 2.6 2.28 3.47 2.3 3.48-.02.06-.36 1.24-1.19 2.45-.72 1.05-1.46 2.09-2.64 2.11-1.15.02-1.52-.68-2.84-.68-1.32 0-1.73.66-2.82.7-1.13.04-2-1.13-2.72-2.18-1.48-2.14-2.6-6.05-1.09-8.69.75-1.31 2.1-2.14 3.56-2.16 1.11-.02 2.16.75 2.84.75.68 0 1.95-.93 3.29-.79.56.02 2.13.23 3.14 1.7-.08.05-1.87 1.1-1.85 3.28M14.2 4.21c.6-.73 1-1.74.89-2.75-.86.03-1.91.58-2.53 1.3-.55.64-1.04 1.67-.91 2.66.96.07 1.95-.49 2.55-1.21"/></svg>
@@ -297,7 +325,7 @@
           </a>
           <a class="btn btn-quiet" href="#features">See what it does</a>
         </div>
-        <p class="fine">Free. No account, no ads, no tracking.</p>
+        <p class="fine">Free. No account, no ads, no tracking. AI coaching by Apple Intelligence.</p>
       </div>
       <div class="stage">
         <svg class="loop" viewBox="150 180 760 720" aria-hidden="true">
@@ -319,6 +347,33 @@
       </div>
     </div>
   </div>
+
+  <section class="coach" id="coach">
+    <div class="wrap">
+      <div class="band">
+        <div class="map"></div>
+        <div class="row">
+          <div class="shot">
+            <div class="phone"><img src="/stride/img/coach.webp" width="660" height="1434" loading="lazy" alt="Stride's AI coach on a run: the verdict 'Easy run too hard, cut short' with the numbers behind it, what to do next, the next session, and suggested questions to ask the coach."></div>
+          </div>
+          <div class="copy">
+            <span class="eyebrow"><span class="pin"></span>AI coach, powered by Apple Intelligence</span>
+            <h2>A coach that read your run.</h2>
+            <p>Finish a run and Stride's coach gives you a straight verdict, the numbers behind it, and what to change next time. It compares the run with your plan and with how you usually run, not with a generic chart.</p>
+            <ul class="abilities">
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></div><div><strong>A verdict on every run</strong><span>Was it on plan, too hard, cut short? One line, then the reasons.</span></div></li>
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><strong>Ask anything</strong><span>"Should I rest tomorrow?" "Why was my heart rate so high?" It looks through your history to answer.</span></div></li>
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v6h6"/><path d="M20 20v-6h-6"/><path d="M20 10a8 8 0 0 0-14-4L4 10M4 14a8 8 0 0 0 14 4l2-4"/></svg></div><div><strong>Adapts your plan</strong><span>One tap updates your next session from what the coach saw, or reshapes the rest of the plan.</span></div></li>
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg></div><div><strong>Daily coach tips</strong><span>Fueling and training tips on Home, written for the week you're actually having.</span></div></li>
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M6 16v-4M11 16V8M16 16v-6M21 16V5"/></svg></div><div><strong>Your week in review</strong><span>What changed this week and what it means for the next one.</span></div></li>
+              <li><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></div><div><strong>A race plan</strong><span>How to pace race day, from your training and your goal.</span></div></li>
+            </ul>
+            <p class="note">The coach runs on Apple Intelligence, on your iPhone or on Apple's Private Cloud Compute, which doesn't keep your data. I never see your runs or what you ask. It works from your own training data, and on iPhones without Apple Intelligence Stride still gives you a plain read of each run.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="features">
     <div class="wrap">
@@ -382,9 +437,9 @@
           <p>Today's session, your week and your race on your wrist, and a Start button that sends today's workout to the Workout app.</p>
         </div>
         <div class="card">
-          <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg></div>
-          <h3>An AI coach</h3>
-          <p>Ask about any run, get coach tips and a race plan, written by Apple Intelligence on your iPhone or Apple's Private Cloud Compute.</p>
+          <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div>
+          <h3>Voice cues</h3>
+          <p>Splits and the next step of your workout spoken in your ear, even with the phone locked in your pocket.</p>
         </div>
         <div class="card">
           <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4"/><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/><circle cx="12" cy="15.5" r="1.5"/></svg></div>
