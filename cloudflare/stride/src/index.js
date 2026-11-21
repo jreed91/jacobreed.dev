@@ -15,6 +15,22 @@ const OFFSITE = {
   '/stride/support': '/stride/support'
 };
 
+// iOS reads this to decide which links open Stride: a race invite shared from
+// the app (running-app RaceInvite.swift) opens the app when it is installed.
+const APP_SITE_ASSOCIATION = {
+  applinks: {
+    details: [
+      {
+        appIDs: ['VMNPGK3Q29.com.running.stride'],
+        components: [
+          { '/': '/race', comment: 'Stride race invites' },
+          { '/': '/race/', comment: 'The same, with a trailing slash' }
+        ]
+      }
+    ]
+  }
+};
+
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -33,6 +49,10 @@ export default {
 
     const path = url.pathname.replace(/\/+$/, '') || '/';
 
+    if (path === '/.well-known/apple-app-site-association') {
+      return Response.json(APP_SITE_ASSOCIATION);
+    }
+
     if (OFFSITE[path]) {
       return Response.redirect(MAIN_SITE + OFFSITE[path], 301);
     }
@@ -43,6 +63,10 @@ export default {
     let assetPath;
     if (path === '/') {
       assetPath = '/';
+    } else if (path === '/race') {
+      // A race invite for someone without the app. The race is in the query
+      // string, which the page reads.
+      assetPath = '/race';
     } else if (url.pathname.startsWith('/stride/img/')) {
       assetPath = url.pathname.slice('/stride'.length);
     } else if (url.pathname.startsWith('/img/')) {
