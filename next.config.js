@@ -15,17 +15,19 @@ module.exports = {
         source: '/blog/Explain',
         destination: '/blog/postgres-query-plans',
         permanent: true
-      }
-    ];
-  },
-  async rewrites() {
-    return [
-      // The Stride landing page is a standalone page in the app's own
-      // branding, outside the site layout. /stride/privacy and /stride/support
-      // stay App Router pages.
+      },
+      // The Stride website moved to runwithstride.app (deployed from the
+      // running-app repo). /stride/privacy and /stride/support stay here,
+      // because App Store Connect links to them.
       {
         source: '/stride',
-        destination: '/stride/index.html'
+        destination: 'https://runwithstride.app/',
+        permanent: true
+      },
+      {
+        source: '/stride/race',
+        destination: 'https://runwithstride.app/race',
+        permanent: true
       }
     ];
   },

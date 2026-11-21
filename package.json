@@ -9,9 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "oxlint",
-    "test": "vitest",
-    "stride:dev": "cd cloudflare/stride && npx wrangler@4 dev",
-    "stride:deploy": "cd cloudflare/stride && npx wrangler@4 deploy"
+    "test": "vitest"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.20",
