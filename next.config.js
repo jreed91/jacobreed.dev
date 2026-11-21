@@ -16,17 +16,17 @@ module.exports = {
         destination: '/blog/postgres-query-plans',
         permanent: true
       },
-      // The Stride website moved to runwithstride.app (deployed from the
-      // running-app repo). /stride/privacy and /stride/support stay here,
-      // because App Store Connect links to them.
+      // Stride's website, privacy policy and support page live on
+      // runwithstride.app (deployed from the running-app repo's website/).
+      // These keep old links, including App Store Connect's, working.
       {
         source: '/stride',
         destination: 'https://runwithstride.app/',
         permanent: true
       },
       {
-        source: '/stride/race',
-        destination: 'https://runwithstride.app/race',
+        source: '/stride/:page(privacy|support|race)',
+        destination: 'https://runwithstride.app/:page',
         permanent: true
       }
     ];
