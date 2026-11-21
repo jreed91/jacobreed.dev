@@ -14,5 +14,3 @@ node_modules
 # TypeScript incremental build cache
 *.tsbuildinfo
 
-# Cloudflare Wrangler local state
-.wrangler/
