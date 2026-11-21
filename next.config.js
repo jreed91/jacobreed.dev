@@ -26,24 +26,11 @@ module.exports = {
       {
         source: '/stride',
         destination: '/stride/index.html'
-      },
-      // A race invite shared from the app (running-app RaceInvite.swift). With
-      // Stride installed, iOS opens the app instead; this page is for everyone
-      // else.
-      {
-        source: '/stride/race',
-        destination: '/stride/race.html'
       }
     ];
   },
   async headers() {
     return [
-      // iOS reads this file to decide which links open Stride. It has no
-      // extension, so say it is JSON.
-      {
-        source: '/.well-known/apple-app-site-association',
-        headers: [{ key: 'Content-Type', value: 'application/json' }]
-      },
       {
         source: '/(.*)',
         headers: [
