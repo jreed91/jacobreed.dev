@@ -28,9 +28,6 @@ export default async function sitemap() {
     '/blog',
     '/projects',
     '/talks',
-    '/stride',
-    '/stride/privacy',
-    '/stride/support',
   ].map((route) => ({
     url: `https://jacobreed.dev${route}`,
     lastModified: new Date().toISOString().split('T')[0],

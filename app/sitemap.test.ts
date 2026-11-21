@@ -25,9 +25,8 @@ describe('sitemap', () => {
     expect(urls).toContain('https://jacobreed.dev');
     expect(urls).toContain('https://jacobreed.dev/blog');
     expect(urls).toContain('https://jacobreed.dev/projects');
-    expect(urls).toContain('https://jacobreed.dev/stride');
-    expect(urls).toContain('https://jacobreed.dev/stride/privacy');
-    expect(urls).toContain('https://jacobreed.dev/stride/support');
+    // Stride's pages live on runwithstride.app; /stride/* here only redirects.
+    expect(urls.some((url) => url.startsWith('https://jacobreed.dev/stride'))).toBe(false);
   });
 
   it('includes an entry for every blog post', async () => {
