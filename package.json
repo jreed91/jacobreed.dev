@@ -35,7 +35,7 @@
     "postcss": "^8.5.33",
     "prettier": "^3.10.1",
     "typescript": "^7.0.2",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   },
   "overrides": {
     "postcss-selector-parser": "^7.1.6"
